@@ -7,6 +7,7 @@
 
         public function __construct(){
             parent::__construct();
+            $this->load->model("Igor_Airtel_Normal_Model");
 
         }
 
@@ -31,7 +32,7 @@
             $igor= array();
             if (count($airtel_read) > 1 ) {
                 
-                for($i=2; $i < count($airtel_read); $i++) {
+                for($i=1; $i < count($airtel_read); $i++) {
 
                     // $date= $airtel_read[$i][2];
                     // $date = DateTime::createFromFormat('d-M-Y', $date);
@@ -53,7 +54,7 @@
 
             if (count($igor_read) > 1 ) {
                 
-                for($i=2; $i < count($igor_read); $i++) {
+                for($i=1; $i < count($igor_read); $i++) {
 
                     // $date= $airtel_read[$i][2];
                     // $date = DateTime::createFromFormat('d-M-Y', $date);
@@ -72,21 +73,46 @@
                 }
             }
 
+
+// --------------------------------------------------------------------------------AIRTEL CI ---------------------------------------------------------------------
+
+
             $airtel = $this->supprimerEspace($airtel);
-            $igor = $this->supprimerEspace($airtel);
-
             $deallocation = $this->filtrerDeallocation($airtel);
+            $rollback= $this->filtrerRollback($airtel);
+            $ambiguous= $this->filtrerAmbiguous($airtel);
 
-            echo "<pre>";
-            echo "--------------------------------------------------";
-                print_r($airtel);
-            echo "--------------------------------------------------";
-            echo "</pre>";
+            $airtelCI= $this->filtrerAirtelCashIn($airtel);
+            $airtelCI = $this->trierParExternalId($airtelCI);
+
+// -------------------------------------------------------------------------------IGOR CI ------------------------------------------------------------
+
+            $igor = $this->supprimerEspace($igor);
+            $resultat= $this->filtrerIgorCIEtNonAu($igor);
+
+            $igorCI= $resultat[0];
+            $igorVI= $resultat[1];
+            $igorRegul= $resultat[2];
+            $igorCI= $this->trierParRefIgor($igorCI);
 
 
+// -----------------------------------------------------------------------------COMPARAISON CI -------------------------------------------------------
+
+            $res= $this->comparerRollBackEtAmbigous($rollback, $ambiguous);
+            $airtelIgorNormaleCI = $this->comparerAirtelEtIgorCI($airtelCI, $igorCI);
+            $resultatAnomalieCI= $this->filtrerAnomalieCI($airtelCI, $igorCI);
+            $anomalieAirtelCI= $resultatAnomalieCI[0];
+            $anomalieIgorCI= $resultatAnomalieCI[1];
+            $dernierRollBack = $res[0];
+            $dernierAmbiguous = $res[1];
+
+
+
+// --------------------------------------------------------------------------------- INSERTION
+            
             // echo "<pre>";
             // echo "--------------------------------------------------";
-            //     print_r($igor);
+            //     print_r($anomalieAirtelCI);
             // echo "--------------------------------------------------";
             // echo "</pre>";
 
@@ -119,8 +145,6 @@
             // echo "<pre>";
             //     print_r($sheetdata);
             // echo "</pre>";
-
-
 
         }
 
@@ -156,21 +180,21 @@
 
         public function filtrerDeallocation ($data) {
             $resultat= array();
-
             foreach($data as $item) {
                 if($item["service_name"] ==="DeallocationTransfer") {
+                    $item["solde"] = $item["amount"] * -1;
                     $resultat[]= $item;
                 }
             }
-
             return $resultat;
         }
 
-        public function filtrerCashIn($data) {
+        public function filtrerAirtelCashIn($data) {
             $reultat= array();
 
             foreach($data as $item) {
                 if(!empty($item["external_id"]) && ($item["service_name"]==="BanktoWalletTransfer" || $item["service_name"] === "ChannelBanktoWalletTransfer" )) {
+                    $item["solde"] = $item["amount"] * -1;
                     $resultat[]= $item;
                 }
             }
@@ -180,7 +204,119 @@
 
         public function filtrerRollback($data) {
             $resultat= array();
+
+            foreach($data as $item) {
+                if (substr($item["reference_number"], 0, 2) ==="RO" || $item["service_name"] ==="RollBack") {
+                    $resultat[]= $item;
+                }
+            } 
+
+            return $resultat;
         }
+
+        public function filtrerAmbiguous($data) {
+            $resultat= array();
+
+            foreach($data as $item) {
+                if($item["description"] ==="TransactionAmbiguous") {
+                    $resultat[] = $item;
+                }
+            }
+            return $resultat;
+        }
+
+        public function comparerRollBackEtAmbigous($rollback, $ambiguous) {
+            $dernierRollBack= array();
+            $dernierAmbiguous= array();
+
+            foreach($rollback as $itemRoll) {
+                foreach($ambiguous as $itemAmbi) {
+                    if($itemAmbi["TRANSFER_ID"] !== $itemRoll["reference_number"]) {
+                        $dernierRollBack= $itemRoll;
+                        $dernierAmbiguous= $itemAmbi;
+                    }
+                }
+            }
+
+            return [$dernierRollBack,  $dernierAmbiguous];
+        }
+
+        public function trierParRefIgor($data) {
+            usort($data, function($a, $b) {
+                return strcmp($a['REF_IGOR'], $b['REF_IGOR']);
+            });
+
+            return $data;
+        }
+
+        public function trierParExternalId($data) {
+            usort($data, function($a, $b) {
+                return strcmp($a['external_id'], $b['external_id']);
+            });
+
+            return $data;
+        }
+
+        public function comparerAirtelEtIgorCI($airtel, $igor) {
+            $mergedAirtelEtIgor= array();
+            $normaleIgor= array();
+            $normaleAirtel= array();
+
+            foreach ($airtel as $itemAirtel) {
+                foreach($igor as $itemIgor) {
+                    if($itemAirtel["external_id"] === $itemIgor["REF_IGOR"]) {
+                        $normaleAirtel[]= $itemAirtel;
+                    } 
+                }
+            }
+
+            foreach ($igor as $itemIgor) {
+                foreach($airtel as $itemAirtel) {
+                    if($itemAirtel["external_id"] === $itemIgor["REF_IGOR"]) {
+                        $normaleIgor[]= $itemIgor;
+                    }
+                }
+            }
+
+            
+            for ($i=0; $i < count($normaleAirtel) ; $i++) {
+                 array_push($mergedAirtelEtIgor, array_merge($normaleAirtel[$i], $normaleIgor[$i])) ;
+            }
+            return $mergedAirtelEtIgor;
+        }
+
+        public function filtrerAnomalieCI($airtel, $igor) {
+            $externalIdsIgor = array_column($igor, 'REF_IGOR');
+            $externalIdsAirtel = array_column($airtel, 'external_id');
+        
+            $anomalieAirtel = array_filter($airtel, function ($item) use ($externalIdsIgor) {
+                return !in_array($item['external_id'], $externalIdsIgor);
+            });
+        
+            $anomalieIgor = array_filter($igor, function ($item) use ($externalIdsAirtel) {
+                return !in_array($item['REF_IGOR'], $externalIdsAirtel);
+            });
+        
+            return [$anomalieAirtel, $anomalieIgor];
+        }
+
+        public function filtrerIgorCIEtNonAu($data) {
+            $igorCI= array();
+            $igorVI= array();
+            $igorRegul = array();
+
+            foreach($data as $item) {
+                if($item["OPER"]==="CASHI" && $item["EXPL"] ==="AU") {
+                    $igorCI[] = $item;
+                } else if ($item["EXPL"] !=="AU" && $item["OPER"] ==="VI") {
+                    $igorVI[] = $item;
+                } else if ($item["EXPL"] != "AU" && $item["OPER"] ==="CASHI") {
+                    $igorRegul[]= $item;
+                }
+            }
+            return [$igorCI, $igorVI, $igorRegul];
+        }
+        
  }
 
 
