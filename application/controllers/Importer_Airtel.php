@@ -7,8 +7,9 @@
 
         public function __construct(){
             parent::__construct();
+            $this->load->database("db1");
             $this->load->model("Igor_Airtel_Normal_Model");
-
+            $this->load->model("Igor_Airtel_Anomalie_Model");
         }
 
         public function index() {
@@ -25,9 +26,7 @@
             // $extension_igor = pathinfo($upload_file_igor, PATHINFO_EXTENSION);
 
             $airtel_read = $this->readData($_FILES["airtel"]["name"], $_FILES["airtel"]["tmp_name"]);
-
             $igor_read= $this->readData($_FILES["igor"]["name"], $_FILES["igor"]["tmp_name"]);
-
             $airtel= array();
             $igor= array();
             if (count($airtel_read) > 1 ) {
@@ -74,7 +73,7 @@
             }
 
 
-// --------------------------------------------------------------------------------AIRTEL CI ---------------------------------------------------------------------
+// --------------------------------------------------------------------------------AIRTEL ---------------------------------------------------------------------
 
 
             $airtel = $this->supprimerEspace($airtel);
@@ -85,7 +84,10 @@
             $airtelCI= $this->filtrerAirtelCashIn($airtel);
             $airtelCI = $this->trierParExternalId($airtelCI);
 
-// -------------------------------------------------------------------------------IGOR CI ------------------------------------------------------------
+            $airtelCO= $this->filtrerAirtelCashOut($airtel);
+            $airtelCO= $this->trierParExternalId($airtelCO);
+
+// -------------------------------------------------------------------------------IGOR------------------------------------------------------------
 
             $igor = $this->supprimerEspace($igor);
             $resultat= $this->filtrerIgorCIEtNonAu($igor);
@@ -94,6 +96,13 @@
             $igorVI= $resultat[1];
             $igorRegul= $resultat[2];
             $igorCI= $this->trierParRefIgor($igorCI);
+
+            $igorCO= $this->filtrerIgorCO($igor);
+            $igorCO= $this->trierParRefIgor($igorCO);
+
+
+
+//
 
 
 // -----------------------------------------------------------------------------COMPARAISON CI -------------------------------------------------------
@@ -108,13 +117,28 @@
 
 
 
-// --------------------------------------------------------------------------------- INSERTION
+// ------------------------------------------------------------------------------ COMPARAISON CO ---------------------------------------------------------
+
+            $airtelIgorNormaleCO = $this->comparerAirtelEtIgorCI($airtelCO, $igorCO);
+            $resultatAnomalieCO= $this->filtrerAnomalieCI($airtelCO, $igorCO);
+
+            $anomalieAirtelCO= $resultatAnomalieCO[0];
+            $anomalieIgorCO = $resultatAnomalieCO[1];
+
+
+
+
+// --------------------------------------------------------------------------------- INSERTION -------------------------------------------------------------
+
+
+            // $this->Igor_Airtel_Normal_Model->insert_or_update_ci($airtelIgorNormaleCI);
             
-            // echo "<pre>";
-            // echo "--------------------------------------------------";
-            //     print_r($anomalieAirtelCI);
-            // echo "--------------------------------------------------";
-            // echo "</pre>";
+            echo "<pre>";
+            echo "--------------------------------------------------";
+                print_r($anomalieAirtelCO);
+            echo "--------------------------------------------------";
+            echo "</pre>";
+
 
             // if($extension_airtel ==="csv") {
             //     $reader_airtel= new \PhpOffice\PhpSpreadsheet\Reader\Csv();
@@ -199,6 +223,17 @@
                 }
             }
 
+            return $resultat;
+        }
+
+        public function filtrerAirtelCashOut($data) {
+            $resultat= array();
+            foreach($data as $item) {
+                if(!empty($item["external_id"]) && ($item["service_name"]==="ChannelWalletToBankTransfer" || $item["service_name"] === "WalletToBankTransfer" || $item["service_name"] === "AutoSweepMoneyTransfer" )) {
+                    $item["solde"] = $item["amount"] * 1;
+                    $resultat[]= $item;
+                }
+            }
             return $resultat;
         }
 
@@ -316,6 +351,53 @@
             }
             return [$igorCI, $igorVI, $igorRegul];
         }
+
+        public function filtrerIgorCO ($data) {
+            $resultat= array();
+
+            foreach($data as $item) {
+                if($item["OPER"] ==="CASHO" && $item["EXPL"] ==="AU") {
+                    $resultat[]= $item;
+                }
+            }
+
+            return $resultat;
+        }
+
+
+        // public function comparerAirtelIgorCO($airtel,$igor) {
+
+        //     $mergedAirtelEtIgor= array();
+        //     $normaleIgor= array();
+        //     $normaleAirtel= array();
+
+        //     foreach ($airtel as $itemAirtel) {
+        //         foreach($igor as $itemIgor) {
+        //             if($itemAirtel["external_id"] === $itemIgor["REF_IGOR"]) {
+        //                 $normaleAirtel[]= $itemAirtel;
+        //             } 
+        //         }
+        //     }
+
+        //     foreach ($igor as $itemIgor) {
+        //         foreach($airtel as $itemAirtel) {
+        //             if($itemAirtel["external_id"] === $itemIgor["REF_IGOR"]) {
+        //                 $normaleIgor[]= $itemIgor;
+        //             }
+        //         }
+        //     }
+
+            
+        //     for ($i=0; $i < count($normaleAirtel) ; $i++) {
+        //          array_push($mergedAirtelEtIgor, array_merge($normaleAirtel[$i], $normaleIgor[$i])) ;
+        //     }
+        //     return $mergedAirtelEtIgor;
+
+        // }
+
+        
+
+       
         
  }
 
