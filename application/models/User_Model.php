@@ -6,14 +6,14 @@
             $this->load->database("db1");
         }
 
-        public function insert_profil($data) {
-            return $this->db->insert("profils", $data);
+        public function insert_user($data) {
+            return $this->db->insert("utilisateurs", $data);
         }
 
         public function get_profils() {
 
             $this->db->select("*");
-            $this->db->from("profils");
+            $this->db->from("utilisateurs");
             $this->db->order_by("code_profile", "ASC");
 
             $query= $this->db->get();
@@ -21,16 +21,16 @@
         }
         public function delete_profil($id) {
             $this->db->where("id", $id);
-            $this->db->delete("profils");
+            $this->db->delete("utilisateurs");
         }
 
         public function update_profil($id, $data) {
             $this->db->where("id", $id);
-            return $this->db->update("profils", $data);
+            return $this->db->update("utilisateurs", $data);
         }
 
         public function find_profile($id) {
-            return $this->db->get_where("profiles", array("id" =>$id))->row();
+            return $this->db->get_where("utilisateurs", array("id" =>$id))->row();
         }
     }
 ?>

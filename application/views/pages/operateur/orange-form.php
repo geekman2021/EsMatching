@@ -1,7 +1,7 @@
 
 <?php // print_r($_SESSION["userExist"]) ; ?>
 
-<form id="addform" method="post"  action="<?php echo site_url("orange/importdata"); ?>" enctype="multipart/form-data" >
+<form id="addform" method="post"  action="<?php echo site_url("importer_orange/importer"); ?>" enctype="multipart/form-data" >
     <div class="container mt-5">
         <div class="row">
             <div class="form-group col-lg-6">
