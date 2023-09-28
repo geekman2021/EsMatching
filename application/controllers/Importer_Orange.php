@@ -37,6 +37,15 @@
             if (count($orange_read) > 1 ) {
                 
                 for($i=1; $i < count($orange_read); $i++) {
+
+                    $debit= str_replace([" ", ","], "", $orange_read[$i][6]);
+                    $credit= str_replace([" ", ","], "", $orange_read[$i][7]);
+                    $cle= $orange_read[$i][5] .$debit .$credit ;
+                    $super_distri= str_replace([" ", ".0"], "", $orange_read[$i][8]); 
+                    $sous_distr= str_replace([" ", ".0"], "", $orange_read[$i][9]); 
+
+                    // $debit = floatval($debit);
+                    // $debit = intval($debit);
                     $orange[]= array(
                        "orange_num" => $orange_read[$i][0],
                        "orange_date" =>  $orange_read[$i][1],
@@ -44,10 +53,11 @@
                        "orange_ref" => $orange_read[$i][3],
                        "orange_service" => $orange_read[$i][4],
                        "orange_num_compte" => $orange_read[$i][5],
-                       "orange_debit" => $orange_read[$i][6],
-                       "orange_credit" => $orange_read[$i][7],
-                       "orange_super_distri" => $orange_read[$i][8],
-                       "orange_sous_distri" => $orange_read[$i][9],
+                       "orange_debit" => $debit,
+                       "orange_credit" => $credit,
+                       "orange_super_distri" => $super_distri,
+                       "orange_sous_distri" => $sous_distr,
+                       "cle" => $cle
                     );
                 }
             }
@@ -55,12 +65,15 @@
             if (count($princ_read) > 1 ) {
                 
                 for($i=1; $i < count($princ_read); $i++) {
+
+                    $montant = strval($princ_read[$i][4]);
+                    $montant = str_replace(".00", "" , $montant);
                     $princ[]= array(
                        "princ_compte" => $princ_read[$i][0],
                        "princ_date_oper" =>  $princ_read[$i][1],
                        "princ_date_val" => $princ_read[$i][2],
                        "princ_devise" => $princ_read[$i][3],
-                       "princ_montant" => $princ_read[$i][4],
+                       "princ_montant" => $montant,
                        "princ_libelle" => $princ_read[$i][5],
                        "princ_oper" => $princ_read[$i][6],
                        "princ_expl" => $princ_read[$i][7],
@@ -73,6 +86,9 @@
             if (count($com_read) > 1 ) {
                 
                 for($i=1; $i < count($com_read); $i++) {
+
+                    $codeAgence= $com_read[$i][9];
+                    $codeAgence= explode("-", $codeAgence);
                     $comm[]= array(
                        "comm_compte" => $com_read[$i][0],
                        "comm_date_oper" =>  $com_read[$i][1],
@@ -84,6 +100,7 @@
                        "comm_expl" => $com_read[$i][7],
                        "comm_ref_igor" => $com_read[$i][8],
                        "comm_ref_rel" => $com_read[$i][9],
+                       "comm_code_agence" => $codeAgence[0]
                     );
                 }
             }
@@ -105,22 +122,46 @@
             $commCI= $this->trierCommParRefIgor($commCI);
 
             $mergedComEtPrinc = $this->mergePrincEtCommi($principalCI, $commCI);
+            $mergedComEtPrinc = $this->trierParCleCroissante($mergedComEtPrinc);
 
 
+// ---------------------------------------------------------------------------- ORANGE -------------------------------------------------------------------------------
+            $orange= $this->supprimerEspace($orange);
+            $ind= $this->filtrerInd($orange);
+            $orangeCI= $this->filtrerOrangeCI($orange);
+            $orangeCI= $this->trierParCleCroissante($orangeCI);
+            $orangeCO= $this->filtrerOrangeCO($orange);
+            $orangeCO = $this->trierParCleCroissante($orangeCO);
 
-
-            echo "<pre>";
-                print_r($mergedComEtPrinc);
-            echo "</pre>";
-
+            $this->comparerBoaEtOrange($mergedComEtPrinc, $orangeCI);
 
             // echo "<pre>";
-            //     print_r($principalCI);
+            //     print_r($orangeCI);
             // echo "</pre>";
+            // echo "<pre>";
+            //     print_r($mergedComEtPrinc);
+            // echo "</pre>";
+        }
 
+        public function filtrerOrangeCI($data) {
+            $resultat= array();
+            foreach ($data as $item) {
+                if($item["orange_service"] ==="Cashin") {
+                    $resultat[]= $item;
+                }
+            }
 
+            return $resultat;
+        }
 
-
+        public function filtrerOrangeCO($data) {
+            $resultat= array();
+            foreach ($data as $item) {
+                if($item["orange_service"] ==="CashOut") {
+                    $resultat[]= $item;
+                }
+            }
+            return $resultat;
         }
 
 
@@ -144,12 +185,7 @@
         }
 
 
-       
-
-
-
-
-        public function filtreInd($data) {
+        public function filtrerInd($data) {
             $resultat= array();
 
             foreach($data as $item) {
@@ -169,12 +205,30 @@
             return $resultat;
         }
 
+        public function supprimerEspaceOrange($data) {
+            foreach ($data as &$item) {
+                foreach ($item as $key => &$value) {
+                    $value = preg_replace('/\s+/', '', $value);
+                }
+                $item['orange_debit'] = preg_replace('/\s+/', '', $item['orange_debit']);
+            }
+            return $data;
+        }
+
 
         public function filtrerPrincCI($data) {
             $resultat= array();
 
             foreach($data as $item) {
+                if (preg_match('/tel:(\d+)/', $item["princ_libelle"], $matches)) {
+                    $numeroTelephone = $matches[1];
+                    // echo "Numéro de téléphone : " . $numeroTelephone;
+                } else {
+                    // echo "Aucun numéro de téléphone trouvé.";
+                }
                 if($item["princ_oper"] ==="CASHI" && $item["princ_expl"] ==="AU") {
+                    $cle = $numeroTelephone .$item["princ_montant"];
+                    $item["cle"] = $cle;
                     $resultat[]= $item;
                 }
             }
@@ -237,6 +291,56 @@
 
             return $data;
         }
-    }
+
+        public function trierParCleCroissante($data){
+            usort($data, function ($a, $b) {
+                $cleA = intval($a['cle']);
+                $cleB = intval($b['cle']);
+
+                if ($cleA == $cleB) {
+                    return 0;
+                }
+                return ($cleA < $cleB) ? -1 : 1;
+            });
+
+            return $data;
+        }
+
+        public function comparerBoaEtOrange($boa, $orange) {
+            $anomalieBoa = array();
+            $anomalieOrange = array();
+            $normaleOrange = array();
+            $normaleBoa = array();
+            $boaCopy = $boa;
+            $orangeCopy = $orange;
+        
+            $ligne = min(count($boa), count($orange));
+            $isFinished = false;
+            $i = 0;
+        
+            while ($i < $ligne && !$isFinished) {
+                if ($boaCopy[$i]["cle"] === $orangeCopy[$i]["cle"]) {
+                    $normaleOrange[] = $orangeCopy[$i];
+                    $normaleBoa[] = $boaCopy[$i];
+                    $isFinished = true;
+                    $i++;
+                } elseif ($boaCopy[$i]["cle"] < $orangeCopy["cle"]) {
+                    $anomalieBoa[] = $boaCopy[$i];
+                    array_splice($boaCopy, $i, 1);
+                    $boaCopy = array_values($boaCopy);
+                } else {
+                    $anomalieOrange[] = $orangeCopy;
+                    array_splice($orange, $i, 1);
+                    $orange = array_values($orange);
+                }
+            }
+
+            
+            echo "<pre>";
+            print_r($normaleOrange);
+            echo "</pre>";
+        }
+        
+}
 
 ?>
