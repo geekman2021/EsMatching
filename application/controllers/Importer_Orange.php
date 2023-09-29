@@ -138,9 +138,9 @@
             // echo "<pre>";
             //     print_r($orangeCI);
             // echo "</pre>";
-            // echo "<pre>";
-            //     print_r($mergedComEtPrinc);
-            // echo "</pre>";
+            echo "<pre>";
+                print_r($mergedComEtPrinc);
+            echo "</pre>";
         }
 
         public function filtrerOrangeCI($data) {

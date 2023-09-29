@@ -35,12 +35,9 @@
           <a class="nav-link" href="#tabCat">Crédit à Tort</a>
         </li>
         <li class="nav-item col-sm-3">
-          <a class="nav-link" href="#tabAmbi">Ambiguous</a>
+          <a class="nav-link" href="#tabAdmin">Admin</a>
         </li>
-        <li class="nav-item col-sm-2">
-          <a class="nav-link" href="#tabDeallo">Deallocation</a>
-        </li>
-        <li class="nav-item col-sm-1">
+        <li class="nav-item col-sm-3">
           <a class="nav-link" href="#tabVI">VI</a>
         </li>
       </ul>
@@ -48,36 +45,49 @@
 
   </div>
   <div class="container tab-content">
+    
     <div id="tabNormaleCashIn" class="tab-pane"><br>
-        <div class="table-responsive">
+    <div class="row">
+        <div class="col-lg-6">
+            <label for="daDeb">Date Debut</label>
+            <input class="form-control" type="date" name="dateDebNormCI" id="dateDebNormCI" />
+        </div>
+        <div class="col-sm-6">
+            <label for="daDeb">Date Fin</label>
+            <input class="form-control" type="date" name="dateFinNormCI" id="dateFinNormCI" />
+        </div>
+    </div>
+        <div class="table-responsive mt-1">
             <table class="table table-bordered" id="tableNormaleCashIn">
                 <thead style="text-align: center ;">
                     <tr>
-                        <th colspan="9" style="text-align: center ;">BOA</th>
-                        <th colspan="10" style="text-align: center ;">Airtel</th>
+                        <th colspan="10" style="text-align: center ;">BOA</th>
+                        <th></th>
+                        <th colspan="10" style="text-align: center ;">Telma</th>
                     </tr>
                     <tr>
                         
                         <th>Compte</th>
-                        <th>DateOper</th>
-                        <th>DateVal</th>
+                        <th>Date_Oper</th>
+                        <th>Date_Val</th>
                         <th>Devise</th>
                         <th>Montant</th>
                         <th>Libelle</th>
                         <th>Operation</th>
                         <th>Expl</th>
                         <th>ReferenceIgor</th>
-                        <th>ExternalId</th>
-                        <th>TransferId</th>
-                        <th>TransferDate</th>
-                        <th>AccountNo</th>
-                        <th>SenderMsiSDN</th>
-                        <th>DestMsiSDN</th>
-                        <th>Amount</th>
-                        <th>Description</th>
-                        <th>ServiceName</th>
-                        <th>ReferenceNumber</th>
-                       
+                        <th>Cle</th>
+                        <th></th>
+                        <th>Cle</th>
+                        <th>Date</th>
+                        <th>Heure</th>
+                        <th>Transfer_id</th>
+                        <th>Type</th>
+                        <th>Channel</th>
+                        <th>Etat</th>
+                        <th>Montant</th>
+                        <th>sender</th>
+                        <th>receiver</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -85,34 +95,53 @@
             </table>
         </div>
     </div>
+
+
+
     <div id="tabNormaleCashOut" class="container tab-pane "><br>
+        <div class="row">
+            <div class="col-lg-6">
+                <label for="daDeb">Date Debut</label>
+                <input class="form-control" type="date" name="dateDebNormCI" id="dateDebNormCI" />
+            </div>
+            <div class="col-sm-6">
+                <label for="daDeb">Date Fin</label>
+                <input class="form-control" type="date" name="dateFinNormCI" id="dateFinNormCI" />
+            </div>
+        </div>
         <div class="table-responsive">
+            <input type="date" name="dateDebNormCI" id="dateDebNormCI" />
+            <input type="date" name="dateFinNormCI" id="dateFinNormCI" />
             <table class="table table-bordered" id="tableNormaleCashOut">
-                <thead>
+                <thead style="text-align: center ;">
                     <tr>
-                        <th colspan="9" style="text-align: center ;">BOA</th>
-                        <th colspan="10" style="text-align: center ;">AIRTEL</th>
+                        <th colspan="10" style="text-align: center ;">BOA</th>
+                        <th></th>
+                        <th colspan="10" style="text-align: center ;">Telma</th>
                     </tr>
                     <tr>
-                      <th>Compte</th>
-                      <th>DateOper</th>
-                      <th>DateVal</th>
-                      <th>Devise</th>
-                      <th>Montant</th>
-                      <th>Libelle</th>
-                      <th>Operation</th>
-                      <th>Expl</th>
-                      <th>ReferenceIgor</th>
-                      <th>ExternalId</th>
-                      <th>TransferId</th>
-                      <th>TransferDate</th>
-                      <th>AccountNo</th>
-                      <th>SenderMsiSDN</th>
-                      <th>DestMsiSDN</th>
-                      <th>Amount</th>
-                      <th>Description</th>
-                      <th>ServiceName</th>
-                      <th>ReferenceNumber</th>
+                        
+                        <th>Compte</th>
+                        <th>Date_Oper</th>
+                        <th>Date_Val</th>
+                        <th>Devise</th>
+                        <th>Montant</th>
+                        <th>Libelle</th>
+                        <th>Operation</th>
+                        <th>Expl</th>
+                        <th>ReferenceIgor</th>
+                        <th>Cle</th>
+                        <th></th>
+                        <th>Cle</th>
+                        <th>Date</th>
+                        <th>Heure</th>
+                        <th>Transfer_id</th>
+                        <th>Type</th>
+                        <th>Channel</th>
+                        <th>Etat</th>
+                        <th>Montant</th>
+                        <th>sender</th>
+                        <th>receiver</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -120,38 +149,42 @@
                 </tbody>
             </table>
         </div>
-         
-  </div>
+    </div>
+</div>
 
   <div class="container tab-content">
-  <div id="tabDat" class="container tab-pane "><br>   
+  <div id="tabDat" class="container tab-pane "><br>  
     <div class="table-responsive">
       <table class="table table-bordered" id="tableDat">
         <thead style="text-align: center ;">
             <tr>
                 <th colspan="10" style="text-align: center ;">BOA</th>
-                <th colspan="9" style="text-align: center ;">Airtel</th>
+                <th></th>
+                <th colspan="10" style="text-align: center ;">Telma</th>
             </tr>
             <tr>
-              <th>Compte</th>
-              <th>DateOper</th>
-              <th>DateVal</th>
-              <th>Devise</th>
-              <th>Montant</th>
-              <th>Libelle</th>
-              <th>Operation</th>
-              <th>Expl</th>
-              <th>ReferenceIgor</th>
-              <th>ExternalId</th>
-              <th>TransferId</th>
-              <th>TransferDate</th>
-              <th>AccountNo</th>
-              <th>SenderMsiSDN</th>
-              <th>DestMsiSDN</th>
-              <th>Amount</th>
-              <th>Description</th>
-              <th>ServiceName</th>
-              <th>ReferenceNumber</th>
+                
+                <th>Compte</th>
+                <th>Date_Oper</th>
+                <th>Date_Val</th>
+                <th>Devise</th>
+                <th>Montant</th>
+                <th>Libelle</th>
+                <th>Operation</th>
+                <th>Expl</th>
+                <th>ReferenceIgor</th>
+                <th>Cle</th>
+                <th></th>
+                <th>Cle</th>
+                <th>Date</th>
+                <th>Heure</th>
+                <th>Transfer_id</th>
+                <th>Type</th>
+                <th>Channel</th>
+                <th>Etat</th>
+                <th>Montant</th>
+                <th>sender</th>
+                <th>receiver</th>
             </tr>
         </thead>
         <tbody>    
@@ -159,35 +192,38 @@
       </table>
     </div>
   </div>
-  <div id="tabCat" class="container tab-pane "><br>    
+  <div id="tabCat" class="container tab-pane "><br>  
     <div class="table-responsive">
       <table class="table table-bordered" id="tableCat">
-        <thead>
-            <tr>
-                <th colspan="10" style="text-align: center ;">BOA</th>
-                <th colspan="10" style="text-align: center ;">Airtel</th>
-            </tr>
-            <tr>
-              <th>Compte</th>
-              <th>DateOper</th>
-              <th>DateVal</th>
-              <th>Devise</th>
-              <th>Montant</th>
-              <th>Libelle</th>
-              <th>Operation</th>
-              <th>Expl</th>
-              <th>ReferenceIgor</th>
-              <th>ExternalId</th>
-              <th>TransferId</th>
-              <th>TransferDate</th>
-              <th>AccountNo</th>
-              <th>SenderMsiSDN</th>
-              <th>DestMsiSDN</th>
-              <th>Amount</th>
-              <th>Description</th>
-              <th>ServiceName</th>
-              <th>ReferenceNumber</th>
-            </tr>
+      <thead style="text-align: center ;">
+        <tr>
+            <th colspan="10" style="text-align: center ;">BOA</th>
+            <th></th>
+            <th colspan="10" style="text-align: center ;">Telma</th>
+        </tr>
+        <tr>
+            <th>Compte</th>
+            <th>Date_Oper</th>
+            <th>Date_Val</th>
+            <th>Devise</th>
+            <th>Montant</th>
+            <th>Libelle</th>
+            <th>Operation</th>
+            <th>Expl</th>
+            <th>ReferenceIgor</th>
+            <th>Cle</th>
+            <th></th>
+            <th>Cle</th>
+            <th>Date</th>
+            <th>Heure</th>
+            <th>Transfer_id</th>
+            <th>Type</th>
+            <th>Channel</th>
+            <th>Etat</th>
+            <th>Montant</th>
+            <th>sender</th>
+            <th>receiver</th>
+        </tr>
         </thead>
         <tbody>
         </tbody>
@@ -195,21 +231,22 @@
     </div>     
   </div>
 
-  <div id="tabAmbi" class="container tab-pane "><br>    
+  <div id="tabAdmin" class="container tab-pane "><br>    
     <div class="table-responsive">
-      <table class="table table-bordered" id="tableAmbi">
+      <table class="table table-bordered" id="tableAdmin">
         <thead>
           <tr>
-              <th>TransferId</th>
-              <th>TransferDate</th>
-              <th>ExternalId</th>
-              <th>AccountNo</th>
-              <th>SenderMsiSDN</th>
-              <th>DestMsiSDN</th>
-              <th>Amount</th>
-              <th>Description</th>
-              <th>ServiceName</th>
-              <th>ReferenceNumber</th>
+            <th></th>
+            <th>Cle</th>
+            <th>Date</th>
+            <th>Heure</th>
+            <th>Transfer_id</th>
+            <th>Type</th>
+            <th>Channel</th>
+            <th>Etat</th>
+            <th>Montant</th>
+            <th>sender</th>
+            <th>receiver</th>
           </tr>
         </thead>
         <tbody>
@@ -218,28 +255,6 @@
     </div>     
   </div>
 
-  <div id="tabDeallo" class="container tab-pane "><br>    
-    <div class="table-responsive">
-      <table class="table table-bordered" id="tableDeallo">
-        <thead>
-          <tr>
-            <th>TransferId</th>
-            <th>TransferDate</th>
-            <th>ExternalId</th>
-            <th>AccountNo</th>
-            <th>SenderMsiSDN</th>
-            <th>DestMsiSDN</th>
-            <th>Amount</th>
-            <th>Description</th>
-            <th>ServiceName</th>
-            <th>ReferenceNumber</th>
-          </tr>
-        </thead>
-        <tbody>
-        </tbody>
-      </table>
-    </div>     
-  </div>
   <div id="tabVI" class="tab-pane"><br>
       <div class="table-responsive">
           <table class="table table-bordered" id="tableVI">
@@ -327,7 +342,7 @@ $(document).ready(function(){
 
   });
 
-  $("#tableAmbi").DataTable({
+  $("#tableAdmin").DataTable({
     responsive: true,
 
     dom: 'Bfrtip',

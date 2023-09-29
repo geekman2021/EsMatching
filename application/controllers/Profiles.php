@@ -1,7 +1,6 @@
 <?php
     class Profiles extends CI_Controller {
 
-        public $profilesCRUD;
         
         public function header () {
             header("Access-Control-Allow-Origin: *");
@@ -13,12 +12,11 @@
             parent::__construct();
             // $this->load->library("form_validation");
             // $this->load->session("session");
-            $this->load->model("Profil_Model");
-            $this->profilesCRUD= new Profil_Model;
+            $this->load->model("profil_model");
         }
 
         public function index() {
-            $data["data"] = $this->profilesCRUD->get_profils(); 
+            $data["data"] = $this->profil_model->get_profils(); 
             $this->load->view("templates/sidebar");
             $this->load->view("pages/profile/profile_form", $data);
             $this->load->view("pages/profile/profile_list", $data);
@@ -26,11 +24,11 @@
         }
 
         public function create() {
-            $this->header();
+            // $this->header();
             $code_profile= $this->input->post("code_profile");
             $libelle= $this->input->post("libelle");
 
-            $this->profilesCRUD->insert_profil(array(
+            $this->profil_model->insert_profil(array(
                 "code_profile" => $code_profile,
                 "libelle" => $libelle
             ));
@@ -44,7 +42,7 @@
             $code_profile= $request->code_profile;
             $libelle = $request->libelle;
             
-            $this->profilesCRUD->update_profil($id, array(
+            $this->profil_model->update_profil($id, array(
                 "code_profile" => $code_profile,
                 "libelle" => $libelle,
             ));
@@ -54,7 +52,7 @@
             $this->header();
             $id= $this->input->post("id");
 
-            $this->profilesCRUD->delete_profil($id); 
+            $this->profil_model->delete_profil($id); 
         }
 
 

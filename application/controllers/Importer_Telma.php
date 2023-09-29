@@ -117,11 +117,11 @@
                     //     echo "Le tableau n'est pas trié par ordre croissant en se référant à la clé 'cle'.";
                     // }
 
-                    // echo "<pre>";
-                    //     print_r($igorCI);
-                    // echo "</pre>";
+                    echo "<pre>";
+                        print_r($telmaCI);
+                    echo "</pre>";
 
-                    $this->comparerTelmaEtIgor($igorCI, $telmaCI);
+                    // $this->comparerTelmaEtIgor($igorCI, $telmaCI);
                 }
 
                 

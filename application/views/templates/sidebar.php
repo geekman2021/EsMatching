@@ -3,31 +3,30 @@
 <html lang="en" dir="ltr">
   <head>
     <meta charset="UTF-8" />
-    <title>Drop Down Sidebar Menu | CodingLab</title>
+    <title>Rapprochement</title>
 
     <script src="<?php echo base_url(); ?>assets/jquery/jquery-3.7.1.min.js"></script>
     <script src="<?php  echo base_url(); ?>assets/jquery/jquery.dataTables.min.js"></script>
-     <!-- <script src="<?php echo base_url(); ?>assets/jquery/dataTables.buttons.min.js"></script> -->
+     <script src="<?php echo base_url(); ?>assets/jquery/dataTables.buttons.min.js"></script>
     <script src="<?php echo base_url(); ?>assets/jquery/jszip.min.js"></script>
-    <!-- <script src="<?php echo base_url(); ?>assets/jquery/pdfmake.min.js"></script>
+    <script src="<?php echo base_url(); ?>assets/jquery/pdfmake.min.js"></script>
     <script src="<?php echo base_url(); ?>assets/jquery/vfs_fonts.js"></script>
     <script src="<?php echo base_url(); ?>assets/jquery/buttons.html5.min.js"></script>
     <script src="<?php echo base_url(); ?>assets/jquery/vfs_fonts.js"></script>
     <script src="<?php echo base_url(); ?>assets/jquery/buttons.html5.min.js"></script>
-    <script src="<?php echo base_url(); ?>assets/jquery/buttons.print.min.js"></script> -->
+    <script src="<?php echo base_url(); ?>assets/jquery/buttons.print.min.js"></script>
     <script src="<?php echo base_url(); ?>assets/sweetalert/sweetalert.min.js"></script>
-    <script src="<?php echo base_url(); ?>assets/bootstrap/js/bootstrap.min.js"></script> 
-    <link rel="stylesheet" href="<?php echo base_url(); ?>assets/bootstrap/css/bootstrap.min.css" />
+    <script src="<?php echo base_url(); ?>assets/bootstrap/js/bootstrap.min.js"></script>
+    <script src="<?php echo base_url(); ?>assets/chart/chart.js"> </script>
+    <link rel="stylesheet" href="<?php echo base_url(); ?>assets/bootstrap/css/bootstrap.css" />
     <script src="<?php echo base_url(); ?>assets/jquery/datatables.min.js"> </script>
-    <link rel="stylesheet" href="<?php echo base_url(); ?>assets/jquery/datatables.min.css" />
+    <link rel="stylesheet" href="<?php echo base_url(); ?>assets/jquery/datatables.css" />
     <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>assets/jquery/buttons.dataTables.min.css">
-    <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>assets/font-awesome/css/all.min.css" >
+    <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>assets/font-awesome/css/all.css" >
     <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>assets/font-awesome/css/fontawesome.min.css" >
     <script src="<?php echo base_url(); ?>assets/jquery/jquery.dataTables.min.js"></script>
     
     
-    <!-- <link rel="stylesheet" href="style.css" /> -->
-    <!-- Boxiocns CDN Link -->
     <link href="https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css" rel="stylesheet" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
@@ -303,12 +302,12 @@
       </div>
       <ul class="nav-links">
         <li>
-          <a href="#">
+          <a href="<?php echo site_url("dashboard") ?>">
             <i class="bx bx-grid-alt"></i>
             <span class="link_name">Dashboard</span>
           </a>
           <ul class="sub-menu blank">
-            <li><a class="link_name" href="#">Dashboard</a></li>
+            <li><a class="link_name" href="<?php echo site_url("dashboard") ?>">Dashboard</a></li>
           </ul>
         </li>
         <li>
@@ -341,7 +340,7 @@
             </a>
           </div>
           <ul class="sub-menu blank">
-            <li><a class="link_name" href="#">Droit Utilisateur</a></li>
+            <li><a class="link_name" href="<?php echo site_url("droits") ?>">Droit Utilisateur</a></li>
           </ul>
         </li>
         <li>
@@ -350,7 +349,7 @@
             <span class="link_name">Importer</span>
           </a>
           <ul class="sub-menu blank">
-            <li><a class="link_name" href="#">Importer</a></li>
+            <li><a class="link_name" href="<?php echo site_url("importer") ?>">Importer</a></li>
           </ul>
         </li>
         <li>
@@ -363,9 +362,9 @@
           </div>
           <ul class="sub-menu">
             <li><a class="link_name" href="#">Operateur</a></li>
-            <li><a href="#">Airtel</a></li>
-            <li><a href="#">Orange</a></li>
-            <li><a href="#">Telma</a></li>
+            <li><a href="<?php echo site_url("airtel") ?>">Airtel</a></li>
+            <li><a href="<?php echo site_url("orange") ?>">Orange</a></li>
+            <li><a href="<?php echo site_url("telma") ?>">Telma</a></li>
           </ul>
         </li>
 

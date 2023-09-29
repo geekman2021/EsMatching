@@ -10,11 +10,11 @@
             return $this->db->insert("utilisateurs", $data);
         }
 
-        public function get_profils() {
+        public function get_users() {
 
             $this->db->select("*");
             $this->db->from("utilisateurs");
-            $this->db->order_by("code_profile", "ASC");
+            $this->db->order_by("code_profil", "ASC");
 
             $query= $this->db->get();
             return $query->result();

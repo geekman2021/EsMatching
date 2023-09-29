@@ -20,9 +20,6 @@
                 <?php foreach($profile as $p) { ?>
                     <option value="<?php echo $p->code_profile; ?>"><?php echo $p->libelle; ?></option>
                 <?php }; ?>
-                <!-- <option value="1">profile 1</option>
-                <option value="2">profile 2</option>
-                <option value="3">profile 3</option> -->
             </select>
         </div>
         <div class="container">

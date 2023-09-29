@@ -28,15 +28,20 @@
     </div>
     <div id="anormale" class="container tab-pane fade"><br>
       <ul class="nav nav-tabs">
-        <li class="nav-item col-sm-6">
-          <a class="nav-link" href="#tabAnormaleCashIn">Anomalie Cash in</a>
+        <li class="nav-item col-sm-3">
+          <a class="nav-link" href="#tabDat">Débit à Tort</a>
         </li>
-        <li class="nav-item col-sm-6">
-          <a class="nav-link" href="#tabAnormaleCashOut">Anormalie Cash Out</a>
+        <li class="nav-item col-sm-3">
+          <a class="nav-link" href="#tabCat">Crédit à Tort</a>
+        </li>
+        <li class="nav-item col-sm-3">
+          <a class="nav-link" href="#tabInd">IND01</a>
+        </li>
+        <li class="nav-item col-sm-3">
+          <a class="nav-link" href="#tabVi">VI</a>
         </li>
       </ul>
     </div>
-
   </div>
   <div class="container tab-content">
     <div id="tabNormaleCashIn" class="tab-pane"><br>
@@ -44,30 +49,33 @@
             <table class="table table-bordered" id="tableNormaleCashIn">
                 <thead style="text-align: center ;">
                     <tr>
-                        <th colspan="10" style="text-align: center ;">Orange Cash In</th>
-                        <th colspan="9" style="text-align: center ;">IGore Cash In</th>
+                        <th colspan="12" style="text-align: center ;">BOA</th>
+                        <th style="text-align: center ;"></th>
+                        <th colspan="9" style="text-align: center ;">ORANGE/th>
                     </tr>
                     <tr>
-                        <th>TransferId</th>
-                        <th>TransferDate</th>
-                        <th>AccountNo</th>
-                        <th>SenderMsiSDN</th>
-                        <th>DestMsiSDN</th>
-                        <th>Amount</th>
-                        <th>Description</th>
-                        <th>ServiceName</th>
-                        <th>ReferenceNumber</th>
-                        <th>ExternalId</th>
-                        <th>ReferenceIgor</th>
-                        <th>Compte</th>
-                        <th>DateOper</th>
-                        <th>DateVal</th>
-                        <th>Devise</th>
-                        <th>Montant</th>
-                        <th>Libelle</th>
-                        <th>Operation</th>
-                        <th>Expl</th>
-                        
+                      <th>Code_Agence</th>
+                      <th>Date_Oper</th>
+                      <th>princ_date_val</th>
+                      <th>comm_date_val</th>
+                      <th>princ_montant</th>
+                      <th>comm_montant</th>
+                      <th>Montant</th>
+                      <th>Devise</th>
+                      <th>Oper</th>
+                      <th>Expl</th>
+                      <th>ReferenceIgor</th>
+                      <th>Cle</th>
+                      <th></th>
+                      <th>Cle</th>
+                      <th></th>
+                      <th>Date</th>
+                      <th>Heure</th>
+                      <th>Réference</th>
+                      <th>Service</th>
+                      <th>Num_Compte</th>
+                      <th>Débit</th>
+                      <th>Crédit</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -78,118 +86,158 @@
     <div id="tabNormaleCashOut" class="container tab-pane "><br>
         <div class="table-responsive">
             <table class="table table-bordered" id="tableNormaleCashOut">
-                <thead>
-                    <tr>
-                        <th colspan="10" style="text-align: center ;">Orange Cash Out</th>
-                        <th colspan="9" style="text-align: center ;">IGore Cash Out</th>
-                    </tr>
-                    <tr>
-                        <th>TransferId</th>
-                        <th>TransferDate</th>
-                        <th>ExternalId</th>
-                        <th>AccountNo</th>
-                        <th>SenderMsiSDN</th>
-                        <th>DestMsiSDN</th>
-                        <th>Amount</th>
-                        <th>Description</th>
-                        <th>ServiceName</th>
-                        <th>ReferenceNumber</th>
-                        <th>Compte</th>
-                        <th>DateOper</th>
-                        <th>DateVal</th>
-                        <th>Devise</th>
-                        <th>Montant</th>
-                        <th>Libelle</th>
-                        <th>Operation</th>
-                        <th>Expl</th>
-                        <th>ReferenceIgor</th>
-                    </tr>
-                </thead>
-                <tbody>
-                 
-                </tbody>
-            </table>
-        </div>
-         
-    </div>
-    <div id="tabAnormaleCashIn" class="container tab-pane "><br>
-        
-    <div class="table-responsive">
-            <table class="table table-bordered" id="tableAnormaleCashIn">
-                <thead style="text-align: center ;">
-                    <tr>
-                        <th colspan="10" style="text-align: center ;">Orange Cash In</th>
-                        <th colspan="9" style="text-align: center ;">IGore Cash In</th>
-                    </tr>
-                    <tr>
-                    <th>Transfer Id</th>
-                        <th>Transfer Date</th>
-                        <th>Account No</th>
-                        <th>Sender MsiSDN</th>
-                        <th>Dest MsiSDN</th>
-                        <th>Amount</th>
-                        <th>Description</th>
-                        <th>Service Name</th>
-                        <th>Reference Number</th>
-                        <th>External Id</th>
-                        <th>Reference Igor</th>
-                        <th>Compte</th>
-                        <th>Date Oper</th>
-                        <th>Date Val</th>
-                        <th>Devise</th>
-                        <th>Montant</th>
-                        <th>Libelle</th>
-                        <th>Operation</th>
-                        <th>Expl</th>
-                    </tr>
-                </thead>
-                <tbody>    
-                </tbody>
-            </table>
-        </div>
-        
-    </div>
-    <div id="tabAnormaleCashOut" class="container tab-pane "><br>
-        
-    <div class="table-responsive">
-        <table class="table table-bordered" id="tableAnormaleCashOut">
-            <thead>
-                <tr>
-                    <th colspan="10" style="text-align: center ;">Orange Cash Out</th>
-                    <th colspan="10" style="text-align: center ;">IGore Cash Out</th>
-                </tr>
-                <tr>
-                    <th>TransferId</th>
-                    <th>TransferDate</th>
-                    <th>ExternalId</th>
-                    <th>AccountNo</th>
-                    <th>SenderMsiSDN</th>
-                    <th>DestMsiSDN</th>
-                    <th>Amount</th>
-                    <th>Description</th>
-                    <th>ServiceName</th>
-                    <th>ReferenceNumber</th>
-                    <th>Compte</th>
-                    <th>DateOper</th>
-                    <th>DateVal</th>
-                    <th>Devise</th>
-                    <th>Montant</th>
-                    <th>Libelle</th>
-                    <th>Operation</th>
-                    <th>Expl</th>
-                    <th>ReferenceIgor</th>
-                </tr>
+            <thead style="text-align: center ;">
+              <tr>
+                  <th colspan="8" style="text-align: center ;">BOA</th>
+                  <th style="text-align: center ;"></th>
+                  <th colspan="8" style="text-align: center ;">ORANGE/th>
+              </tr>
+              <tr>
+                <th>Date_Oper</th>
+                <th>date_val</th>
+                <th>montant</th>
+                <th>Devise</th>
+                <th>Oper</th>
+                <th>Expl</th>
+                <th>ReferenceIgor</th>
+                <th>Cle</th>
+                <th></th>
+                <th>Cle</th>
+                <th>Date</th>
+                <th>Heure</th>
+                <th>Réference</th>
+                <th>Service</th>
+                <th>Num_Compte</th>
+                <th>Débit</th>
+                <th>Crédit</th>
+              </tr>
             </thead>
-            <tbody>
-                
-            </tbody>
-        </table>
-    </div>
+              <tbody>
+              </tbody>
+            </table>
+        </div>
          
-      </ul>
-    </div>
-  
   </div>
+
+  <div class="container tab-content">
+  <div id="tabDat" class="container tab-pane "><br>   
+    <div class="table-responsive">
+      <table class="table table-bordered" id="tableDat">
+        <thead style="text-align: center ;">
+          <tr>
+              <th colspan="12" style="text-align: center ;">BOA</th>
+              <th style="text-align: center ;"></th>
+              <th colspan="9" style="text-align: center ;">ORANGE/th>
+          </tr>
+          <tr>
+            <th>Code_Agence</th>
+            <th>Date_Oper</th>
+            <th>princ_date_val</th>
+            <th>comm_date_val</th>
+            <th>princ_montant</th>
+            <th>comm_montant</th>
+            <th>Montant</th>
+            <th>Devise</th>
+            <th>Oper</th>
+            <th>Expl</th>
+            <th>ReferenceIgor</th>
+            <th>Cle</th>
+            <th></th>
+            <th>Cle</th>
+            <th></th>
+            <th>Date</th>
+            <th>Heure</th>
+            <th>Réference</th>
+            <th>Service</th>
+            <th>Num_Compte</th>
+            <th>Débit</th>
+            <th>Crédit</th>
+          </tr>
+        </thead>
+        <tbody>    
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div id="tabCat" class="container tab-pane "><br>    
+    <div class="table-responsive">
+      <table class="table table-bordered" id="tableCat">
+        <thead style="text-align: center ;">
+          <tr>
+              <th colspan="8" style="text-align: center ;">BOA</th>
+              <th style="text-align: center ;"></th>
+              <th colspan="8" style="text-align: center ;">ORANGE/th>
+          </tr>
+          <tr>
+            <th>Date_Oper</th>
+            <th>date_val</th>
+            <th>montant</th>
+            <th>Devise</th>
+            <th>Oper</th>
+            <th>Expl</th>
+            <th>ReferenceIgor</th>
+            <th>Cle</th>
+            <th></th>
+            <th>Cle</th>
+            <th>Date</th>
+            <th>Heure</th>
+            <th>Réference</th>
+            <th>Service</th>
+            <th>Num_Compte</th>
+            <th>Débit</th>
+            <th>Crédit</th>
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
+    </div>     
+  </div>
+
+  <div id="tabInd" class="container tab-pane "><br>    
+    <div class="table-responsive">
+      <table class="table table-bordered" id="tableInd">
+        <thead>
+          <tr>
+            <th></th>
+            <th>Cle</th>
+            <th></th>
+            <th>Date</th>
+            <th>Heure</th>
+            <th>Réference</th>
+            <th>Service</th>
+            <th>Num_Compte</th>
+            <th>Débit</th>
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
+    </div>     
+  </div>
+  <div id="tabVI" class="tab-pane"><br>
+      <div class="table-responsive">
+          <table class="table table-bordered" id="tableVI">
+              <thead style="text-align: center ;">
+                <tr>
+                  <th>Compte</th>
+                  <th>DateOper</th>
+                  <th>DateVal</th>
+                  <th>Montant</th>
+                  <th>Devise</th>
+                  <th>ReferenceIgor</th>
+                  <th>Libelle</th>
+                  <th>Operation</th>
+                  <th>Expl</th>
+                </tr>
+              </thead>
+              <tbody>
+              </tbody>
+          </table>
+      </div>
+  </div>
+</div>
+</div>
 <script>
 $(document).ready(function(){
 
@@ -216,7 +264,7 @@ $(document).ready(function(){
     }
     });
 
-  $("#tableAnormaleCashOut").DataTable({
+  $("#tableDat").DataTable({
     responsive: true,
 
     dom: 'Bfrtip',
@@ -228,7 +276,7 @@ $(document).ready(function(){
     }
   });
 
-  $("#tableAnormaleCashIn").DataTable({
+  $("#tableCat").DataTable({
     responsive: true,
 
     dom: 'Bfrtip',
@@ -239,6 +287,32 @@ $(document).ready(function(){
       url: '<?php echo base_url(); ?>assets/fr-FR.json',
     }
 
+  });
+
+
+  $("#tableInd").DataTable({
+    responsive: true,
+
+    dom: 'Bfrtip',
+    buttons: [
+      'copy', 'csv', 'excel', 'pdf', 'print'
+    ],
+    language: {
+      url: '<?php echo base_url(); ?>assets/fr-FR.json',
+    }
+
+  });
+
+  $("#tableVI").DataTable({
+    responsive: true,
+
+    dom: 'Bfrtip',
+    buttons: [
+      'copy', 'csv', 'excel', 'pdf', 'print'
+    ],
+    language: {
+      url: '<?php echo base_url(); ?>assets/fr-FR.json',
+    }
   });
   
 
@@ -252,8 +326,8 @@ $(document).ready(function(){
       $("#tabNormaleCashOut").removeClass("show active");
     }
     if($(this).attr('href') === '#normale') {
-      $("#tabAnormaleCashIn").removeClass("show active");
-      $("#tabAnormaleCashOut").removeClass("show active");
+      $("#tabDat").removeClass("show active");
+      $("#tabCat").removeClass("show active");
     }
   });
 });

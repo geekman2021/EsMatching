@@ -1,7 +1,7 @@
 <div class="container mt-4">
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold" style="color: #11101d">Liste Profil</h6>
+            <h6 class="m-0 font-weight-bold" style="color: #11101d">Liste Utilisateurs</h6>
         </div>
         <div class="card-body">
             <div class="container mt-4">
@@ -9,25 +9,15 @@
                     <thead style="text-align: center;">
                         <tr >
                             <th style="display: none;">Id </th>
-                            <th>Code Profile</th>
-                            <th>libelle</th>
+                            <th>Matricule</th>
+                            <th>Nom</th>
+                            <th>Profil</th>
+                            <th>Code Unité</th>
                             <th>Action</th>
                         </tr>
                     </thead>
                     <tbody style="text-align: center;">
-                        <?php foreach ($data as $profile) { ?>
-                            <tr>
-                                <td style="display: none;"><?php echo $profile->id; ?></td>
-                                <td><?php echo  $profile->code_profile; ?></td>
-                                <td><?php  echo $profile->libelle; ?></td>
-                                <td style="text-align: center ;">
-                                    <form action="" method="DELETE">
-                                        <a class="btn btn-info" href="#" onclick="modifier('<?php echo $profile->id; ?>', '<?php echo $profile->code_profile; ?>', '<?php echo $profile->libelle; ?>')"><i class="fa-regular fa-pen-to-square" style="margin-right: 5px;"></i>Modifier</a>
-                                        <button class="btn btn-danger" onclick="supprimer('<?php echo $profile->id; ?>')"><i class="fa-solid fa-trash" style="margin-right: 5px;"></i>Supprimer</button>
-                                    </form>
-                                </td>
-                            </tr>
-                        <?php }; ?>
+                       
                     </tbody>
                 </table>
             </div>

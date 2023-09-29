@@ -1,8 +1,8 @@
 <?php
     class Users extends CI_Controller {
 
-        public $usersCRUD;
-        public $profilList;
+        public $user_model;
+        public $profil_model;
 
         public function header() {
             header("Access-Control-Allow-Origin: *");
@@ -12,38 +12,37 @@
 
         public function __construct() {
             parent::__construct();
-            // $this->load->model("User_Model");
-            // $this->load->model("Profil_Model");
-            // $this->usersCRUD= new User_Model;
-            // $this->profilList= new Profil_Model;
+            $this->load->model("user_model");
+            $this->load->model("profil_model");
             
         }
 
         public function index() {
 
-            echo "bonjour";
-            $this->load->view("templates/header");
+        
             // $this->header();
 
-            // $data["data"] = $this->usersCRUD->get_users(); 
-            // $data["profile"] = $this->profilList->get_profils();
-            // $this->load->view("templates/sidebars");
-            // $this->load->view("pages/users/user_form", $data);
-            // $this->load->view("pages/users/user_list", $data);
+            $data["data"] = $this->user_model->get_users(); 
+            $data["profile"] = $this->profil_model->get_profils();
+            $this->load->view("templates/sidebar");
+            $this->load->view("pages/users/user_form", $data);
+            $this->load->view("pages/users/user-list");
             // $this->load->view("templates/footer");
         }
 
         public function add_user() {
 
-            $this->header();
+            // $this->header();
             $num_mat = $this->input->post('num_mat');
             $nom = $this->input->post('nom');
             $code_profile = $this->input->post('code_profile');
+            $code_unite= $this->input->post("code_unite");
             
-            $this->usersCRUD->insert_user(array(
-                "num_mat" => $num_mat,
-                "code_profile" => $code_profile,
+            $this->user_model->insert_user(array(
+                "matricule" => $num_mat,
+                "code_profil" => $code_profile,
                 "nom" => $nom,
+                "code_unite" => $code_unite
             ));
         }
 
@@ -56,11 +55,13 @@
             $num_mat = $request->num_mat;
             $nom = $request->nom;
             $code_profile = $request->code_profile;
+            $code_unite = $request->code_unite;
 
-            $this->usersCRUD->update_user($id, array(
-                "num_mat" => $num_mat,
-                "code_profile" => $code_profile,
+            $this->user_model->update_user($id, array(
+                "matricule" => $num_mat,
+                "code_profil" => $code_profile,
                 "nom" => $nom,
+                "code_unite" => $code_unite
             ));
             // redirect(site_url("/users"));
         }
@@ -68,7 +69,7 @@
         public function remove_user() {
             $this->header();
             $id = $this->input->post("id");    
-            $this->usersCRUD->delete_user($id);
+            $this->user_model->delete_user($id);
         }
 
 

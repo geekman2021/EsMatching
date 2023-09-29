@@ -203,6 +203,7 @@
             // $this->RegulViDeallocation($_SESSION["anomalie_vi"], $_SESSION["deallocation"]);
             $this->exporter($airtelIgorNormaleCI, $airtelIgorNormaleCO, $dernierAmbiguous, $dernierRollBack, $anomalieAirtelCI, $anomalieAirtelCO, $anomalieIgorCI, $anomalieIgorCO, $igorVI, $deallocation);
 
+       
             // $this->RegulNonAu($nonAU, $_SESSION["igor_anomalie_ci"]);
 
 }
@@ -532,7 +533,7 @@
         public function exporter($airtelIgorNormaleCI, $airtelIgorNormaleCO, $dernierAmbiguous, $dernierRollBack, $anomalieAirtelCI, $anomalieAirtelCO, $anomalieIgorCI, $anomalieIgorCO, $igorVI, $deallocation) {
 
             $dateAujourdhui = date("Y-m-d");
-            $nomFichier = "RapproAirtel-" . $dateAujourdhui . ".xlsx";
+            $nomFichier = "RapproAirtel-" .$dateAujourdhui .".xlsx";
 
             header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
             header("Content-Disposition: attachment; filename=\"" . $nomFichier . "\"");
@@ -542,6 +543,8 @@
 
             $cell_array = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X"];
             $header = ["TRI", "DATE OPE", "DATE VAL", "DEVISE", "MONTANT", "LIBELLE", "CODE OPER", "EXPL", "REF", "SOLDE", " ", "TRANSFER_ID", "DATE OPE", "REF", "ACCOUNT_NO", "SENDER MSISDN", "DESTMSISDN", "MONTANT", "DESCRIPTION", "SERVICE_NAME", "REFERENCE_NUMBER", "MONTANT", "SOLDE", "PRINCIPALE"];
+
+            // echo count($cell_array);
 
             for ($i = 0; $i < count($cell_array); $i++) {
                 $sheet->getStyle($cell_array[$i] . "2")->getFont()->setBold(true);
@@ -556,7 +559,7 @@
 
             }
 
-            $lastRow = $sheet->getHighestRow() + 1;
+            // $lastRow = $sheet->getHighestRow() + 1;
             // $columnOrder= ["DATE_OPER", "DATE_VAL", "DEVISE", "MONTANT", "LIBELLE", "OPER", "EXPL", "REF_IGOR", "solde", "transfer_date", "external_id", "sender_msisdn", "dest_msisdn", "amount", "description", "service_name", "reference_number", "solde"];
 
 
@@ -569,60 +572,60 @@
             //     $lastRow++;
             // }
 
-// ------------------------------------------------------------------------------------------------------NORMALE CI -----------------------------------------------------------------------------
-
-            // foreach ($airtelIgorNormaleCI as $dataRow) {
-            //     $sheet->setCellValue($cell_array[1] .$lastRow, $dataRow["DATE_OPER"]);
-            //     $sheet->setCellValue($cell_array[2] .$lastRow, $dataRow["DATE_VAL"]);
-            //     $sheet->setCellValue($cell_array[3] .$lastRow, $dataRow["DEVISE"]);
-            //     $sheet->setCellValue($cell_array[4] .$lastRow, $dataRow["MONTANT"]);
-            //     $sheet->setCellValue($cell_array[5] .$lastRow, $dataRow["LIBELLE"]);
-            //     $sheet->setCellValue($cell_array[6] .$lastRow, $dataRow["OPER"]);
-            //     $sheet->setCellValue($cell_array[7] .$lastRow, $dataRow["EXPL"]);
-            //     $sheet->setCellValue($cell_array[8] .$lastRow, $dataRow["REF_IGOR"]);
-            //     $sheet->setCellValue($cell_array[11] .$lastRow, $dataRow["TRANSFER_ID"]);
-            //     $sheet->setCellValue($cell_array[12] .$lastRow, $dataRow["transfer_date"]);
-            //     $sheet->setCellValue($cell_array[13] .$lastRow, $dataRow["external_id"]);
-            //     $sheet->setCellValue($cell_array[14] .$lastRow, $dataRow["account_no"]);
-            //     $sheet->setCellValue($cell_array[15] .$lastRow, $dataRow["sender_msisdn"]);
-            //     $sheet->setCellValue($cell_array[16] .$lastRow, $dataRow["dest_msisdn"]);
-            //     $sheet->setCellValue($cell_array[17] .$lastRow, $dataRow["amount"]);
-            //     $sheet->setCellValue($cell_array[18] .$lastRow, $dataRow["description"]);
-            //     $sheet->setCellValue($cell_array[19] .$lastRow, $dataRow["service_name"]);
-            //     $sheet->setCellValue($cell_array[20] .$lastRow, $dataRow["reference_number"]);
-            //     $sheet->setCellValue($cell_array[21] .$lastRow, $dataRow["solde"]);
-            //     $lastRow++;
-            // }
-
-// -----------------------------------------------------------------------------------------------------NORMALE CO --------------------------------------------------------------
+            $lastRow = $sheet->getHighestRow() + 1;
+            foreach ($airtelIgorNormaleCI as $dataRow) {
+                $sheet->setCellValue($cell_array[1] .$lastRow, $dataRow["DATE_OPER"]);
+                $sheet->setCellValue($cell_array[2] .$lastRow, $dataRow["DATE_VAL"]);
+                $sheet->setCellValue($cell_array[3] .$lastRow, $dataRow["DEVISE"]);
+                $sheet->setCellValue($cell_array[4] .$lastRow, $dataRow["MONTANT"]);
+                $sheet->setCellValue($cell_array[5] .$lastRow, $dataRow["LIBELLE"]);
+                $sheet->setCellValue($cell_array[6] .$lastRow, $dataRow["OPER"]);
+                $sheet->setCellValue($cell_array[7] .$lastRow, $dataRow["EXPL"]);
+                $sheet->setCellValue($cell_array[8] .$lastRow, $dataRow["REF_IGOR"]);
+                $sheet->setCellValue($cell_array[11] .$lastRow, $dataRow["TRANSFER_ID"]);
+                $sheet->setCellValue($cell_array[12] .$lastRow, $dataRow["transfer_date"]);
+                $sheet->setCellValue($cell_array[13] .$lastRow, $dataRow["external_id"]);
+                $sheet->setCellValue($cell_array[14] .$lastRow, $dataRow["account_no"]);
+                $sheet->setCellValue($cell_array[15] .$lastRow, $dataRow["sender_msisdn"]);
+                $sheet->setCellValue($cell_array[16] .$lastRow, $dataRow["dest_msisdn"]);
+                $sheet->setCellValue($cell_array[17] .$lastRow, $dataRow["amount"]);
+                $sheet->setCellValue($cell_array[18] .$lastRow, $dataRow["description"]);
+                $sheet->setCellValue($cell_array[19] .$lastRow, $dataRow["service_name"]);
+                $sheet->setCellValue($cell_array[20] .$lastRow, $dataRow["reference_number"]);
+                $sheet->setCellValue($cell_array[21] .$lastRow, $dataRow["solde"]);
+                $lastRow++;
+            }
 
 
-            // $lastRow = $sheet->getHighestRow() + 1;
-            // foreach ($airtelIgorNormaleCO as $dataRow) {
-            //     $sheet->setCellValue($cell_array[1] .$lastRow, $dataRow["DATE_OPER"]);
-            //     $sheet->setCellValue($cell_array[2] .$lastRow, $dataRow["DATE_VAL"]);
-            //     $sheet->setCellValue($cell_array[3] .$lastRow, $dataRow["DEVISE"]);
-            //     $sheet->setCellValue($cell_array[4] .$lastRow, $dataRow["MONTANT"]);
-            //     $sheet->setCellValue($cell_array[5] .$lastRow, $dataRow["LIBELLE"]);
-            //     $sheet->setCellValue($cell_array[6] .$lastRow, $dataRow["OPER"]);
-            //     $sheet->setCellValue($cell_array[7] .$lastRow, $dataRow["EXPL"]);
-            //     $sheet->setCellValue($cell_array[8] .$lastRow, $dataRow["REF_IGOR"]);
-            //     $sheet->setCellValue($cell_array[11] .$lastRow, $dataRow["TRANSFER_ID"]);
-            //     $sheet->setCellValue($cell_array[12] .$lastRow, $dataRow["transfer_date"]);
-            //     $sheet->setCellValue($cell_array[13] .$lastRow, $dataRow["external_id"]);
-            //     $sheet->setCellValue($cell_array[14] .$lastRow, $dataRow["account_no"]);
-            //     $sheet->setCellValue($cell_array[15] .$lastRow, $dataRow["sender_msisdn"]);
-            //     $sheet->setCellValue($cell_array[16] .$lastRow, $dataRow["dest_msisdn"]);
-            //     $sheet->setCellValue($cell_array[17] .$lastRow, $dataRow["amount"]);
-            //     $sheet->setCellValue($cell_array[18] .$lastRow, $dataRow["description"]);
-            //     $sheet->setCellValue($cell_array[19] .$lastRow, $dataRow["service_name"]);
-            //     $sheet->setCellValue($cell_array[20] .$lastRow, $dataRow["reference_number"]);
-            //     $sheet->setCellValue($cell_array[21] .$lastRow, $dataRow["solde"]);
+
+            $lastRow = $sheet->getHighestRow() + 2;
+            foreach ($airtelIgorNormaleCO as $dataRow) {
+                $sheet->setCellValue($cell_array[1] .$lastRow, $dataRow["DATE_OPER"]);
+                $sheet->setCellValue($cell_array[2] .$lastRow, $dataRow["DATE_VAL"]);
+                $sheet->setCellValue($cell_array[3] .$lastRow, $dataRow["DEVISE"]);
+                $sheet->setCellValue($cell_array[4] .$lastRow, $dataRow["MONTANT"]);
+                $sheet->setCellValue($cell_array[5] .$lastRow, $dataRow["LIBELLE"]);
+                $sheet->setCellValue($cell_array[6] .$lastRow, $dataRow["OPER"]);
+                $sheet->setCellValue($cell_array[7] .$lastRow, $dataRow["EXPL"]);
+                $sheet->setCellValue($cell_array[8] .$lastRow, $dataRow["REF_IGOR"]);
+                $sheet->setCellValue($cell_array[11] .$lastRow, $dataRow["TRANSFER_ID"]);
+                $sheet->setCellValue($cell_array[12] .$lastRow, $dataRow["transfer_date"]);
+                $sheet->setCellValue($cell_array[13] .$lastRow, $dataRow["external_id"]);
+                $sheet->setCellValue($cell_array[14] .$lastRow, $dataRow["account_no"]);
+                $sheet->setCellValue($cell_array[15] .$lastRow, $dataRow["sender_msisdn"]);
+                $sheet->setCellValue($cell_array[16] .$lastRow, $dataRow["dest_msisdn"]);
+                $sheet->setCellValue($cell_array[17] .$lastRow, $dataRow["amount"]);
+                $sheet->setCellValue($cell_array[18] .$lastRow, $dataRow["description"]);
+                $sheet->setCellValue($cell_array[19] .$lastRow, $dataRow["service_name"]);
+                $sheet->setCellValue($cell_array[20] .$lastRow, $dataRow["reference_number"]);
+                $sheet->setCellValue($cell_array[21] .$lastRow, $dataRow["solde"]);
                 
-            //     $lastRow++;
-            // }
+                $lastRow++;
+            }
 
-// -----------------------------------------------------------------IGOR VI -------------------------------------------------------------------------------------
+            $writer = new PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
+            $writer->save('php://output');
+
 
             // $lastRow = $sheet->getHighestRow() + 3;
             // foreach($igorVI as $dataRow) {
@@ -638,8 +641,8 @@
 
             // }
 
-// -----------------------------------------------------------------ANOMALIE IGOR CI -------------------------------------------------------------------------------------
 
+            
             // $lastRow = $sheet->getHighestRow() + 2;
 
             // foreach($anomalieIgorCI as $dataRow) {
@@ -655,7 +658,6 @@
             //     // $sheet->getStyle($cell_array[1] . $rowIndex)->getFill()->setStartColor($redFill->getStartColor());
             // }
 
-// -----------------------------------------------------------------ANOMALIE IGOR CO  -------------------------------------------------------------------------------------
 
             // $lastRow = $sheet->getHighestRow() + 2;
             // foreach($anomalieIgorCO as $dataRow) {
@@ -673,7 +675,6 @@
             //     // }
             // }
 
-// -----------------------------------------------------------------ANOMALIE AIRTEL CI  -------------------------------------------------------------------------------------
             // $lastRow = $sheet->getHighestRow() + 2;
 
             // foreach($anomalieAirtelCI as $item) {
@@ -690,7 +691,6 @@
             //     $sheet->setCellValue($cell_array[21] .$lastRow, $dataRow["solde"]);
             // }
 
-// -----------------------------------------------------------------ANOMALIE AIRTEL CO  -------------------------------------------------------------------------------------
 
 
             // $lastRow = $sheet->getHighestRow() + 2;
@@ -709,7 +709,6 @@
             //     $sheet->setCellValue($cell_array[21] .$lastRow, $dataRow["solde"]);
             // }
 
-// -----------------------------------------------------------------AMBIGUOUS  -------------------------------------------------------------------------------------
             
             // $lastRow = $sheet->getHighestRow() + 2;
             // foreach($dernierAmbiguous as $dataRow) {
@@ -725,7 +724,6 @@
             //     $sheet->setCellValue($cell_array[20] .$lastRow, $dataRow["reference_number"]);
             //     $sheet->setCellValue($cell_array[21] .$lastRow, $dataRow["solde"]);
             // }
-// -----------------------------------------------------------------ROLLBACK  -------------------------------------------------------------------------------------
 
             // $lastRow = $sheet->getHighestRow() + 1;
             // foreach($dernierRollBack as $dataRow) {
@@ -744,7 +742,6 @@
 
 
 
-// -----------------------------------------------------------------DEALLOCATION  -------------------------------------------------------------------------------------
 
             // $lastRow = $sheet->getHighestRow() + 3;
             // foreach($deallocation as $dataRow) {
@@ -762,61 +759,61 @@
             // }
 
 
-            $lastRow = $sheet->getHighestRow() + 1;
-            $range = 'J3:J' . $lastRow;
-            $style = $sheet->getStyle($range);
+            // $lastRow = $sheet->getHighestRow() + 1;
+            // $range = 'J3:J' . $lastRow;
+            // $style = $sheet->getStyle($range);
 
-            $style->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID);
-            $style->getFill()->getStartColor()->setARGB('FFFF00');
+            // $style->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID);
+            // $style->getFill()->getStartColor()->setARGB('FFFF00');
 
-            $range = 'K3:K' . $lastRow;
-            $style= $sheet->getStyle($range);
-            $style->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID);
-            $style->getFill()->getStartColor()->setARGB('FF00FF00');
+            // $range = 'K3:K' . $lastRow;
+            // $style= $sheet->getStyle($range);
+            // $style->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID);
+            // $style->getFill()->getStartColor()->setARGB('FF00FF00');
 
-            $range = 'W3:W' . $lastRow;
-            $style= $sheet->getStyle($range);
-            $style->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID);
-            $style->getFill()->getStartColor()->setARGB('FF00FFFF');
+            // $range = 'W3:W' . $lastRow;
+            // $style= $sheet->getStyle($range);
+            // $style->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID);
+            // $style->getFill()->getStartColor()->setARGB('FF00FFFF');
 
-            for ($row = 4; $row <= $lastRow; $row++) {
-                $formula = "=E$row + J" . ($row - 1);
-                $sheet->setCellValue("J$row", $formula);
-            }
+            // for ($row = 4; $row <= $lastRow; $row++) {
+            //     $formula = "=E$row + J" . ($row - 1);
+            //     $sheet->setCellValue("J$row", $formula);
+            // }
 
-            for ($row = 4; $row <= $lastRow; $row++) {
-                $formula = "=V$row + W" . ($row - 1);
-                $sheet->setCellValue("W$row", $formula);
-            }
+            // for ($row = 4; $row <= $lastRow; $row++) {
+            //     $formula = "=V$row + W" . ($row - 1);
+            //     $sheet->setCellValue("W$row", $formula);
+            // }
 
-            for ($row = 4; $row <= $lastRow; $row++) {
-                $formula = "=E$row + V" . $row;
-                $sheet->setCellValue("X$row", $formula);
-            }
+            // for ($row = 4; $row <= $lastRow; $row++) {
+            //     $formula = "=E$row + V" . $row;
+            //     $sheet->setCellValue("X$row", $formula);
+            // }
 
 
-            $cell = "X1";
-            $style = $sheet->getStyle($cell);
-            $style->getFont()->getColor()->setARGB('FFFF0000');
-            $lastRow = $sheet->getHighestRow();
-            $formula = "=SUM(X3:X$lastRow)";
-            $sheet->setCellValue("X1", $formula);
+            // $cell = "X1";
+            // $style = $sheet->getStyle($cell);
+            // $style->getFont()->getColor()->setARGB('FFFF0000');
+            // $lastRow = $sheet->getHighestRow();
+            // $formula = "=SUM(X3:X$lastRow)";
+            // $sheet->setCellValue("X1", $formula);
 
 
             // foreach ($dataRow as $key => $value) {
-                //     $sheet->setCellValue($cell_array[$colIndex] . $lastRow, $value);
-                //     // $colIndex++;
-                // }
-            // // return $lastDataRow;
-            $writer = new PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
-            $writer->save('php://output');
-        }
+            //         $sheet->setCellValue($cell_array[$colIndex] . $lastRow, $value);
+            //         $colIndex++;
+            //     }
+            // return $lastDataRow;
 
-        
+            // $writer = new PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
+            // $writer->save('php://output');
 
+            
+    }
 
-        
- }
+    
+}
 
 
 

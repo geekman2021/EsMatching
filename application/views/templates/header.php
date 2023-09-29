@@ -5,22 +5,17 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    
     <script src="<?php echo base_url(); ?>assets/jquery/jquery-3.7.1.min.js"></script>
-    <script src="<?php echo base_url(); ?>assets/sweetalert/sweetalert.min.js"></script>
-    <link rel="stylesheet" href="<?php echo base_url(); ?>assets/bootstrap/css/bootstrap.min.css" />
-    <!-- <script src="<?php //echo base_url(); ?>assets/jquery/datatables.min.js"> </script> -->
-    <link rel="stylesheet" href="<?php echo base_url(); ?>assets/jquery/datatables.min.css" />
-    <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>assets/jquery/buttons.dataTables.min.css">
-    <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>assets/font-awesome/css/all.min.css" >
-    <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>assets/font-awesome/css/fontawesome.min.css" >
-    <script src="<?php echo base_url(); ?>assets/jquery/jquery.dataTables.min.js"></script>
-    <script src="<?php echo base_url(); ?>assets/jquery/dataTables.buttons.min.js"></script>
-    <script src="<?php echo base_url(); ?>assets/jquery/jszip.min.js"></script>
-    <script src="<?php echo base_url(); ?>assets/jquery/buttons.html5.min.js"></script>
+    
     <script src="<?php echo base_url(); ?>assets/bootstrap/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="<?php echo base_url(); ?>assets/bootstrap/css/bootstrap.css" />
+    
 </head>
 <body>
   <header>
+
+    <button class="btn btn-success">dsdsds</button>
     <nav class="navbar navbar-expand-sm bg-dark navbar-dark ">
       <ul class="navbar-nav">
         <li class="nav-item active">
