@@ -57,7 +57,6 @@
                         <th colspan="10" style="text-align: center ;">Airtel</th>
                     </tr>
                     <tr>
-                        
                         <th>Compte</th>
                         <th>DateOper</th>
                         <th>DateVal</th>
@@ -77,10 +76,33 @@
                         <th>Description</th>
                         <th>ServiceName</th>
                         <th>ReferenceNumber</th>
-                       
                     </tr>
                 </thead>
                 <tbody>
+                  <?php foreach($normale_ci as $item) { ?>
+                    <tr>
+                      <td><?php echo $item->COMPTE ?></td>
+                      <td><?php echo $item->DATE_OPER ?></td>
+                      <td><?php echo $item->DATE_VAL ?></td>
+                      <td><?php echo $item->DEVISE ?></td>
+                      <td><?php echo $item->MONTANT ?></td>
+                      <td><?php echo $item->LIBELLE ?></td>
+                      <td><?php echo $item->OPER ?></td>
+                      <td><?php echo $item->EXPL ?></td>
+                      <td><?php echo $item->REF_IGOR ?></td>
+                      <td><?php echo $item->external_id ?></td>
+                      <td><?php echo $item->TRANSFER_ID ?></td>
+                      <td><?php echo $item->transfer_date ?></td>
+                      <td><?php echo $item->account_no ?></td>
+                      <td><?php echo $item->sender_msisdn ?></td>
+                      <td><?php echo $item->dest_msisdn ?></td>
+                      <td><?php echo $item->amount ?></td>
+                      <td><?php echo $item->description ?></td>
+                      <td><?php echo $item->service_name ?></td>
+                      <td><?php echo $item->reference_number ?></td>
+                    </tr>
+
+                  <?php } ?>
                 </tbody>
             </table>
         </div>
@@ -116,6 +138,30 @@
                     </tr>
                 </thead>
                 <tbody>
+                  <?php foreach($normale_co as $item) { ?>
+                    <tr>
+                      <td><?php echo $item->COMPTE ?></td>
+                      <td><?php echo $item->DATE_OPER ?></td>
+                      <td><?php echo $item->DATE_VAL ?></td>
+                      <td><?php echo $item->DEVISE ?></td>
+                      <td><?php echo $item->MONTANT ?></td>
+                      <td><?php echo $item->LIBELLE ?></td>
+                      <td><?php echo $item->OPER ?></td>
+                      <td><?php echo $item->EXPL ?></td>
+                      <td><?php echo $item->REF_IGOR ?></td>
+                      <td><?php echo $item->external_id ?></td>
+                      <td><?php echo $item->TRANSFER_ID ?></td>
+                      <td><?php echo $item->transfer_date ?></td>
+                      <td><?php echo $item->account_no ?></td>
+                      <td><?php echo $item->sender_msisdn ?></td>
+                      <td><?php echo $item->dest_msisdn ?></td>
+                      <td><?php echo $item->amount ?></td>
+                      <td><?php echo $item->description ?></td>
+                      <td><?php echo $item->service_name ?></td>
+                      <td><?php echo $item->reference_number ?></td>
+                    </tr>
+
+                  <?php } ?>
                  
                 </tbody>
             </table>
@@ -131,11 +177,12 @@
             <tr>
                 <th colspan="10" style="text-align: center ;">BOA</th>
                 <th colspan="9" style="text-align: center ;">Airtel</th>
+                <th colspan="3" style="text-align: center ;">Regularisation</th>
             </tr>
             <tr>
               <th>Compte</th>
-              <th>DateOper</th>
-              <th>DateVal</th>
+              <th>Date_Oper</th>
+              <th>Date_Val </th>
               <th>Devise</th>
               <th>Montant</th>
               <th>Libelle</th>
@@ -152,9 +199,72 @@
               <th>Description</th>
               <th>ServiceName</th>
               <th>ReferenceNumber</th>
+              <th>Etat</th>
+              <th>Date</th>
+              <th>Action</th>
             </tr>
         </thead>
-        <tbody>    
+        <tbody>
+          <?php foreach($igor_anomalie_ci as $item) { ?>
+              <tr>
+                <td><?php echo $item->COMPTE ?></td>
+                <td><?php echo $item->DATE_OPER ?></td>
+                <td><?php echo $item->DATE_VAL ?></td>
+                <td><?php echo $item->DEVISE ?></td>
+                <td><?php echo $item->MONTANT ?></td>
+                <td><?php echo $item->LIBELLE ?></td>
+                <td><?php echo $item->OPER ?></td>
+                <td><?php echo $item->EXPL ?></td>
+                <td><?php echo $item->REF_IGOR ?></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>
+                <a href="javascript:void(0);" class="text-warning">
+                  <box-icon name="edit"></box-icon>
+                </a>
+                <a href="javascript:void(0);" class="text-primary" onClick="ouvrirEtImprimer('<?php echo $item->DATE_OPER ?>? ', '<?php echo $item->REF_IGOR ?>?', '<?php echo $item->MONTANT ?>', '<?php echo $item->OPER ?>', '<?php echo $item->COMPTE ?>')">
+                ssdsds<box-icon name="printer"></box-icon>
+                </a>
+              </td>
+              </tr>
+          <?php } ?>
+          <?php foreach($anomalie_ci as $item) { ?>
+            <tr>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td><?php echo $item->external_id ?></td>
+              <td><?php echo $item->TRANSFER_ID ?></td>
+              <td><?php echo $item->transfer_date ?></td>
+              <td><?php echo $item->account_no ?></td>
+              <td><?php echo $item->sender_msisdn ?></td>
+              <td><?php echo $item->dest_msisdn ?></td>
+              <td><?php echo $item->amount ?></td>
+              <td><?php echo $item->description ?></td>
+              <td><?php echo $item->service_name ?></td>
+              <td><?php echo $item->reference_number ?></td>
+              <td></td>
+              <td></td>
+              
+            </tr>
+          <?php } ?>
         </tbody>
       </table>
     </div>
@@ -162,10 +272,11 @@
   <div id="tabCat" class="container tab-pane "><br>    
     <div class="table-responsive">
       <table class="table table-bordered" id="tableCat">
-        <thead>
+      <thead style="text-align: center ;">
             <tr>
                 <th colspan="10" style="text-align: center ;">BOA</th>
-                <th colspan="10" style="text-align: center ;">Airtel</th>
+                <th colspan="9" style="text-align: center ;">Airtel</th>
+                <th colspan="3" style="text-align: center ;">Regularisation</th>
             </tr>
             <tr>
               <th>Compte</th>
@@ -187,9 +298,65 @@
               <th>Description</th>
               <th>ServiceName</th>
               <th>ReferenceNumber</th>
+              <th>Etat</th>
+              <th>Date</th>
+              <th>Action</th>
             </tr>
         </thead>
         <tbody>
+          <?php foreach($igor_anomalie_co as $item) { ?>
+              <tr>
+                <td><?php echo $item->COMPTE ?></td>
+                <td><?php echo $item->DATE_OPER ?></td>
+                <td><?php echo $item->DATE_VAL ?></td>
+                <td><?php echo $item->DEVISE ?></td>
+                <td><?php echo $item->MONTANT ?></td>
+                <td><?php echo $item->LIBELLE ?></td>
+                <td><?php echo $item->OPER ?></td>
+                <td><?php echo $item->EXPL ?></td>
+                <td><?php echo $item->REF_IGOR ?></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+          <?php } ?>
+          <?php foreach($anomalie_co as $item) { ?>
+            <tr>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td><?php echo $item->external_id ?></td>
+              <td><?php echo $item->TRANSFER_ID ?></td>
+              <td><?php echo $item->transfer_date ?></td>
+              <td><?php echo $item->account_no ?></td>
+              <td><?php echo $item->sender_msisdn ?></td>
+              <td><?php echo $item->dest_msisdn ?></td>
+              <td><?php echo $item->amount ?></td>
+              <td><?php echo $item->description ?></td>
+              <td><?php echo $item->service_name ?></td>
+              <td><?php echo $item->reference_number ?></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+          <?php } ?>
         </tbody>
       </table>
     </div>     
@@ -213,6 +380,21 @@
           </tr>
         </thead>
         <tbody>
+          <?php foreach ($ambiguous as $item) { ?>
+          <tr>
+            <td><?php echo $item->TRANSFER_ID ?></td>
+            <td><?php echo $item->transfer_date ?></td>
+            <td><?php echo $item->external_id ?></td>
+            <td><?php echo $item->account_no ?></td>
+            <td><?php echo $item->sender_msisdn ?></td>
+            <td><?php echo $item->dest_msisdn ?></td>
+            <td><?php echo $item->amount ?></td>
+            <td><?php echo $item->description ?></td>
+            <td><?php echo $item->service_name ?></td>
+            <td><?php echo $item->reference_number ?></td>
+          </tr>   
+          <?php } ?>
+
         </tbody>
       </table>
     </div>     
@@ -221,21 +403,36 @@
   <div id="tabDeallo" class="container tab-pane "><br>    
     <div class="table-responsive">
       <table class="table table-bordered" id="tableDeallo">
-        <thead>
+      <thead>
           <tr>
-            <th>TransferId</th>
-            <th>TransferDate</th>
-            <th>ExternalId</th>
-            <th>AccountNo</th>
-            <th>SenderMsiSDN</th>
-            <th>DestMsiSDN</th>
-            <th>Amount</th>
-            <th>Description</th>
-            <th>ServiceName</th>
-            <th>ReferenceNumber</th>
+              <th>TransferId</th>
+              <th>TransferDate</th>
+              <th>ExternalId</th>
+              <th>AccountNo</th>
+              <th>SenderMsiSDN</th>
+              <th>DestMsiSDN</th>
+              <th>Amount</th>
+              <th>Description</th>
+              <th>ServiceName</th>
+              <th>ReferenceNumber</th>
           </tr>
         </thead>
         <tbody>
+          <?php foreach ($deallocation as $item) { ?>
+          <tr>
+            <td><?php echo $item->TRANSFER_ID ?></td>
+            <td><?php echo $item->transfer_date ?></td>
+            <td><?php echo $item->external_id ?></td>
+            <td><?php echo $item->account_no ?></td>
+            <td><?php echo $item->sender_msisdn ?></td>
+            <td><?php echo $item->dest_msisdn ?></td>
+            <td><?php echo $item->amount ?></td>
+            <td><?php echo $item->description ?></td>
+            <td><?php echo $item->service_name ?></td>
+            <td><?php echo $item->reference_number ?></td>
+          </tr>   
+          <?php } ?>
+
         </tbody>
       </table>
     </div>     
@@ -257,6 +454,17 @@
                   </tr>
               </thead>
               <tbody>
+                <?php foreach($vi as $item) { ?>
+                  <td><?php echo $item->COMPTE ?></td>
+                  <td><?php echo $item->DATE_OPER ?></td>
+                  <td><?php echo $item->DATE_VAL ?></td>
+                  <td><?php echo $item->MONTANT ?></td>
+                  <td><?php echo $item->DEVISE ?></td>
+                  <td><?php echo $item->REF_IGOR ?></td>
+                  <td><?php echo $item->LIBELLE ?></td>
+                  <td><?php echo $item->OPER ?></td>
+                  <td><?php echo $item->EXPL ?></td>
+                <?php } ?>
               </tbody>
           </table>
       </div>
@@ -264,6 +472,20 @@
 </div>
 </div>
 <script>
+   function ouvrirEtImprimer(date_oper, ref_igor, montant, oper, compte) {
+
+    var url = '<?php echo site_url('Imprimer/imprimerDocument'); ?>' +
+      '?date=' + encodeURIComponent(date_oper) +
+      '&ref=' + encodeURIComponent(ref_igor) +
+      '&oper=' + encodeURIComponent(oper)+
+      '&montant=' + encodeURIComponent(montant)+
+      '&compte=' + encodeURIComponent(compte);
+
+    var nouvelleFenetre = window.open(url, '_blank');
+
+  }
+
+
 $(document).ready(function(){
 
   $("#tableNormaleCashOut").DataTable({
@@ -352,6 +574,10 @@ $(document).ready(function(){
     }
 
   });
+
+
+ 
+
   
 
 

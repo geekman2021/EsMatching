@@ -3,7 +3,7 @@
         public function __construct()
         {
             parent::__construct();
-            $this->load->database("db1");
+            $this->load->database("default");
         }
 
         public function insert_vi($data) {

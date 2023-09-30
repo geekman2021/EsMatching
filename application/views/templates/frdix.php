@@ -100,10 +100,9 @@
                 <td><?php echo $montant; ?></td>
                 <td>09194120000</td>
                 <td></td>
-                <td>Une transaction de «montant» MGA a été effectuée par le client le «date_opr» de IGOR vers Airtel money sous la référence «ref_igor». L’opération sous référence n’a pas été prise en compte par Airtel money suivant la confirmation de Airtel  en pièce jointe.		</td>
-                <td>Annulation de la réference surmentionnée (<<REF_IGOR>>) du <<date_oper>></td>
+                <td>Une transaction de <b><?php echo $montant; ?> </b> MGA a été effectuée par le client le <b><?php echo $date_oper; ?></b> de IGOR vers Airtel money sous la référence <b><?php echo $ref_igor; ?></b>. L’opération sous référence n’a pas été prise en compte par Airtel money suivant la confirmation de Airtel  en pièce jointe.		</td>
+                <td>Annulation de la réference surmentionnée <b><?php echo $ref_igor; ?></b> du <b><?php echo $date_oper; ?></b></td>
               </tr>
-
               <tr>
                 <td></td>
                 <td></td>

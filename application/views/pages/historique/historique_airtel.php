@@ -1,13 +1,13 @@
 <div class="container mt-5">
     <div class="row">
-            <div class="form-group col-sm-6" >
-                <label for="date_debut">Date Debut</label>
-                <input type="date" class="form-control" id="dateDebut">
-            </div>
-            <div class="form-group col-sm-6" >
-                <label for="date_fin">Date Fin</label>
-                <input type="date" class="form-control" id="dateFin">
-            </div>
+        <div class="form-group col-sm-6" >
+            <label for="date_debut">Date Debut</label>
+            <input type="date" class="form-control" id="dateDebut">
+        </div>
+        <div class="form-group col-sm-6" >
+            <label for="date_fin">Date Fin</label>
+            <input type="date" class="form-control" id="dateFin">
+        </div>
     </div>
 </div>
 
@@ -46,21 +46,21 @@
             </tr>
         </thead>
             <tbody>
-                <?php foreach($historique_airtel as $item) { ?>
+                <?php foreach($historique as $item) { ?>
                 <tr>
                     <td style="display: none;"><?php echo $item->id; ?></td>
-                    <td><?php echo $item->date_oper ?></td>
-                    <td><?php echo $item->date_val ?></td>
-                    <td><?php echo $item->compte ?></td>
-                    <td><?php echo $item->montant ?></td>
-                    <td><?php echo $item->devise ?></td>
-                    <td><?php echo $item->oper ?></td>
-                    <td><?php echo $item->expl ?></td>
-                    <td><?php echo $item->transfer_id ?></td>
+                    <td><?php echo $item->DATE_OPER ?></td>
+                    <td><?php echo $item->DATE_VAL ?></td>
+                    <td><?php echo $item->COMPTE ?></td>
+                    <td><?php echo $item->MONTANT ?></td>
+                    <td><?php echo $item->DEVISE ?></td>
+                    <td><?php echo $item->OPER ?></td>
+                    <td><?php echo $item->EXPL ?></td>
+                    <td><?php echo $item->TRANSFER_ID ?></td>
                     <td><?php echo $item->transfer_date ?></td>
-                    <td ><?php echo $item->ref_igor ?></td>
+                    <td ><?php echo $item->REF_IGOR ?></td>
                     <td><?php echo $item->solde_boa ?></td>
-                    <td></td>
+                    <td style="background-color: green;"></td>
                     <td><?php echo $item->external_id ?></td>
                     <td><?php echo $item->account_no ?></td>
                     <td><?php echo $item->sender_msisdn ?></td>
@@ -70,7 +70,6 @@
                     <td style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis ;max-width: 100px; "><?php echo $item->service_name ?></td>
                     <td style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis ;max-width: 100px; "><?php echo $item->reference_number ?></td>
                     <td><?php echo $item->solde_airtel ?></td>
-
                 </tr>
                 <?php } ?>
             

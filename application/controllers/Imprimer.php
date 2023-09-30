@@ -15,19 +15,20 @@
         public function imprimerDocument() {
             $i=0;
 
-            $ref_igor = $this->input->get('ref_igor');
+            $ref_igor = $this->input->get('ref');
             $compte= $this->input->get("compte");
             $montant= $this->input->get("montant");
             $oper= $this->input->get("oper");
+            $date_oper= $this->input->get("date");
             $date= date("d/m/y");
             $annee= date("y");
             $reference= $i++;
-            session_destroy();
 
             $template = $this->load->view('templates/frDix', array(
                 'ref_igor' => $ref_igor,
                 'compte' => $compte,
                 'montant' => $montant,
+                'date_oper' => $date_oper,
                 'oper' => $oper,
                 'date' => $date,
                 'annee' => $annee,

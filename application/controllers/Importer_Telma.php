@@ -121,7 +121,7 @@
                         print_r($telmaCI);
                     echo "</pre>";
 
-                    // $this->comparerTelmaEtIgor($igorCI, $telmaCI);
+                    $this->comparerTelmaEtIgor($igorCI, $telmaCI);
                 }
 
                 
@@ -402,7 +402,6 @@
                         print_r($igorCopy);
                     echo "</pre>";
 
-                    break;
 
                     echo "---------------------------------------------" .$i;
                     // echo "mandalo"; 

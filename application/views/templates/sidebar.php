@@ -369,21 +369,21 @@
         </li>
 
         <li>
-          <a href="#">
+          <a href="<?php echo site_url("regul") ?>">
             <i class="bx bx-compass"></i>
             <span class="link_name">Regularisation</span>
           </a>
           <ul class="sub-menu blank">
-            <li><a class="link_name" href="#">Regularisation</a></li>
+            <li><a class="link_name" href="<?php echo site_url("regul") ?>">Regularisation</a></li>
           </ul>
         </li>
         <li>
-          <a href="#">
+          <a href="<?php echo site_url("historique") ?>">
             <i class="bx bx-history"></i>
             <span class="link_name">Historique</span>
           </a>
           <ul class="sub-menu blank">
-            <li><a class="link_name" href="#">Historique</a></li>
+            <li><a class="link_name" href="<?php echo site_url("historique") ?>">Historique</a></li>
           </ul>
         </li>
         <li>

@@ -138,9 +138,9 @@
             // echo "<pre>";
             //     print_r($orangeCI);
             // echo "</pre>";
-            echo "<pre>";
-                print_r($mergedComEtPrinc);
-            echo "</pre>";
+            // echo "<pre>";
+            //     print_r($mergedComEtPrinc);
+            // echo "</pre>";
         }
 
         public function filtrerOrangeCI($data) {
@@ -319,25 +319,25 @@
             $i = 0;
         
             while ($i < $ligne && !$isFinished) {
-                if ($boaCopy[$i]["cle"] === $orangeCopy[$i]["cle"]) {
-                    $normaleOrange[] = $orangeCopy[$i];
-                    $normaleBoa[] = $boaCopy[$i];
+                if ($boa[$i]["cle"] - $orange[$i]["cle"] == 0) {
+                    $normaleOrange[] = $orange[$i];
+                    $normaleBoa[] = $boa[$i];
                     $isFinished = true;
                     $i++;
-                } elseif ($boaCopy[$i]["cle"] < $orangeCopy["cle"]) {
-                    $anomalieBoa[] = $boaCopy[$i];
-                    array_splice($boaCopy, $i, 1);
-                    $boaCopy = array_values($boaCopy);
+                } elseif ($boa[$i]["cle"] - $orange["cle"] < 0) {
+                    $anomalieBoa[] = $boa[$i];
+                    array_splice($boa, $i, 1);
+                    $boa = array_values($boa);
                 } else {
-                    $anomalieOrange[] = $orangeCopy;
+                    $anomalieOrange[] = $orange;
                     array_splice($orange, $i, 1);
                     $orange = array_values($orange);
                 }
             }
 
-            
+
             echo "<pre>";
-            print_r($normaleOrange);
+            print_r($anomalieBoa);
             echo "</pre>";
         }
         

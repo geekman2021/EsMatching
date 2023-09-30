@@ -7,9 +7,10 @@
 
         public function __construct(){
             parent::__construct();
-            $this->load->database("db1");
-            $this->load->model("Igor_Airtel_Normal_Model");
-            $this->load->model("Igor_Airtel_Anomalie_Model");
+            $this->load->model("igor_airtel_model");
+            $this->load->model("igor_airtel_anomalie_model");
+            $this->load->model("airtel_anomalie_model");
+            $this->load->model("historique_airtel_model");
             session_start();
         }
 
@@ -17,6 +18,8 @@
             $this->load->view("templates/sidebar");
             $this->load->view("pages/importer/importer");
             $this->load->view("pages/operateur/airtel-form");
+
+            $_SESSION["last_solde"] = $this->historique_airtel_model->get_last_solde();
 
                 $_SESSION["igor_anomalie_ci"] = array(
                 array(
@@ -193,19 +196,132 @@
             );
 
             
-            echo "--------------------------------------------------";
+            // echo "--------------------------------------------------";
             // echo "<pre>";
-            //     print_r($dernierAmbiguous);
+            //     print_r($anomalieIgorCO);
             // echo "</pre>";
+
+            
+
+
+                
+                
+
+
+
+            // $this->igor_airtel_model->insert_or_update_co($airtelIgorNormaleCO);
 
                 
 
             // $this->RegulViDeallocation($_SESSION["anomalie_vi"], $_SESSION["deallocation"]);
-            $this->exporter($airtelIgorNormaleCI, $airtelIgorNormaleCO, $dernierAmbiguous, $dernierRollBack, $anomalieAirtelCI, $anomalieAirtelCO, $anomalieIgorCI, $anomalieIgorCO, $igorVI, $deallocation);
+            // $this->exporter($airtelIgorNormaleCI, $airtelIgorNormaleCO, $dernierAmbiguous, $dernierRollBack, $anomalieAirtelCI, $anomalieAirtelCO, $anomalieIgorCI, $anomalieIgorCO, $igorVI, $deallocation);
 
        
             // $this->RegulNonAu($nonAU, $_SESSION["igor_anomalie_ci"]);
 
+// ------------------------------------------------------------- INSERTION ------------------------------------------------------------------------------------
+
+            // foreach($airtelIgorNormaleCO as $item) {
+            //     $this->igor_airtel_model->insert_or_update_co($item);
+            //     $solde_airtel+=$item["solde"];
+            //     $solde_boa+= $item["MONTANT"];
+            //     $item["solde_airtel"]=  $solde_airtel;
+            //     $item["solde_boa"]= $solde_boa;
+            //     $this->historique_airtel_model->insert($item);
+            // }
+
+            // foreach($airtelIgorNormaleCI as $item) {
+            //     $this->igor_airtel_model->insert_or_update_ci($item);
+            //     $solde_airtel+=$item["solde"];
+            //     $solde_boa+= $item["MONTANT"];
+            //     $item["solde_airtel"]=  $solde_airtel;
+            //     $item["solde_boa"]= $solde_boa;
+            //     $this->historique_airtel_model->insert($item);
+            // }
+
+            // foreach($anomalieIgorCO as $item) {
+            //     $this->igor_airtel_anomalie_model->insert_or_update_co($item);
+            //     $solde_airtel+=$item["solde"];
+            //     $solde_boa+= $item["MONTANT"];
+            //     $item["solde_airtel"]=  $solde_airtel;
+            //     $item["solde_boa"]= $solde_boa;
+            //     $this->historique_airtel_model->insert($item);
+            // }
+
+            // foreach($anomalieIgorCI as $item) {
+            //     $this->igor_airtel_anomalie_model->insert_or_update_ci($item);
+            //     $solde_airtel+=$item["solde"];
+            //     $solde_boa+= $item["MONTANT"];
+            //     $item["solde_airtel"]=  $solde_airtel;
+            //     $item["solde_boa"]= $solde_boa;
+            //     $this->historique_airtel_model->insert($item);
+
+            // }
+
+            // foreach ($anomalieAirtelCI as $item ) {
+            //     $this->airtel_anomalie_model->insert_or_update_ci($item);
+            //     $solde_airtel+=$item["solde"];
+            //     $solde_boa+= $item["MONTANT"];
+            //     $item["solde_airtel"]=  $solde_airtel;
+            //     $item["solde_boa"]= $solde_boa;
+            //     $this->historique_airtel_model->insert($item);
+            // }
+
+            // foreach($anomalieAirtelCO as $item) {
+            //     $this->airtel_anomalie_model->insert_or_update_co($item);
+            //     $solde_airtel+=$item["solde"];
+            //     $solde_boa+= $item["MONTANT"];
+            //     $item["solde_airtel"]=  $solde_airtel;
+            //     $item["solde_boa"]= $solde_boa;
+            //     $this->historique_airtel_model->insert($item);
+            // }
+
+            // foreach($ambiguous as $item) {
+            //     $this->airtel_anomalie_model->insert_or_update_ambiguous($item);
+            // }
+
+            // foreach($rollback as $item) {
+            //     $this->airtel_anomalie_model->insert_or_update_rb($item);
+            // }
+
+            // foreach($igorVI as $item) {
+            //     $this->igor_airtel_anomalie_model->insert_or_update_vi($item);
+            // }
+
+            // foreach($airtelIgorNormaleCO as $item) {
+            //     $this->igor_airtel_model->insert_or_update_co($item);
+            // }
+
+            // foreach($airtelIgorNormaleCI as $item) {
+            //     $this->igor_airtel_model->insert_or_update_ci($item);
+            // }
+
+            $historique = array_merge($airtelIgorNormaleCI, $airtelIgorNormaleCO, $igorVI, $dernierAmbiguous, $dernierRollBack);
+            
+            if(count($_SESSION["last_solde"]) > 0 ) {
+                $solde_airtel= $_SESSION["last_solde"][0]->solde_airtel;
+                $solde_boa= $_SESSION["last_solde"][0]->solde_boa;
+            } else if(count($_SESSION["last_solde"]) === 0 ) {
+                $solde_airtel= 0;
+                $solde_boa= 0;
+            }
+
+            foreach ($historique as $item) {
+                $solde_airtel += isset($item["solde"]) ? $item["solde"] : 0;
+                $solde_boa += isset($item["MONTANT"]) ? $item["MONTANT"] : 0;
+                $item["solde_airtel"] = $solde_airtel;
+                $item["solde_boa"] = $solde_boa;
+                $this->historique_airtel_model->insert($item);
+            }
+
+            
+
+
+
+           
+
+            session_destroy();
+            // foreach()
 }
 
 
@@ -221,7 +337,7 @@
 // --------------------------------------------------------------------------------- INSERTION -------------------------------------------------------------
 
 
-            // $this->Igor_Airtel_Normal_Model->insert_or_update_ci($airtelIgorNormaleCI);
+                   
             
             
             // echo "--------------------------------------------------";
@@ -332,6 +448,7 @@
 
             foreach($data as $item) {
                 if ($item["service_name"] ==="RollBack") {
+                    $item["solde"] = $item["amount"] * (-1);
                     $resultat[]= $item;
                 }
             } 
@@ -344,6 +461,7 @@
 
             foreach($data as $item) {
                 if($item["description"] ==="TransactionAmbiguous" || ($item["description"] === "TransactionSuccess" && empty($item["external_id"]))  && ($item["service_name"] === "BanktoWalletTransfer" || $item["service_name"] === "ChannelBanktoWalletTransfer") ) {
+                    $item["solde"] = $item["amount"] * (-1);
                     $resultat[] = $item;
                 }
             }
@@ -489,9 +607,9 @@
                 // echo "Total amount for reference number $reference_number: $total_amount\n";
             }
 
-            echo "<pre>";
-                print_r($deallocationCopy);
-            echo "</pre>";
+            // echo "<pre>";
+            //     print_r($deallocationCopy);
+            // echo "</pre>";
             session_destroy();
         } 
         
@@ -507,9 +625,9 @@
                 }
             }
 
-            echo "<pre>";
-                print_r($regul);
-            echo "</pre>";
+            // echo "<pre>";
+            //     print_r($regul);
+            // echo "</pre>";
 
             return $regul;
         }
