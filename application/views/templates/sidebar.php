@@ -8,25 +8,27 @@
     <script src="<?php echo base_url(); ?>assets/jquery/jquery-3.7.1.min.js"></script>
     <script src="<?php  echo base_url(); ?>assets/jquery/jquery.dataTables.min.js"></script>
      <script src="<?php echo base_url(); ?>assets/jquery/dataTables.buttons.min.js"></script>
-    <script src="<?php echo base_url(); ?>assets/jquery/jszip.min.js"></script>
+    <!-- <script src="<?php echo base_url(); ?>assets/jquery/jszip.min.js"></script>
     <script src="<?php echo base_url(); ?>assets/jquery/pdfmake.min.js"></script>
     <script src="<?php echo base_url(); ?>assets/jquery/vfs_fonts.js"></script>
     <script src="<?php echo base_url(); ?>assets/jquery/buttons.html5.min.js"></script>
     <script src="<?php echo base_url(); ?>assets/jquery/vfs_fonts.js"></script>
     <script src="<?php echo base_url(); ?>assets/jquery/buttons.html5.min.js"></script>
     <script src="<?php echo base_url(); ?>assets/jquery/buttons.print.min.js"></script>
-    <script src="<?php echo base_url(); ?>assets/sweetalert/sweetalert.min.js"></script>
+    <script src="<?php echo base_url(); ?>assets/sweetalert/sweetalert.min.js"></script> -->
+    <!-- <script  src="<?php echo base_url(); ?>assets/bootstrap/js/popper.js">></script> -->
     <script src="<?php echo base_url(); ?>assets/bootstrap/js/bootstrap.min.js"></script>
+    <script src="<?php echo base_url(); ?>assets/bootstrap/js/popper.min.js"></script>
     <script src="<?php echo base_url(); ?>assets/chart/chart.js"> </script>
     <link rel="stylesheet" href="<?php echo base_url(); ?>assets/bootstrap/css/bootstrap.css" />
+    <link rel="stylesheet" href="<?php  echo base_url(); ?>assets/jquery/jquery.dataTables.min.css" />
     <script src="<?php echo base_url(); ?>assets/jquery/datatables.min.js"> </script>
     <link rel="stylesheet" href="<?php echo base_url(); ?>assets/jquery/datatables.css" />
     <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>assets/jquery/buttons.dataTables.min.css">
     <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>assets/font-awesome/css/all.css" >
     <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>assets/font-awesome/css/fontawesome.min.css" >
+
     <script src="<?php echo base_url(); ?>assets/jquery/jquery.dataTables.min.js"></script>
-    
-    
     <link href="https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css" rel="stylesheet" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
@@ -402,9 +404,18 @@
     </div>
     <section class="home-section">
       <div class="home-content">
-        <i class="bx bx-menu"></i>
-        <span class="text"></span>
+        <div class="row" style="display: flex; justify-content: space-between; align-items: center;">
+          <div>
+            <i class="bx bx-menu"></i>
+          </div>
+          <div style="position: absolute; right: 0px;">
+          <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <img class="img-profile rounded-circle" src="<?php echo base_url(); ?>assets/images/undraw_profile.svg" style="width: 50px; height: 50px;">
+          </a>
+          </div>
+        </div>
       </div>
+
     
   
 </html>

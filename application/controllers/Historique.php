@@ -7,10 +7,8 @@
         }
 
         public function index() {
-            
             $this->load->view("templates/sidebar");
             $this->load->view("pages/historique/historique");
-
         }
  }
 

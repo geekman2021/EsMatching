@@ -180,6 +180,7 @@
                 <th colspan="3" style="text-align: center ;">Regularisation</th>
             </tr>
             <tr>
+              <th style="display: none;">Id</th>
               <th>Compte</th>
               <th>Date_Oper</th>
               <th>Date_Val </th>
@@ -207,6 +208,7 @@
         <tbody>
           <?php foreach($igor_anomalie_ci as $item) { ?>
               <tr>
+                <td style="display: none;"><?php echo $item->id ?></td>
                 <td><?php echo $item->COMPTE ?></td>
                 <td><?php echo $item->DATE_OPER ?></td>
                 <td><?php echo $item->DATE_VAL ?></td>
@@ -226,14 +228,14 @@
                 <td></td>
                 <td></td>
                 <td></td>
-                <td></td>
-                <td></td>
+                <td><?php echo $item->etat ?></td>
+                <td><?php echo $item->date_regul ?></td>
                 <td>
-                <a href="javascript:void(0);" class="text-warning">
-                  <box-icon name="edit"></box-icon>
-                </a>
+                <a href="javascript:void(0);" class="text-warning" data-toggle="modal" data-target="#myModal" onClick="modifier('<?php echo $item->REF_IGOR ?>', '<?php echo $item->etat ?>', '<?php echo $item->date_regul ?>')">
+                  <box-icon name='printer'  ></box-icon>Modifier
+                </a> 
                 <a href="javascript:void(0);" class="text-primary" onClick="ouvrirEtImprimer('<?php echo $item->DATE_OPER ?>? ', '<?php echo $item->REF_IGOR ?>?', '<?php echo $item->MONTANT ?>', '<?php echo $item->OPER ?>', '<?php echo $item->COMPTE ?>')">
-                ssdsds<box-icon name="printer"></box-icon>
+                  <box-icon name="printer"></box-icon>Imprimer
                 </a>
               </td>
               </tr>
@@ -325,9 +327,16 @@
                 <td></td>
                 <td></td>
                 <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
+                <td><?php echo $item->etat ?></td>
+                <td><?php echo $item->date_regul ?></td>
+                <td>
+                <a href="javascript:void(0);" class="text-warning" data-toggle="modal" data-target="#myModal2" onClick="modifier2('<?php echo $item->REF_IGOR ?>', '<?php echo $item->etat ?>', '<?php echo $item->date_regul ?>')">
+                  <box-icon name='printer'  ></box-icon>Modifier
+                </a> 
+                <a href="javascript:void(0);" class="text-primary" onClick="ouvrirEtImprimer('<?php echo $item->DATE_OPER ?>? ', '<?php echo $item->REF_IGOR ?>?', '<?php echo $item->MONTANT ?>', '<?php echo $item->OPER ?>', '<?php echo $item->COMPTE ?>')">
+                  <box-icon name="printer"></box-icon>Imprimer
+                </a>
+              </td>
               </tr>
           <?php } ?>
           <?php foreach($anomalie_co as $item) { ?>
@@ -471,6 +480,189 @@
   </div>
 </div>
 </div>
+
+<!-- Modal  -->
+<form id="modifForm">
+  <div class="modal fade" id="myModal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="card p-3">
+          <div class="text-center" style="font-size: 17px;">
+            <b>Régulariser</b>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+          </div>
+            <div class="row form-group mt-2">
+                <div class="col-sm-6" style="display: none;">
+                  <label for="ref">ref</label>
+                  <input type="text" class="form-control" id="ref_igor" name="ref_igor">
+                </div>
+                <div class="col-sm-6">
+                  <label for="etat">Etat</label>
+                  <select name="etat" id="etat" class="form-control">
+                    <option value="Non">Non</option>
+                    <option value="En cours">En cours</option>
+                  </select>
+                </div>
+                <div class="col-sm-6">
+                  <label for="date">Date</label>
+                  <input type="date" class="form-control" id="date_regul" name="date_regul" required>
+                </div>
+                </div>
+                <div class="text-center">
+                  <button type="button" class="btn btn-danger" data-dismiss="modal">Annuler</button>
+                  <input type="submit" class="btn btn-success" value="Valider" />
+                </div>
+              </div>
+            </div>
+
+                  
+
+        <!-- En-tête de la modal -->
+        <!-- <div class="modal-header">
+          <h4 class="modal-title">Regularisation</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div> -->
+
+       
+        <!-- <form action="modifForm">
+
+          <div class="modal-body">
+
+            <div class="row">
+              <div class="col-sm-6" style="display: none;">
+                <label for="id">Id</label>
+                <input type="text" id="id" name="id">
+              </div>
+              <div class="col-sm-6">
+                <label for="etat">Etat</label>
+                <select name="etat" id="etat">
+                  <option value="Non">Non</option>
+                  <option value="En cours">En cours</option>
+                </select>
+              </div>
+              <div class="col-sm-6">
+                <label for="date">Date</label>
+                <input type="date" id="date_regul" name="date_regul">
+              </div>
+              </div>
+            </div>
+            
+          </div>
+
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-danger" data-dismiss="modal">Annuler</button>
+            <input type="submit" class="btn btn-success">Valider</button>
+          </div>
+        </form> -->
+
+
+      </div>
+    </div>
+  </div>
+</form>
+
+
+<form id="modifForm2">
+
+  <div class="modal fade" id="myModal2">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="card p-3">
+          <div class="text-center" style="font-size: 17px;">
+            <b>Régulariser</b>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+          </div>
+            <div class="row form-group mt-2">
+                <div class="col-sm-6" style="display: none;">
+                  <label for="ref">ref</label>
+                  <input type="text" class="form-control" id="ref_igor2" name="ref_igor2">
+                </div>
+                <div class="col-sm-6">
+                  <label for="etat">Etat</label>
+                  <select name="etat2" id="etat2" class="form-control">
+                    <option value="Non">Non</option>
+                    <option value="En cours">En cours</option>
+                  </select>
+                </div>
+                <div class="col-sm-6">
+                  <label for="date">Date</label>
+                  <input type="date" class="form-control" id="date_regul2" name="date_regul2" required>
+                </div>
+                </div>
+                <div class="text-center">
+                  <button type="button" class="btn btn-danger" data-dismiss="modal">Annuler</button>
+                  <input type="submit" class="btn btn-success" value="Valider" />
+                </div>
+              </div>
+            </div>
+
+                  
+
+        <!-- En-tête de la modal -->
+        <!-- <div class="modal-header">
+          <h4 class="modal-title">Regularisation</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div> -->
+
+       
+        <!-- <form action="modifForm">
+
+          <div class="modal-body">
+
+            <div class="row">
+              <div class="col-sm-6" style="display: none;">
+                <label for="id">Id</label>
+                <input type="text" id="id" name="id">
+              </div>
+              <div class="col-sm-6">
+                <label for="etat">Etat</label>
+                <select name="etat" id="etat">
+                  <option value="Non">Non</option>
+                  <option value="En cours">En cours</option>
+                </select>
+              </div>
+              <div class="col-sm-6">
+                <label for="date">Date</label>
+                <input type="date" id="date_regul" name="date_regul">
+              </div>
+              </div>
+            </div>
+            
+          </div>
+
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-danger" data-dismiss="modal">Annuler</button>
+            <input type="submit" class="btn btn-success">Valider</button>
+          </div>
+        </form> -->
+
+
+      </div>
+    </div>
+  </div>
+  
+</form>
+
+
+
+<script>
+  function modifier(ref_igor, etat, date) {
+    $("#ref_igor").val(ref_igor);
+    $("#etat").val(etat);
+    $("#date_regul").val(date);
+  }
+
+  function modifier2(ref_igor, etat, date) {
+    $("#ref_igor2").val(ref_igor);
+    $("#etat2").val(etat);
+    $("#date_regul2").val(date);
+  }
+
+
+</script>
+
 <script>
    function ouvrirEtImprimer(date_oper, ref_igor, montant, oper, compte) {
 
@@ -487,6 +679,58 @@
 
 
 $(document).ready(function(){
+
+  $("#modifForm").submit(function(e) {
+    e.preventDefault();
+    const etat = $("#etat").val();
+    const date_regul= $("#date_regul").val();
+    const ref_igor = $("#ref_igor").val();
+
+
+
+    $.ajax({
+        url: "<?php echo site_url("airtel/edit_anomalie_igor_ci") ?>",
+        type: "POST",
+        data: {
+            "ref_igor": ref_igor,
+            "date_regul": date_regul,
+            "etat": etat
+        },
+        success: function(response) {
+            window.location.reload();
+    
+        },
+        error: function(error) {
+            console.log(error);
+        }
+    });    
+  });
+
+  $("#modifForm2").submit(function(e) {
+    e.preventDefault();
+    const etat = $("#etat2").val();
+    const date_regul= $("#date_regul2").val();
+    const ref_igor = $("#ref_igor2").val();
+
+
+
+    $.ajax({
+        url: "<?php echo site_url("airtel/edit_anomalie_igor_co") ?>",
+        type: "POST",
+        data: {
+            "ref_igor": ref_igor,
+            "date_regul": date_regul,
+            "etat": etat
+        },
+        success: function(response) {
+            // window.location.reload();
+    
+        },
+        error: function(error) {
+            console.log(error);
+        }
+    });    
+  });
 
   $("#tableNormaleCashOut").DataTable({
     responsive: true,
@@ -513,7 +757,7 @@ $(document).ready(function(){
 
   $("#tableDat").DataTable({
     responsive: true,
-
+    scrollX: true,
     dom: 'Bfrtip',
     buttons: [
       'copy', 'csv', 'excel', 'pdf', 'print'
@@ -525,6 +769,7 @@ $(document).ready(function(){
 
   $("#tableCat").DataTable({
     responsive: true,
+    scrollX: true,
 
     dom: 'Bfrtip',
     buttons: [
@@ -538,6 +783,7 @@ $(document).ready(function(){
 
   $("#tableDeallo").DataTable({
     responsive: true,
+    scrollX: true,
 
     dom: 'Bfrtip',
     buttons: [
@@ -551,6 +797,7 @@ $(document).ready(function(){
 
   $("#tableAmbi").DataTable({
     responsive: true,
+    scrollX: true,
 
     dom: 'Bfrtip',
     buttons: [
@@ -564,6 +811,7 @@ $(document).ready(function(){
 
   $("#tableVI").DataTable({
     responsive: true,
+    scrollX: true,
 
     dom: 'Bfrtip',
     buttons: [
@@ -574,12 +822,6 @@ $(document).ready(function(){
     }
 
   });
-
-
- 
-
-  
-
 
     // $("#tableAnormaleCashOut").DataTable();
   $(".nav-tabs a").click(function(){
@@ -595,6 +837,7 @@ $(document).ready(function(){
     }
   });
 });
+
 </script>
 
 

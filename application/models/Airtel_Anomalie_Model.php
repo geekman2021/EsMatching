@@ -104,10 +104,10 @@
             return $query->result();
         }
 
-        public function delete_ambiguous($transfer_id) {
-            $this->db->where("TRANSFER_ID", $transfer_id);
-            $this->db->delete("utilisateurs");
-        }
+        // public function delete_ambiguous($transfer_id) {
+        //     $this->db->where("TRANSFER_ID", $transfer_id);
+        //     $this->db->delete("utilisateurs");
+        // }
 
         public function update_anomalie_co($id, $etat, $date_regul) {
             $this->db->set('etat', $etat);
@@ -133,6 +133,16 @@
         public function delete_deallocation ($reference_number) {
             $this->db->where("reference_number", $reference_number);
             $this->db->delete("airtel_deallocation");
+        }
+
+        public function update_ambigu($data) {
+            $this->db->where("TRANSFER_ID", $data["TRANSFER_ID"]);
+            return $this->db->update("airtel_ambiguous", $data);
+        }
+
+        public function update_deallocation($data) {
+            $this->db->where("reference_number", $data["reference_number"]);
+            return $this->db->update("airtel_deallocation", $data);
         }
 
     }

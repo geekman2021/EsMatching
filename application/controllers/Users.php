@@ -14,7 +14,6 @@
             parent::__construct();
             $this->load->model("user_model");
             $this->load->model("profil_model");
-            
         }
 
         public function index() {

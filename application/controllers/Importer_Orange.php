@@ -337,7 +337,7 @@
 
 
             echo "<pre>";
-            print_r($anomalieBoa);
+            print_r();
             echo "</pre>";
         }
         

@@ -66,6 +66,23 @@
             $this->airtel_anomalie_model->update_anomalie_deallo($id, $etat, $date_regul);
     
         }
+
+        public function edit_anomalie_igor_ci() {
+            $ref_igor= $this->input->post("ref_igor");
+            $etat= $this->input->post("etat");
+            $date_regul= $this->input->post("date_regul");
+
+            $this->igor_airtel_anomalie_model->update_anomalie_ci($ref_igor, $etat, $date_regul);
+
+        }
+
+        public function edit_anomalie_igor_co() {
+            $ref_igor= $this->input->post("ref_igor");
+            $etat= $this->input->post("etat");
+            $date_regul= $this->input->post("date_regul");
+            $this->igor_airtel_anomalie_model->update_anomalie_co($ref_igor, $etat, $date_regul);
+
+        }
     }
 
 

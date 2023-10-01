@@ -4,7 +4,6 @@ class Dashboard extends CI_Controller {
     public function index() {
         $data['chart_data'] = $this->getDataForDonutChart();
         $this->load->view("templates/sidebar");
-
         $this->load->view('chart-view', $data);
     }
 

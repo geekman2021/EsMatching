@@ -10,7 +10,6 @@
 
         }
 
-
         public function edit_anomalie_CO() {
             $ref_igor= $this->input->post("id");
             $etat= $this->input->post("etat");

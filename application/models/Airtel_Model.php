@@ -150,11 +150,6 @@
 
             $this->db->query("DROP TEMPORARY TABLE temp_1");
             $this->db->query(" DROP TEMPORARY TABLE temp_2");
-
-
-           
-            
-    
         }
 
         public function update_anormale_CO($id, $etat, $date_regul) {
