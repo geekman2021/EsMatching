@@ -67,7 +67,6 @@
                     </tr>
                     <tr>
                         
-                        <th>Compte</th>
                         <th>Date_Oper</th>
                         <th>Date_Val</th>
                         <th>Devise</th>
@@ -78,7 +77,6 @@
                         <th>ReferenceIgor</th>
                         <th>Cle</th>
                         <th></th>
-                        <th>Cle</th>
                         <th>Date</th>
                         <th>Heure</th>
                         <th>Transfer_id</th>
@@ -91,6 +89,24 @@
                     </tr>
                 </thead>
                 <tbody>
+                  <?php foreach($normal_ci as $item) { ?>
+                    <td><?php echo $item->DATE_OPER ?></td>
+                    <td><?php echo $item->DATE_VAL ?></td>
+                    <td><?php echo $item->DEVISE ?></td>
+                    <td><?php echo $item->MONTANT ?></td>
+                    <td><?php echo $item->LIBELLE ?></td>
+                    <td><?php echo $item->OPER ?></td>
+                    <td><?php echo $item->EXPL ?></td>
+                    <td><?php echo $item->REF_IGOR ?></td>
+                    <td><?php echo $item->cle ?></td>
+                    <td></td>
+                    <td><?php echo $item->date_d ?></td>
+                    <td><?php echo $item->cle ?></td>
+                    <td><?php echo $item->cle ?></td>
+                    <td><?php echo $item->cle ?></td>
+                    <td><?php echo $item->cle ?></td>
+                    <td><?php echo $item->cle ?></td>
+                  <?php }?>
                 </tbody>
             </table>
         </div>

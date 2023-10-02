@@ -7,37 +7,22 @@
     class Telma extends CI_Controller {
         public function __construct(){
             parent::__construct();
+            $this->load->model("telma_normal_model");
         }
         public function index() {
-            
             $this->load->view("templates/sidebar");
-            $this->load->view("pages/operateur/telma-list");
-        }
-        public function edit_anomalie_CO() {
-
-            $id= $this->input->post("id");
-            $etat= $this->input->post("etat");
-            $date_regul= $this->input->post("date_regul");
-            $this->airtel_anomalie_model->update_anomalie_co($id, $etat, $date_regul);
-
+            $this->load->view("pages/operateur/telma-list", $this->get_data());
         }
 
-        public function edit_anomalie_CI() {
-            $id= $this->input->post("id");
-            $etat= $this->input->post("etat");
-            $date_regul= $this->input->post("date_regul");
-            $this->airtel_anomalie_model->update_anomalie_CI($id, $etat, $date_regul);
+        public function get_data() {
+
+            $data["normale_ci"] = $this->load->telma_normal_model->get_ci();
+            $data["normale_co"] = $this->load->telma_normal_model->get_co();
+
+            return $data;
 
         }
-
-        public function edit_anomalie_deallo() {
-            $id= $this->input->post("id");
-            $etat= $this->input->post("etat");
-            $date_regul= $this->input->post("date_regul");
-
-            $this->airtel_anomalie_model->update_anomalie_deallo($id, $etat, $date_regul);
-    
-        }
+        
     }
 
 

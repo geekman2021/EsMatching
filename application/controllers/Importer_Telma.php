@@ -9,6 +9,7 @@
 
         public function __construct() {
             parent::__construct();
+            $this->load->model("telma_normal_model");
         }
 
 
@@ -101,6 +102,7 @@
                     $telmaCI= $this->trierParCleCroissante($telmaCI);
 
                     $telmaCO= $this->filtrerCO($reste);
+                    $telmaCO= $this->trierParCleCroissante($telmaCO);
                     // $telmaCO= $this->trierParCleCroissante($telmaCO);
                     // echo "<<<<<<<<<<<<ROLLBACK>>>>>>>>>>>>>>>>>>>>>>>\n";
 
@@ -117,11 +119,31 @@
                     //     echo "Le tableau n'est pas trié par ordre croissant en se référant à la clé 'cle'.";
                     // }
 
-                    echo "<pre>";
-                        print_r($telmaCI);
-                    echo "</pre>";
+                    // echo "<pre>";
+                    //     print_r($telmaCI);
+                    // echo "</pre>";
+                    // echo "<pre>";
+                    //     print_r($igorCI);
+                    // echo "</pre>";
 
-                    $this->comparerTelmaEtIgor($igorCI, $telmaCI);
+                    
+
+                    $normalCI= $this->comparerTelmaEtIgor($igorCI, $telmaCI);
+                    $normalCO= $this->comparerTelmaEtIgor($igorCO, $telmaCO);
+
+                    // echo "<pre>";
+                    //     print_r($normalCI);
+                    // echo "</pre>";
+                    foreach ($normalCI as $item) {
+                        $this->telma_normal_model->insert_or_update_ci($item);
+                    }
+                    foreach ($normalCO as $item) {
+                        $this->telma_normal_model->insert_or_update_co($item);
+                    }
+
+                    // $this->telma_normal_model->insert_or_update_ci($normalCI);
+                    // $this->telma_normal_model->insert_or_update_co($normalCO);
+
                 }
 
                 
@@ -219,6 +241,7 @@
             foreach($data as $item) {
                 if($item["ACTION"] ==="bank_to_wallet") {
                     $item["cle"] = $item["receiver"] .$item["Amount_MGA"];
+                    $item["solde"] = $item["Amount_MGA"] * -1;
                     $resultat[]= $item;
                 }
             }
@@ -230,6 +253,7 @@
             foreach($data as $item) {
                 if($item["ACTION"] ==="wallet_to_bank") {
                     $item["cle"] = $item["Sender"] .$item["Amount_MGA"];
+                    $item["solde"] = $item["Amount_MGA"] * 1;
                     $resultat[]= $item;
                 }
             }
@@ -377,45 +401,61 @@
         }
 
 
-        public function comparerTelmaEtIgor($igor,$telma) {
+        // public function comparerTelmaEtIgor($igor,$telma) {
             
-            $ligne= count($igor) > count($telma) ? count($telma) : count($igor);
-            $telmaNormale = array();
-            $igorNormale= array();
-            $igorAnomalie= array();
-            $telmaAnomalie = array();
+        //     $ligne= count($igor) > count($telma) ? count($telma) : count($igor);
+        //     $telmaNormale = array();
+        //     $igorNormale= array();
+        //     $igorAnomalie= array();
+        //     $telmaAnomalie = array();
 
-            $igorCopy =$igor;
+        //     $igorCopy  =$igor;
+        //     $telmaCopy= $telma;
 
-            $i=0;
-            while ($i <=$ligne) {
-                if($igorCopy[$i]["cle"] - $telma[$i]["cle"] === 0) {
-                   $telmaNormale[] = $telma[$i];
-                   $igorNormale[] = $igor[$i];
-                   $i++;
-                } else if ($igorCopy[$i]["cle"] < $telma[$i]["cle"]) {
-                    // array_push($igorAnomalie, array_splice($igor[$i], $i, 1));
-                    // array_splice($igorCopy[$i], $i, 1);
-                    unset($igorCopy[$i]);
-                    array_values($igorCopy);
-                    echo "<pre>";
-                        print_r($igorCopy);
-                    echo "</pre>";
+        //     $i=0;
+
+        //     echo $ligne;
+        //     // while ($i < $ligne) {
+        //     //     if($igorCopy[$i]["cle"] - $telma[$i]["cle"] === 0) {
+        //     //        $telmaNormale[] = $telma[$i];
+        //     //        $igorNormale[] = $igor[$i];
+        //     //        $i++;
+        //     //     }else if ($igorCopy[$i]["cle"] - $telma[$i]["cle"] < 0) {
+        //     //         array_push($igorAnomalie, array_splice($igor[$i], $i, 1));
+        //     //         // array_splice($igorCopy[$i], $i, 1);
+        //     //         unset($igorCopy[$i]);
+        //     //         array_values($igorCopy);
+        //     //         // echo "<pre>";
+        //     //         //     print_r($igorCopy);
+        //     //         // echo "</pre>";
 
 
-                    echo "---------------------------------------------" .$i;
-                    // echo "mandalo"; 
-                } else {
+        //     //         echo "---------------------------------------------" .$i;
+        //     //         // echo "mandalo"; 
+        //     //     } else {
+        //     //         // array_push
                     
-                }
-            }
+        //     //     }
+        //     // }
 
-            // echo "<pre>";
-            //     print_r($igor);
-            // echo "</pre>";
+        //     // echo "<pre>";
+        //     //     print_r($igorCopy);
+        //     // echo "</pre>";
 
-            // return [[$igorNormale, $telmaNormale], [$igorAnomalie, $telmaAnomalie]];
-        }
+        //     echo "<pre>";
+        //         print_r($telmaCopy);
+        //     echo "</pre>";
+
+
+
+
+
+        //     // echo "<pre>";
+        //     //     print_r($igor);
+        //     // echo "</pre>";
+
+        //     // return [[$igorNormale, $telmaNormale], [$igorAnomalie, $telmaAnomalie]];
+        // }
 
         // public function comparerTelmaEtIgor($igor, $telma) {
         //     $ligne = min(count($igor), count($telma)); // Utilisez min() pour obtenir la plus petite longueur
@@ -442,6 +482,102 @@
         
         //     // return [[$igorNormale, $telmaNormale], [$igorAnomalie, $telmaAnomalie]];
         // }
+
+        // public function comparerTelmaEtIgor($igorTab, $telmaTab) {
+        //     $telmaNormale = array();
+        //     $igorNormale = array();
+        //     $igorAnomalie = array();
+        //     $telmaAnomalie = array();
+
+        //     foreach ($igorTab as $igorItem) {
+        //         $cleIgor = $igorItem["cle"];
+        //         $cleTrouvee = false;
+        //         $minDifference = null;
+        //         $minTelmaItem = null;
+
+        //         foreach ($telmaTab as $key => $telmaItem) {
+        //             $cleTelma = $telmaItem["cle"];
+        //             $difference = $cleIgor - $cleTelma;
+
+        //             if ($difference === 0) {
+        //                 $telmaNormale[] = $telmaItem;
+        //                 $igorNormale[] = $igorItem;
+        //                 unset($telmaTab[$key]);
+        //                 $cleTrouvee = true;
+        //                 break;
+        //             } elseif ($difference < 0 && ($minDifference === null || $difference < $minDifference)) {
+        //                 $minDifference = $difference;
+        //                 $minTelmaItem = $telmaItem;
+        //             }
+        //         }
+
+        //         if (!$cleTrouvee && $minTelmaItem !== null) {
+        //             $igorAnomalie[] = $igorItem;
+        //             $telmaAnomalie[] = $minTelmaItem;
+        //             unset($telmaTab[array_search($minTelmaItem, $telmaTab)]);
+        //         }
+        //     }
+
+               
+        //     $telmaAnomalie = array_merge($telmaAnomalie, $telmaTab);
+
+        //     echo "<pre>";
+        //         print_r($igorNormale);
+        //     echo "</pre>";
+
+        // }
+
+
+        public function comparerTelmaEtIgor ($igorTab, $telmaTab) {
+            $telmaNormale = array();
+            $igorNormale = array();
+            $igorAnomalie = array();
+            $telmaAnomalie = array();
+
+            $telmaCount = count($telmaTab);
+            $igorCount = count($igorTab);
+
+            $i = 0;
+            $j = 0;
+
+            while ($i < $igorCount && $j < $telmaCount) {
+                $cleIgor = $igorTab[$i]["cle"];
+                $cleTelma = $telmaTab[$j]["cle"];
+                $difference = $cleIgor - $cleTelma;
+
+                if ($difference === 0) {
+                    $telmaNormale[] = $telmaTab[$j];
+                    $igorNormale[] = $igorTab[$i];
+                    $i++;
+                    $j++;
+                } elseif ($difference < 0) {
+                    $igorAnomalie[] = $igorTab[$i];
+                    $i++;
+                } else {
+                    $telmaAnomalie[] = $telmaTab[$j];
+                    $j++;
+                }
+            }
+
+            // Traiter les éléments restants dans $igorTab comme des anomalies
+            while ($i < $igorCount) {
+                $igorAnomalie[] = $igorTab[$i];
+                $i++;
+            }
+
+            // Traiter les éléments restants dans $telmaTab comme des anomalies
+            while ($j < $telmaCount) {
+                $telmaAnomalie[] = $telmaTab[$j];
+                $j++;
+            }
+
+
+            for($i=0; $i < count($igorNormale); $i++) {
+                $mergeIgorTelma []= array_merge($igorNormale[$i], $telmaNormale[$i]);
+            } 
+
+            return $mergeIgorTelma;
+        }
         
         
 
