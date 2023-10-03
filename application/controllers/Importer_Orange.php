@@ -6,18 +6,13 @@
     use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
     class Importer_Orange extends CI_Controller {
-
-        public $ambiguous= array();
-        public $deallocation= array();
-        public $airtel_anomalie_ci= array();
-        public $airtel_anomalie_co= array();
-        public $igor_anomalie_ci= array();
-        public $igor_anomalie_co= array();
-
-
        
         public function __construct(){
             parent::__construct();
+            $this->load->model("boa_orange_anomalie_model");
+            $this->load->model("orange_normal_model");
+            $this->load->model("orange_anomalie_model");
+            $this->load->model("historique_orange_model");
             
         }
 
@@ -26,6 +21,7 @@
             $this->load->view("templates/sidebar");
             $this->load->view("pages/importer/importer");
             $this->load->view("pages/operateur/orange-form");
+            
         }
 
         public function importer() {
@@ -105,16 +101,22 @@
                 }
             }
 
-            // echo "<pre>";
-            //     print_r($princ);
-            // echo "</pre>";
+            
 
 // --------------------------------------------------------------------------- PRINCIPALE -----------------------------------------------------------------
 
 
             $princ= $this->supprimerEspace($princ);
             $principalCI= $this->filtrerPrincCI($princ);
+            $principalCO= $this->filtrerPrincCO($princ);
+            $nonAuCI= $this->filtrerNonAuCI($princ);
+            $nonAuCO= $this->filtrerNonAuCO($princ);
+            $vi= $this->filtrerVi($princ);
+
+            
             $principalCI= $this->trierPrincParRefIgor($principalCI);
+            $principalCO= $this->trierParCleCroissante($principalCO);
+
 
 // --------------------------------------------------------------------------- COMMISSION -----------------------------------------------------------------
             $comm= $this->supprimerEspace($comm);
@@ -128,19 +130,74 @@
 // ---------------------------------------------------------------------------- ORANGE -------------------------------------------------------------------------------
             $orange= $this->supprimerEspace($orange);
             $ind= $this->filtrerInd($orange);
+
             $orangeCI= $this->filtrerOrangeCI($orange);
             $orangeCI= $this->trierParCleCroissante($orangeCI);
             $orangeCO= $this->filtrerOrangeCO($orange);
             $orangeCO = $this->trierParCleCroissante($orangeCO);
 
-            $this->comparerBoaEtOrange($mergedComEtPrinc, $orangeCI);
+
+//  ---------------------------------------------------------------------------- COMAPARAISON -------------------------------------------------------------------------------
+
+            $resultatOrangeCI= $this->comparerBoaEtOrange($mergedComEtPrinc, $orangeCI);
+            $resultatOrangeCO= $this->comparerBoaEtOrange($principalCO, $orangeCO);
+
+
+// -----------------------------------------------------------------------------RESULTAT -------------------------------------------------------------------------------------
+
+            $normalCI= $resultatOrangeCI[0];
+            $normalCO= $resultatOrangeCO[0];
+            $dat= $resultatOrangeCI[1];
+            $cat= $resultatOrangeCO[1];
+            $anomalieOrangeCI= $resultatOrangeCI[2];
+            $anomalieOrangeCO= $resultatOrangeCO[2];
+
 
             // echo "<pre>";
-            //     print_r($orangeCI);
+            //     print_r($normalCI[0]);
             // echo "</pre>";
-            // echo "<pre>";
-            //     print_r($mergedComEtPrinc);
-            // echo "</pre>";
+
+// ------------------------------------------------------------------------------- HISTORIQUE -----------------------------------------------------------
+
+
+            $historique= array_merge($normalCI[0], $normalCO[0], $dat[0], $cat[0], $anomalieOrangeCI[0], $anomalieOrangeCO[0], $ind, $nonAuCO, $nonAuCI, $vi);
+
+            foreach($historique as $item ) {
+                $this->historique_orange_model->insert($item);
+            }
+
+// --------------------------------------------------------------------------------- REGULARISATION ------------------------------------------------------------------------------
+
+
+
+// ---------------------------------------------------------------------------------- INSERTION ----------------------------------------------------------------------------------
+
+            // foreach($normalCI[0] as $item) {
+            //     $this->orange_normal_model->insert_or_update_ci($item);
+            // }
+            // foreach($normalCO[0] as $item) {
+            //     $this->orange_normal_model->insert_or_update_co($item);
+            // }
+
+            // foreach ($dat[0] as $item ) {
+            //     $this->boa_orange_anomalie_model->insert_or_update_dat($item);
+            // }
+
+            // foreach ($cat[0] as $item ) {
+            //     $this->boa_orange_anomalie_model->insert_or_update_cat($item);
+            // }
+
+            // foreach($ind as $item) {
+            //     $this->orange_anomalie_model->insert_or_update_ind($item);
+            // }
+            // foreach($nonAuCI as $item) {
+            //     $this->boa_orange_anomalie_model->insert_or_update_nonAuCI($item);
+            // }
+            // foreach($nonAuCO as $item) {
+            //     $this->boa_orange_anomalie_model->insert_or_update_nonAuCO($item);
+            // }
+
+
         }
 
         public function filtrerOrangeCI($data) {
@@ -196,6 +253,17 @@
             return $resultat;
         }
 
+        public function filtrerVI($data) {
+            $resultat= array();
+
+            foreach($data as $item) {
+                if ($item["princ_oper"] !=="CASHI" && $item["princ_oper"] !=="CASHO" ) {
+                    $resultat[] = $item;
+                }
+            }
+            return $resultat;
+        }
+
         public function supprimerEspace($data) {
             $resultat= array();
             foreach($data as $key=> $valeur) {
@@ -236,6 +304,26 @@
             return $resultat;
         }
 
+        public function filtrerPrincCO($data) {
+            $resultat= array();
+
+            foreach($data as $item) {
+                if (preg_match('/tel:(\d+)/', $item["princ_libelle"], $matches)) {
+                    $numeroTelephone = $matches[1];
+                    // echo "Numéro de téléphone : " . $numeroTelephone;
+                } else {
+                    // echo "Aucun numéro de téléphone trouvé.";
+                }
+                if($item["princ_oper"] ==="CASHO" && $item["princ_expl"] ==="AU") {
+                    $cle = $numeroTelephone .-$item["princ_montant"];
+                    $item["cle"] = $cle;
+                    $resultat[]= $item;
+                }
+            }
+
+            return $resultat;
+        }
+
         public function filtrerCommCI($data) {
             $resultat= array();
             foreach($data as $item) {
@@ -244,6 +332,29 @@
                 }
             }
             return $resultat;
+        }
+
+        public function filtrerNonAuCI($data) {
+            $resultat= array();
+            foreach($data as $item) {
+                if($item["princ_oper"] ==="CASHI" && $item["princ_expl"] !=="AU") {
+                    $resultat[]= $item;
+                }
+            }
+            return $resultat;
+            
+        }
+
+
+        public function filtrerNonAuCO($data) {
+            $resultat= array();
+            foreach($data as $item) {
+                if($item["princ_oper"] ==="CASHO" && $item["princ_expl"] !=="AU") {
+                    $resultat[]= $item;
+                }
+            }
+            return $resultat;
+            
         }
 
 
@@ -306,40 +417,163 @@
             return $data;
         }
 
-        public function comparerBoaEtOrange($boa, $orange) {
-            $anomalieBoa = array();
-            $anomalieOrange = array();
-            $normaleOrange = array();
-            $normaleBoa = array();
-            $boaCopy = $boa;
-            $orangeCopy = $orange;
+        // public function comparerBoaEtOrange($boa, $orange) {
+        //     $anomalieBoa = array();
+        //     $anomalieOrange = array();
+        //     $normaleOrange = array();
+        //     $normaleBoa = array();
+        //     $boaCopy = $boa;
+        //     $orangeCopy = $orange;
         
-            $ligne = min(count($boa), count($orange));
-            $isFinished = false;
+        //     $ligne = min(count($boa), count($orange));
+        //     $isFinished = false;
+        //     $i = 0;
+        
+        //     while ($i < $ligne && !$isFinished) {
+        //         if ($boa[$i]["cle"] - $orange[$i]["cle"] == 0) {
+        //             $normaleOrange[] = $orange[$i];
+        //             $normaleBoa[] = $boa[$i];
+        //             $isFinished = true;
+        //             $i++;
+        //         } elseif ($boa[$i]["cle"] - $orange["cle"] < 0) {
+        //             $anomalieBoa[] = $boa[$i];
+        //             array_splice($boa, $i, 1);
+        //             $boa = array_values($boa);
+        //         } else {
+        //             $anomalieOrange[] = $orange;
+        //             array_splice($orange, $i, 1);
+        //             $orange = array_values($orange);
+        //         }
+        //     }
+
+
+        //     echo "<pre>";
+        //     print_r();
+        //     echo "</pre>";
+        // }
+
+        public function comparerBoaEtOrange ($igorTab, $orangeTab) {
+            $orangeNormal = array();
+            $boaNormal = array();
+            $boaAnomalie = array();
+            $orangeAnomalie = array();
+
+            $orangeCount = count($orangeTab);
+            $boaCount = count($igorTab);
+
             $i = 0;
-        
-            while ($i < $ligne && !$isFinished) {
-                if ($boa[$i]["cle"] - $orange[$i]["cle"] == 0) {
-                    $normaleOrange[] = $orange[$i];
-                    $normaleBoa[] = $boa[$i];
-                    $isFinished = true;
+            $j = 0;
+
+            while ($i < $boaCount && $j < $orangeCount) {
+                $cleIgor = $igorTab[$i]["cle"];
+                $cleTelma = $orangeTab[$j]["cle"];
+                $difference = $cleIgor - $cleTelma;
+
+                if ($difference === 0) {
+                    $orangeNormal[] = $orangeTab[$j];
+                    $boaNormal[] = $igorTab[$i];
                     $i++;
-                } elseif ($boa[$i]["cle"] - $orange["cle"] < 0) {
-                    $anomalieBoa[] = $boa[$i];
-                    array_splice($boa, $i, 1);
-                    $boa = array_values($boa);
+                    $j++;
+                } elseif ($difference < 0) {
+                    $boaAnomalie[] = $igorTab[$i];
+                    $i++;
                 } else {
-                    $anomalieOrange[] = $orange;
-                    array_splice($orange, $i, 1);
-                    $orange = array_values($orange);
+                    $orangeAnomalie[] = $orangeTab[$j];
+                    $j++;
                 }
             }
 
+            // Traiter les éléments restants dans $igorTab comme des anomalies
+            while ($i < $boaCount) {
+                $boaAnomalie[] = $igorTab[$i];
+                $i++;
+            }
 
-            echo "<pre>";
-            print_r();
-            echo "</pre>";
+            // Traiter les éléments restants dans $orangeTab comme des anomalies
+            while ($j < $orangeCount) {
+                $orangeAnomalie[] = $orangeTab[$j];
+                $j++;
+            }
+
+
+            for($i=0; $i < count($boaNormal); $i++) {
+                $mergeBoaOrange[]= array_merge($boaNormal[$i], $orangeNormal[$i]);
+            } 
+
+            // echo "<pre>";
+            //     print_r($mergeBoaOrange);
+            // echo "</pre>";
+          
+
+
+
+            return [[$mergeBoaOrange], [$boaAnomalie], [$orangeAnomalie]];
         }
+
+        public function exporter() {
+            $dateAujourdhui = date("Y-m-d");
+            $nomFichier = "RapproOrange-" .$dateAujourdhui .".xlsx";
+
+            header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+            header("Content-Disposition: attachment; filename=\"" . $nomFichier . "\"");
+            
+            $spreadsheet = new PhpOffice\PhpSpreadsheet\Spreadsheet();
+            $sheet = $spreadsheet->getActiveSheet();
+
+            $cell_array = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "AA", "AB", "AC", "AD", "AE", "AF", "AG", "AH", "AI", "AJ", "AK"];
+            $header = ["DATE OPE", "DATE VAL", "DEVISE", "MONTANT", "LIBELLE", "CODE OPER", "EXPL", "REF", "", "REF2", "SOLDE", "", "date_d", "trans_id", "initiator", "TYPE", "Channel", "State", "Wallet", "Amount_MGA", "Sender", "Sender_name", "receiver", "receiver_name", "details1", "Confirming_agent", "notify_alternate", "Origine", "TVA", "ACTION", "AA1 GROUP", "PAR", "MONTANT", "SOLDE", "ECART", "SOLDE DISPO", "SOLDE TELMA SALFECARE"];
+
+            $sheet->mergeCells('A1:K1');
+            $sheet->setCellValue('A1', 'BOA');
+            $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
+            $sheet->getStyle('A1:K1')->getBorders()->getAllBorders()->setBorderStyle('thin');
+            $sheet->mergeCells('M1:AH1');
+            $sheet->setCellValue('M1', 'Telma');
+            $sheet->getStyle('M1')->getAlignment()->setHorizontal('center');
+            $sheet->getStyle('M1:AH1')->getBorders()->getAllBorders()->setBorderStyle('thin');
+            $sheet->mergeCells('A2:K2');
+            $sheet->mergeCells('M2:AH2');
+            $sheet->setCellValue('A2', 'PRINCIPALE');
+            $sheet->getStyle('A2')->getAlignment()->setHorizontal('center');
+            $sheet->getStyle('A2:K2')->getBorders()->getAllBorders()->setBorderStyle('thin');
+            $sheet->getStyle('M2:AH2')->getBorders()->getAllBorders()->setBorderStyle('thin');
+            $sheet->getStyle('A1')->getFont()->setBold(true);
+            $sheet->getStyle('M1')->getFont()->setBold(true);
+            $sheet->getStyle('A2')->getFont()->setBold(true);
+            $sheet->getStyle('E3')->getFont()->setBold(true);
+
+            
+            //  BORDURE 
+            for($i=0; $i < count($cell_array) -3 ; $i++) {
+                $sheet->getStyle($cell_array[$i] . "3")->getBorders()->getAllBorders()->setBorderStyle('thin');
+            }
+
+            // EN TETE 
+
+            for($i=0; $i < count($cell_array) ; $i++) {
+                $sheet->getStyle($cell_array[$i] . "4")->getBorders()->getAllBorders()->setBorderStyle('thin');
+                $sheet->setCellValue($cell_array[$i] ."4", $header[$i]);
+                $sheet->getStyle($cell_array[$i] . "4")->getAlignment()->setHorizontal('center');
+                $sheet->getStyle($cell_array[$i] . "4")->getFont()->setBold(true);
+                $sheet->getColumnDimension($cell_array[$i])->setAutoSize(true);
+            }
+
+            for($i=0; $i < count($cell_array) ; $i++) {
+                $sheet->getStyle($cell_array[$i] . "4")->getBorders()->getAllBorders()->setBorderStyle('thin');
+                $sheet->setCellValue($cell_array[$i] ."4", $header[$i]);
+                $sheet->getStyle($cell_array[$i] . "4")->getAlignment()->setHorizontal('center');
+                $sheet->getStyle($cell_array[$i] . "4")->getFont()->setBold(true);
+                $sheet->getColumnDimension($cell_array[$i])->setAutoSize(true);
+            }
+
+            $writer = new PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
+            $writer->save('php://output');
+
+        }
+
+        
+
+
         
 }
 

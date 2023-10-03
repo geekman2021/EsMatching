@@ -16,8 +16,8 @@
 
         public function get_data() {
 
-            $data["normale_ci"] = $this->load->telma_normal_model->get_ci();
-            $data["normale_co"] = $this->load->telma_normal_model->get_co();
+            $data["normal_ci"] = $this->load->telma_normal_model->get_ci();
+            $data["normal_co"] = $this->load->telma_normal_model->get_co();
 
             return $data;
 

@@ -61,7 +61,7 @@
             <table class="table table-bordered" id="tableNormaleCashIn">
                 <thead style="text-align: center ;">
                     <tr>
-                        <th colspan="10" style="text-align: center ;">BOA</th>
+                        <th colspan="9" style="text-align: center ;">BOA</th>
                         <th></th>
                         <th colspan="10" style="text-align: center ;">Telma</th>
                     </tr>
@@ -90,23 +90,31 @@
                 </thead>
                 <tbody>
                   <?php foreach($normal_ci as $item) { ?>
-                    <td><?php echo $item->DATE_OPER ?></td>
-                    <td><?php echo $item->DATE_VAL ?></td>
-                    <td><?php echo $item->DEVISE ?></td>
-                    <td><?php echo $item->MONTANT ?></td>
-                    <td><?php echo $item->LIBELLE ?></td>
-                    <td><?php echo $item->OPER ?></td>
-                    <td><?php echo $item->EXPL ?></td>
-                    <td><?php echo $item->REF_IGOR ?></td>
-                    <td><?php echo $item->cle ?></td>
-                    <td></td>
-                    <td><?php echo $item->date_d ?></td>
-                    <td><?php echo $item->cle ?></td>
-                    <td><?php echo $item->cle ?></td>
-                    <td><?php echo $item->cle ?></td>
-                    <td><?php echo $item->cle ?></td>
-                    <td><?php echo $item->cle ?></td>
+                    <tr>
+                      <td><?php echo $item->DATE_OPER ?></td>
+                      <td><?php echo $item->DATE_VAL ?></td>
+                      <td><?php echo $item->DEVISE ?></td>
+                      <td><?php echo $item->MONTANT ?></td>
+                      <td style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis ;max-width: 100px; "><?php echo $item->LIBELLE ?></td>
+                      <td><?php echo $item->OPER ?></td>
+                      <td><?php echo $item->EXPL ?></td>
+                      <td><?php echo $item->REF_IGOR ?></td>
+                      <td><?php echo $item->cle ?></td>
+                      <td></td>
+                      <td><?php echo $item->date_d ?></td>
+                      <td><?php echo $item->cle ?></td>
+                      <td><?php echo $item->cle ?></td>
+                      <td><?php echo $item->cle ?></td>
+                      <td><?php echo $item->cle ?></td>
+                      <td><?php echo $item->cle ?></td>
+                      <td><?php echo $item->cle ?></td>
+                      <td><?php echo $item->cle ?></td>
+                      <td><?php echo $item->cle ?></td>
+
                   <?php }?>
+
+                    </tr>
+                    
                 </tbody>
             </table>
         </div>
@@ -137,7 +145,6 @@
                     </tr>
                     <tr>
                         
-                        <th>Compte</th>
                         <th>Date_Oper</th>
                         <th>Date_Val</th>
                         <th>Devise</th>
@@ -161,6 +168,32 @@
                     </tr>
                 </thead>
                 <tbody>
+                <?php foreach($normal_co as $item) { ?>
+                    <tr>
+                      <td><?php echo $item->DATE_OPER ?></td>
+                      <td><?php echo $item->DATE_VAL ?></td>
+                      <td><?php echo $item->DEVISE ?></td>
+                      <td><?php echo $item->MONTANT ?></td>
+                      <td><?php echo $item->LIBELLE ?></td>
+                      <td><?php echo $item->OPER ?></td>
+                      <td><?php echo $item->EXPL ?></td>
+                      <td><?php echo $item->REF_IGOR ?></td>
+                      <td><?php echo $item->cle ?></td>
+                      <td></td>
+                      <td><?php echo $item->date_d ?></td>
+                      <td><?php echo $item->cle ?></td>
+                      <td><?php echo $item->cle ?></td>
+                      <td><?php echo $item->cle ?></td>
+                      <td><?php echo $item->cle ?></td>
+                      <td><?php echo $item->cle ?></td>
+                      <td><?php echo $item->cle ?></td>
+                      <td><?php echo $item->cle ?></td>
+                      <td><?php echo $item->cle ?></td>
+                      <td><?php echo $item->cle ?></td>
+
+                <?php }?>
+
+                    </tr>
                  
                 </tbody>
             </table>
@@ -312,6 +345,8 @@ $(document).ready(function(){
 
     $('#tableNormaleCashIn').DataTable( {
         dom: 'Bfrtip',
+        responsive: true,
+        scrollX: true,
         buttons: [
             'copy', 'csv', 'excel', 'pdf', 'print'
             ],

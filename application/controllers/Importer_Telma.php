@@ -7,16 +7,24 @@
 
     class Importer_Telma extends CI_Controller {
 
+       
+
         public function __construct() {
             parent::__construct();
             $this->load->model("telma_normal_model");
+            $this->load->model("telma_anomalie_model");
+            $this->load->model("boa_telma_anomalie_model");
+            $this->load->model("historique_telma_model");
         }
 
 
         public function index () {
+            session_start();
             $this->load->view("templates/sidebar");
             $this->load->view("pages/importer/importer");
             $this->load->view("pages/operateur/telma-form");
+            
+            
         }
 
         public function importer() {
@@ -79,6 +87,11 @@
                     }
 
 
+// -------------------------------------------------------------------------TELMA -----------------------------------------------------------------------------
+
+
+
+
                     $telma = $this->supprimerEspace($telma);
                     $telma = $this->trierParTransId($telma);
 
@@ -103,15 +116,21 @@
 
                     $telmaCO= $this->filtrerCO($reste);
                     $telmaCO= $this->trierParCleCroissante($telmaCO);
-                    // $telmaCO= $this->trierParCleCroissante($telmaCO);
-                    // echo "<<<<<<<<<<<<ROLLBACK>>>>>>>>>>>>>>>>>>>>>>>\n";
+
+
+// -------------------------------------------------------------------------------------IGOR ---------------------------------------------------------------------------
 
 
                     $igor = $this->supprimerEspace($igor);
+                    $nonAu= $this->filtrerNonAu($igor);
                     $igorCI= $this->filtrerCIIgor($igor);
                     $igorCI= $this->trierParCleCroissante($igorCI);
                     $igorCO= $this->filtrerCOIgor($igor);
                     $igorCO= $this->trierParCleCroissante($igorCO);
+
+                    $reverseEtAnnule= $this->reverseEtAnnule($indexAnnul, $telma);
+
+// -----------------------------------------------------------------------------------COMPARAISON -------------------------------------------------------------------------
 
                     // if ($this->estTrieParCle($telmaCI)) {
                     //     echo "Le tableau est trié par ordre croissant en se référant à la clé 'cle'.";
@@ -119,35 +138,103 @@
                     //     echo "Le tableau n'est pas trié par ordre croissant en se référant à la clé 'cle'.";
                     // }
 
-                    // echo "<pre>";
-                    //     print_r($telmaCI);
-                    // echo "</pre>";
-                    // echo "<pre>";
-                    //     print_r($igorCI);
-                    // echo "</pre>";
+                    
 
                     
 
-                    $normalCI= $this->comparerTelmaEtIgor($igorCI, $telmaCI);
-                    $normalCO= $this->comparerTelmaEtIgor($igorCO, $telmaCO);
+                    $resultatCI= $this->comparerTelmaEtIgor($igorCI, $telmaCI);
+                    $resultatCO= $this->comparerTelmaEtIgor($igorCO, $telmaCO);
+                    $normalCI= $resultatCI[0];
+                    $normalCO= $resultatCO[0];
+                    $dat= $resultatCI[1];
+                    $cat= $resultatCO[1];
+                    // $telmaAnomalieCI= $resultatCI[2];
+                    // $telmaAnomalieCO= $resultatCO[2];
 
-                    // echo "<pre>";
-                    //     print_r($normalCI);
-                    // echo "</pre>";
-                    foreach ($normalCI as $item) {
-                        $this->telma_normal_model->insert_or_update_ci($item);
+                    // $this->comparerTelmaEtIgor($igorCI, $telmaCI);
+
+
+// ------------------------------------------------------------------------------REGULARISATION ----------------------------------------------------------------------
+
+
+
+
+// ------------------------------------------------------------------------------------INSERTION --------------------------------------------------------------------
+
+
+                        
+
+                    $_SESSION["last_solde"] = $this->historique_telma_model->get_last_solde();
+
+
+
+                    if(count($_SESSION["last_solde"]) > 0 ) {
+                        $solde_telma= $_SESSION["last_solde"][0]->solde_telma;
+                        $solde_boa= $_SESSION["last_solde"][0]->solde_boa;
+                    } else if(count($_SESSION["last_solde"]) === 0 ) {
+                        $solde_telma= 0;
+                        $solde_boa= 0;
                     }
-                    foreach ($normalCO as $item) {
-                        $this->telma_normal_model->insert_or_update_co($item);
+
+                    $historique =array_merge($normalCI[0], $normalCO[0], $dat[0], $cat[0], $reverseEtAnnule, $rollback, $admin, $nonAu);
+
+                    foreach ($historique as $item) {
+                        $solde_telma += isset($item["solde"]) ? $item["solde"] : 0;
+                        $solde_boa += isset($item["MONTANT"]) ? $item["MONTANT"] : 0;
+                        $item["solde_telma"] = $solde_telma;
+                        $item["solde_boa"] = $solde_boa;
+                        $this->historique_telma_model->insert($item);
                     }
+
+                    // foreach ($normalCI as $item) {
+                    //     $solde_telma += isset($item["solde"]) ? $item["solde"] : 0;
+                    //     $solde_boa += isset($item["MONTANT"]) ? $item["MONTANT"] : 0;
+                    //     $this->telma_normal_model->insert_or_update_ci($item);
+                    //     
+                    // }
+                    // foreach ($normalCO as $item) {
+                    //     $this->telma_normal_model->insert_or_update_co($item);
+                    // 
+                    // }
+
+                    // $this->exporter($normalCI[0], $normalCO[0], $reverseEtAnnule,$admin, $rollback, $dat[0], $cat[0]);
 
                     // $this->telma_normal_model->insert_or_update_ci($normalCI);
                     // $this->telma_normal_model->insert_or_update_co($normalCO);
 
+                    // foreach($admin as $item) {
+                    //     $this->telma_anomalie_model->insert_or_update_admin($item);
+                            // 
+                    // }
+                    // foreach($reverseEtAnnule as $item) {
+                    //     $this->telma_anomalie_model->insert_or_update_reverse($item);
+                            // 
+                    // }
+                    // foreach($rollback as $item) {
+                    //     $this->telma_anomalie_model->insert_or_update_rollback($item);
+                    // 
+                    // }
+                    // foreach($dat[0] as $item) {
+                    //     $this->boa_telma_anomalie_model->insert_or_update_dat($item);
+                    // 
+                    // }
+                  
+                    // foreach($cat[0] as $item) {
+                    //     $this->boa_telma_anomalie_model->insert_or_update_cat($item);
+                    // 
+                    // }
+                    // foreach($nonAu as $item) {
+                    //     $this->boa_telma_anomalie_model->insert_or_update_nonAu($item);
+                    // 
+                    // }
+
+                    
                 }
 
                 
             }
+
+
         }
 
         public function readData($upload_file, $upload_tmp) {
@@ -194,6 +281,7 @@
 
             foreach($data as $item) {
                 if($item["TYPE"] ==="adjustment") {
+                    $item["solde"] = $item["Amount_MGA"] * -1;
                     $resultat[]= $item;
                 }
             }
@@ -217,6 +305,7 @@
 
             foreach($data as $item) {
                 if($item["TYPE"] ==="transfer" && $item["Channel"] ==="SOAP" && $item["State"] ==="RolledBack") {
+                    $item["solde"] = $item["Amount_MGA"] * -1;
                     $resultat[]= $item;
                 } 
             }
@@ -388,6 +477,16 @@
             return $resultat;
         }
 
+        public function filtrerNonAu($data) {
+            $resultat= array();
+            foreach($data as $item) {
+                if($item["EXPL"] !=="AU" && ($item["OPER"] ==="CASHI" || $item["OPER"] ==="CASHO")) {; 
+                    $resultat[]= $item;                       
+                }
+            }
+            return $resultat;
+        }
+
         public function estTrieParCle($data) {
             $longueur = count($data);
             
@@ -528,6 +627,291 @@
         // }
 
 
+        public function exporter($normalCI, $normalCO, $reverseEtAnnule, $admin, $rollback, $dat, $cat) {
+            $dateAujourdhui = date("Y-m-d");
+            $nomFichier = "RapproTelma-" .$dateAujourdhui .".xlsx";
+
+            header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+            header("Content-Disposition: attachment; filename=\"" . $nomFichier . "\"");
+            
+            $spreadsheet = new PhpOffice\PhpSpreadsheet\Spreadsheet();
+            $sheet = $spreadsheet->getActiveSheet();
+
+            $cell_array = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "AA", "AB", "AC", "AD", "AE", "AF", "AG", "AH", "AI", "AJ", "AK"];
+            $header = ["DATE OPE", "DATE VAL", "DEVISE", "MONTANT", "LIBELLE", "CODE OPER", "EXPL", "REF", "", "REF2", "SOLDE", "", "date_d", "trans_id", "initiator", "TYPE", "Channel", "State", "Wallet", "Amount_MGA", "Sender", "Sender_name", "receiver", "receiver_name", "details1", "Confirming_agent", "notify_alternate", "Origine", "TVA", "ACTION", "AA1 GROUP", "PAR", "MONTANT", "SOLDE", "ECART", "SOLDE DISPO", "SOLDE TELMA SALFECARE"];
+
+            $sheet->mergeCells('A1:K1');
+            $sheet->setCellValue('A1', 'BOA');
+            $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
+            $sheet->getStyle('A1:K1')->getBorders()->getAllBorders()->setBorderStyle('thin');
+            $sheet->mergeCells('M1:AH1');
+            $sheet->setCellValue('M1', 'Telma');
+            $sheet->getStyle('M1')->getAlignment()->setHorizontal('center');
+            $sheet->getStyle('M1:AH1')->getBorders()->getAllBorders()->setBorderStyle('thin');
+            $sheet->mergeCells('A2:K2');
+            $sheet->mergeCells('M2:AH2');
+            $sheet->setCellValue('A2', 'PRINCIPALE');
+            $sheet->getStyle('A2')->getAlignment()->setHorizontal('center');
+            $sheet->getStyle('A2:K2')->getBorders()->getAllBorders()->setBorderStyle('thin');
+            $sheet->getStyle('M2:AH2')->getBorders()->getAllBorders()->setBorderStyle('thin');
+            $sheet->getStyle('A1')->getFont()->setBold(true);
+            $sheet->getStyle('M1')->getFont()->setBold(true);
+            $sheet->getStyle('A2')->getFont()->setBold(true);
+            $sheet->getStyle('E3')->getFont()->setBold(true);
+
+            
+            //  BORDURE 
+            for($i=0; $i < count($cell_array) -3 ; $i++) {
+                $sheet->getStyle($cell_array[$i] . "3")->getBorders()->getAllBorders()->setBorderStyle('thin');
+            }
+
+            // EN TETE 
+
+            for($i=0; $i < count($cell_array) ; $i++) {
+                $sheet->getStyle($cell_array[$i] . "4")->getBorders()->getAllBorders()->setBorderStyle('thin');
+                $sheet->setCellValue($cell_array[$i] ."4", $header[$i]);
+                $sheet->getStyle($cell_array[$i] . "4")->getAlignment()->setHorizontal('center');
+                $sheet->getStyle($cell_array[$i] . "4")->getFont()->setBold(true);
+                $sheet->getColumnDimension($cell_array[$i])->setAutoSize(true);
+            }
+
+            for($i=0; $i < count($cell_array) ; $i++) {
+                $sheet->getStyle($cell_array[$i] . "4")->getBorders()->getAllBorders()->setBorderStyle('thin');
+                $sheet->setCellValue($cell_array[$i] ."4", $header[$i]);
+                $sheet->getStyle($cell_array[$i] . "4")->getAlignment()->setHorizontal('center');
+                $sheet->getStyle($cell_array[$i] . "4")->getFont()->setBold(true);
+                $sheet->getColumnDimension($cell_array[$i])->setAutoSize(true);
+            }
+
+            
+            // NORMALE CI 
+
+            $lastRow = $sheet->getHighestRow() + 2;
+            foreach ($normalCI as $dataRow) {
+                $sheet->getStyle($cell_array[0] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('DDDDDD');
+                $sheet->setCellValue($cell_array[0] .$lastRow, $dataRow["DATE_OPER"]);
+                $sheet->setCellValue($cell_array[1] .$lastRow, $dataRow["DATE_VAL"]);
+                $sheet->setCellValue($cell_array[2] .$lastRow, $dataRow["DEVISE"]);
+                $sheet->setCellValue($cell_array[3] .$lastRow, $dataRow["MONTANT"]);
+                $sheet->setCellValue($cell_array[4] .$lastRow, $dataRow["LIBELLE"]);
+                $sheet->setCellValue($cell_array[5] .$lastRow, $dataRow["OPER"]);
+                $sheet->setCellValue($cell_array[6] .$lastRow, $dataRow["EXPL"]);
+                $sheet->setCellValue($cell_array[7] .$lastRow, $dataRow["REF_IGOR"]);
+                $sheet->setCellValue($cell_array[9] .$lastRow, $dataRow["cle"]);
+                $sheet->setCellValue($cell_array[12] .$lastRow, $dataRow["date_d"]);
+                $sheet->setCellValue($cell_array[13] .$lastRow, $dataRow["trans_id"]);
+                $sheet->setCellValue($cell_array[14] .$lastRow, $dataRow["initiator"]);
+                $sheet->setCellValue($cell_array[15] .$lastRow, $dataRow["TYPE"]);
+                $sheet->setCellValue($cell_array[16] .$lastRow, $dataRow["Channel"]);
+                $sheet->setCellValue($cell_array[17] .$lastRow, $dataRow["State"]);
+                $sheet->setCellValue($cell_array[18] .$lastRow, $dataRow["Wallet"]);
+                $sheet->setCellValue($cell_array[19] .$lastRow, $dataRow["Amount_MGA"]);
+                $sheet->setCellValue($cell_array[20] .$lastRow, $dataRow["Sender"]);
+                $sheet->setCellValue($cell_array[21] .$lastRow, $dataRow["Sender_name"]);
+                $sheet->setCellValue($cell_array[22] .$lastRow, $dataRow["receiver"]);
+                $sheet->setCellValue($cell_array[23] .$lastRow, $dataRow["receiver_name"]);
+                $sheet->setCellValue($cell_array[24] .$lastRow, $dataRow["details1"]);
+                $sheet->setCellValue($cell_array[25] .$lastRow, $dataRow["Confirming_agent"]);
+                $sheet->setCellValue($cell_array[26] .$lastRow, $dataRow["origine"]);
+                $sheet->setCellValue($cell_array[27] .$lastRow, $dataRow["TVA"]);
+                $sheet->setCellValue($cell_array[29] .$lastRow, $dataRow["ACTION"]);
+                $sheet->setCellValue($cell_array[30] .$lastRow, $dataRow["AA1_GROUP"]);
+                $sheet->setCellValue($cell_array[31] .$lastRow, $dataRow["PAR"]);
+                $sheet->setCellValue($cell_array[32] .$lastRow, $dataRow["solde"]);
+
+                $lastRow++;
+            }
+
+            $lastRow = $sheet->getHighestRow() + 2; // La première ligne du tableau Excel
+
+
+
+
+            $lastRow = $sheet->getHighestRow() + 2;
+
+            // NORMALE CO 
+
+            foreach ($normalCO as $dataRow) {
+                $sheet->getStyle($cell_array[0] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('DDDDDD');
+                $sheet->setCellValue($cell_array[0] .$lastRow, $dataRow["DATE_OPER"]);
+                $sheet->setCellValue($cell_array[1] .$lastRow, $dataRow["DATE_VAL"]);
+                $sheet->setCellValue($cell_array[2] .$lastRow, $dataRow["DEVISE"]);
+                $sheet->setCellValue($cell_array[3] .$lastRow, $dataRow["MONTANT"]);
+                $sheet->setCellValue($cell_array[4] .$lastRow, $dataRow["LIBELLE"]);
+                $sheet->setCellValue($cell_array[5] .$lastRow, $dataRow["OPER"]);
+                $sheet->setCellValue($cell_array[6] .$lastRow, $dataRow["EXPL"]);
+                $sheet->setCellValue($cell_array[7] .$lastRow, $dataRow["REF_IGOR"]);
+                $sheet->setCellValue($cell_array[9] .$lastRow, $dataRow["cle"]);
+                $sheet->setCellValue($cell_array[12] .$lastRow, $dataRow["date_d"]);
+                $sheet->setCellValue($cell_array[13] .$lastRow, $dataRow["trans_id"]);
+                $sheet->setCellValue($cell_array[14] .$lastRow, $dataRow["initiator"]);
+                $sheet->setCellValue($cell_array[15] .$lastRow, $dataRow["TYPE"]);
+                $sheet->setCellValue($cell_array[16] .$lastRow, $dataRow["Channel"]);
+                $sheet->setCellValue($cell_array[17] .$lastRow, $dataRow["State"]);
+                $sheet->setCellValue($cell_array[18] .$lastRow, $dataRow["Wallet"]);
+                $sheet->setCellValue($cell_array[19] .$lastRow, $dataRow["Amount_MGA"]);
+                $sheet->setCellValue($cell_array[20] .$lastRow, $dataRow["Sender"]);
+                $sheet->setCellValue($cell_array[21] .$lastRow, $dataRow["Sender_name"]);
+                $sheet->setCellValue($cell_array[22] .$lastRow, $dataRow["receiver"]);
+                $sheet->setCellValue($cell_array[23] .$lastRow, $dataRow["receiver_name"]);
+                $sheet->setCellValue($cell_array[24] .$lastRow, $dataRow["details1"]);
+                $sheet->setCellValue($cell_array[25] .$lastRow, $dataRow["Confirming_agent"]);
+                $sheet->setCellValue($cell_array[26] .$lastRow, $dataRow["origine"]);
+                $sheet->setCellValue($cell_array[27] .$lastRow, $dataRow["TVA"]);
+                $sheet->setCellValue($cell_array[29] .$lastRow, $dataRow["ACTION"]);
+                $sheet->setCellValue($cell_array[30] .$lastRow, $dataRow["AA1_GROUP"]);
+                $sheet->setCellValue($cell_array[31] .$lastRow, $dataRow["PAR"]);
+                $sheet->setCellValue($cell_array[32] .$lastRow, $dataRow["solde"]);
+
+                $lastRow++;
+            }
+
+            // REVERSE ET ANNULE 
+            
+            foreach ($reverseEtAnnule as $dataRow) {
+                $sheet->getStyle($cell_array[12] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('DDDDDD');
+                $sheet->setCellValue($cell_array[12] .$lastRow, $dataRow["date_d"]);
+                $sheet->setCellValue($cell_array[13] .$lastRow, $dataRow["trans_id"]);
+                $sheet->setCellValue($cell_array[14] .$lastRow, $dataRow["initiator"]);
+                $sheet->setCellValue($cell_array[15] .$lastRow, $dataRow["TYPE"]);
+                $sheet->setCellValue($cell_array[16] .$lastRow, $dataRow["Channel"]);
+                $sheet->setCellValue($cell_array[17] .$lastRow, $dataRow["State"]);
+                $sheet->setCellValue($cell_array[18] .$lastRow, $dataRow["Wallet"]);
+                $sheet->setCellValue($cell_array[19] .$lastRow, $dataRow["Amount_MGA"]);
+                $sheet->setCellValue($cell_array[20] .$lastRow, $dataRow["Sender"]);
+                $sheet->setCellValue($cell_array[21] .$lastRow, $dataRow["Sender_name"]);
+                $sheet->setCellValue($cell_array[22] .$lastRow, $dataRow["receiver"]);
+                $sheet->setCellValue($cell_array[23] .$lastRow, $dataRow["receiver_name"]);
+                $sheet->setCellValue($cell_array[24] .$lastRow, $dataRow["details1"]);
+                $sheet->setCellValue($cell_array[25] .$lastRow, $dataRow["Confirming_agent"]);
+                $sheet->setCellValue($cell_array[26] .$lastRow, $dataRow["origine"]);
+                $sheet->setCellValue($cell_array[27] .$lastRow, $dataRow["TVA"]);
+                $sheet->setCellValue($cell_array[29] .$lastRow, $dataRow["ACTION"]);
+                $sheet->setCellValue($cell_array[30] .$lastRow, $dataRow["AA1_GROUP"]);
+                $sheet->setCellValue($cell_array[31] .$lastRow, $dataRow["PAR"]);
+                $sheet->setCellValue($cell_array[32] .$lastRow, $dataRow["solde"]);
+
+                $lastRow++;
+            }
+
+            // ROLLBACK 
+
+            foreach ($rollback as $dataRow) {
+                $sheet->getStyle($cell_array[12] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('DDDDDD');
+                $sheet->setCellValue($cell_array[12] .$lastRow, $dataRow["date_d"]);
+                $sheet->setCellValue($cell_array[13] .$lastRow, $dataRow["trans_id"]);
+                $sheet->setCellValue($cell_array[14] .$lastRow, $dataRow["initiator"]);
+                $sheet->setCellValue($cell_array[15] .$lastRow, $dataRow["TYPE"]);
+                $sheet->setCellValue($cell_array[16] .$lastRow, $dataRow["Channel"]);
+                $sheet->setCellValue($cell_array[17] .$lastRow, $dataRow["State"]);
+                $sheet->setCellValue($cell_array[18] .$lastRow, $dataRow["Wallet"]);
+                $sheet->setCellValue($cell_array[19] .$lastRow, $dataRow["Amount_MGA"]);
+                $sheet->setCellValue($cell_array[20] .$lastRow, $dataRow["Sender"]);
+                $sheet->setCellValue($cell_array[21] .$lastRow, $dataRow["Sender_name"]);
+                $sheet->setCellValue($cell_array[22] .$lastRow, $dataRow["receiver"]);
+                $sheet->setCellValue($cell_array[23] .$lastRow, $dataRow["receiver_name"]);
+                $sheet->setCellValue($cell_array[24] .$lastRow, $dataRow["details1"]);
+                $sheet->setCellValue($cell_array[25] .$lastRow, $dataRow["Confirming_agent"]);
+                $sheet->setCellValue($cell_array[26] .$lastRow, $dataRow["origine"]);
+                $sheet->setCellValue($cell_array[27] .$lastRow, $dataRow["TVA"]);
+                $sheet->setCellValue($cell_array[29] .$lastRow, $dataRow["ACTION"]);
+                $sheet->setCellValue($cell_array[30] .$lastRow, $dataRow["AA1_GROUP"]);
+                $sheet->setCellValue($cell_array[31] .$lastRow, $dataRow["PAR"]);
+                $sheet->setCellValue($cell_array[32] .$lastRow, $dataRow["solde"]);
+
+                $lastRow++;
+            }
+
+            // DEBIT A TORT
+            $lastRow = $sheet->getHighestRow() + 2; 
+            foreach ($dat as $dataRow) {
+                $sheet->getStyle($cell_array[0] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FF0000');
+                $sheet->getStyle($cell_array[1] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FF0000');
+                $sheet->getStyle($cell_array[2] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FF0000');
+                $sheet->getStyle($cell_array[3] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FF0000');
+                $sheet->getStyle($cell_array[3] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FF0000');
+                $sheet->getStyle($cell_array[4] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FF0000');
+                $sheet->getStyle($cell_array[5] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FF0000');
+                $sheet->getStyle($cell_array[6] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FF0000');
+                $sheet->getStyle($cell_array[7] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FF0000');
+                $sheet->getStyle($cell_array[8] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FF0000');
+                $sheet->getStyle($cell_array[9] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FF0000');
+
+                $sheet->setCellValue($cell_array[0] .$lastRow, $dataRow["DATE_OPER"]);
+                $sheet->setCellValue($cell_array[1] .$lastRow, $dataRow["DATE_VAL"]);
+                $sheet->setCellValue($cell_array[2] .$lastRow, $dataRow["DEVISE"]);
+                $sheet->setCellValue($cell_array[3] .$lastRow, $dataRow["MONTANT"]);
+                $sheet->setCellValue($cell_array[4] .$lastRow, $dataRow["LIBELLE"]);
+                $sheet->setCellValue($cell_array[5] .$lastRow, $dataRow["OPER"]);
+                $sheet->setCellValue($cell_array[6] .$lastRow, $dataRow["EXPL"]);
+                $sheet->setCellValue($cell_array[7] .$lastRow, $dataRow["REF_IGOR"]);
+                $sheet->setCellValue($cell_array[9] .$lastRow, $dataRow["cle"]);
+
+                $lastRow++;
+            }
+
+            // CREDIT A TORT 
+
+            $lastRow = $sheet->getHighestRow() + 2; 
+            foreach ($cat as $dataRow) {
+                $sheet->getStyle($cell_array[0] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FF0000');
+                $sheet->getStyle($cell_array[1] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FF0000');
+                $sheet->getStyle($cell_array[2] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FF0000');
+                $sheet->getStyle($cell_array[3] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FF0000');
+                $sheet->getStyle($cell_array[3] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FF0000');
+                $sheet->getStyle($cell_array[4] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FF0000');
+                $sheet->getStyle($cell_array[5] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FF0000');
+                $sheet->getStyle($cell_array[6] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FF0000');
+                $sheet->getStyle($cell_array[7] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FF0000');
+                $sheet->getStyle($cell_array[8] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FF0000');
+                $sheet->getStyle($cell_array[9] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FF0000');
+
+                $sheet->setCellValue($cell_array[0] .$lastRow, $dataRow["DATE_OPER"]);
+                $sheet->setCellValue($cell_array[1] .$lastRow, $dataRow["DATE_VAL"]);
+                $sheet->setCellValue($cell_array[2] .$lastRow, $dataRow["DEVISE"]);
+                $sheet->setCellValue($cell_array[3] .$lastRow, $dataRow["MONTANT"]);
+                $sheet->setCellValue($cell_array[4] .$lastRow, $dataRow["LIBELLE"]);
+                $sheet->setCellValue($cell_array[5] .$lastRow, $dataRow["OPER"]);
+                $sheet->setCellValue($cell_array[6] .$lastRow, $dataRow["EXPL"]);
+                $sheet->setCellValue($cell_array[7] .$lastRow, $dataRow["REF_IGOR"]);
+                $sheet->setCellValue($cell_array[9] .$lastRow, $dataRow["cle"]);
+
+                $lastRow++;
+            }
+
+
+            $lastRow = $sheet->getHighestRow() +1;
+
+            for ($row = 6; $row <= $lastRow; $row++) {
+                $sheet->getStyle("K" . $row)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FFFF00');
+                $sheet->setCellValue("K$row", "=D$row + K" . ($row - 1));
+            }
+
+            for ($row = 6; $row <= $lastRow; $row++) {
+                $sheet->setCellValue("AH$row", "=AG$row + AH" . ($row - 1));
+            }
+           
+
+            for ($row = 6; $row <= $lastRow; $row++) {
+                $sheet->setCellValue("AI$row", "=D$row + AG$row");
+            }
+
+            $lastRow = $sheet->getHighestRow() +1;
+
+            $sheet->getStyle("L6:L".$lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('00FF00');
+
+            $lastRow = $sheet->getHighestRow();
+
+            $sheet->setCellValue("AI5", "=SUM(AI6:AI$lastRow)");
+
+            $writer = new PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
+            $writer->save('php://output');
+
+        }
+
+        
+
+
         public function comparerTelmaEtIgor ($igorTab, $telmaTab) {
             $telmaNormale = array();
             $igorNormale = array();
@@ -576,8 +960,22 @@
                 $mergeIgorTelma []= array_merge($igorNormale[$i], $telmaNormale[$i]);
             } 
 
-            return $mergeIgorTelma;
+            return [[$mergeIgorTelma], [$igorAnomalie], [$telmaAnomalie]];
         }
+
+        public function reverseEtAnnule($index, $telma) {
+            $resultat = array();
+            foreach($index as $item) {
+                $element= $telma[$item];
+                $element["solde"] = $telma[$item]["Amount_MGA"] * -1;
+                $resultat[]= $element;
+            }
+            return $resultat;
+        }
+
+
+        
+
         
         
 
