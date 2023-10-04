@@ -7,6 +7,15 @@
 
     <script src="<?php echo base_url(); ?>assets/jquery/jquery-3.7.1.min.js"></script>
     <script src="<?php  echo base_url(); ?>assets/jquery/jquery.dataTables.min.js"></script>
+     <script src="<?php echo base_url(); ?>assets/moment.min.js"></script>
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.39.0/js/tempusdominus-bootstrap-4.min.js"></script>
+
+<!-- Inclure le fichier de langue française -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/locale/fr.js"></script>
+     <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.1.2/js/tempusdominus-bootstrap-4.min.js"></script>
+
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/locale/fr.js"></script> -->
+     <script src="<?php echo base_url(); ?>assets/jquery/dataTables.dateTime.min.js"></script>
      <script src="<?php echo base_url(); ?>assets/jquery/dataTables.buttons.min.js"></script>
     <!-- <script src="<?php echo base_url(); ?>assets/jquery/jszip.min.js"></script>
     <script src="<?php echo base_url(); ?>assets/jquery/pdfmake.min.js"></script>
@@ -14,19 +23,23 @@
     <script src="<?php echo base_url(); ?>assets/jquery/buttons.html5.min.js"></script>
     <script src="<?php echo base_url(); ?>assets/jquery/vfs_fonts.js"></script>
     <script src="<?php echo base_url(); ?>assets/jquery/buttons.html5.min.js"></script>
-    <script src="<?php echo base_url(); ?>assets/jquery/buttons.print.min.js"></script>
-    <script src="<?php echo base_url(); ?>assets/sweetalert/sweetalert.min.js"></script> -->
-    <!-- <script  src="<?php echo base_url(); ?>assets/bootstrap/js/popper.js">></script> -->
+    <script src="<?php echo base_url(); ?>assets/jquery/buttons.print.min.js"></script>-->
+    
+    <!-- <script  src="<?php echo base_url(); ?>assets/bootstrap/js/popper.js"></script> -->
+    <script src="<?php echo base_url(); ?>assets/sweetalert.min.js"></script> 
+
     <script src="<?php echo base_url(); ?>assets/bootstrap/js/bootstrap.min.js"></script>
-    <script src="<?php echo base_url(); ?>assets/bootstrap/js/popper.min.js"></script>
+
     <script src="<?php echo base_url(); ?>assets/chart/chart.js"> </script>
     <link rel="stylesheet" href="<?php echo base_url(); ?>assets/bootstrap/css/bootstrap.css" />
     <link rel="stylesheet" href="<?php  echo base_url(); ?>assets/jquery/jquery.dataTables.min.css" />
+    <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>assets/dataTables.dateTime.min.css" >
     <script src="<?php echo base_url(); ?>assets/jquery/datatables.min.js"> </script>
     <link rel="stylesheet" href="<?php echo base_url(); ?>assets/jquery/datatables.css" />
     <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>assets/jquery/buttons.dataTables.min.css">
     <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>assets/font-awesome/css/all.css" >
     <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>assets/font-awesome/css/fontawesome.min.css" >
+    
 
     <script src="<?php echo base_url(); ?>assets/jquery/jquery.dataTables.min.js"></script>
     <link href="https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css" rel="stylesheet" />

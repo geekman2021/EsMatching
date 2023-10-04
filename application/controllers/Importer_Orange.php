@@ -154,15 +154,32 @@
 
 
             // echo "<pre>";
-            //     print_r($normalCI[0]);
+            //     print_r("mergedComEtPrinc");
             // echo "</pre>";
+
+            
+
+          
 
 // ------------------------------------------------------------------------------- HISTORIQUE -----------------------------------------------------------
 
 
             $historique= array_merge($normalCI[0], $normalCO[0], $dat[0], $cat[0], $anomalieOrangeCI[0], $anomalieOrangeCO[0], $ind, $nonAuCO, $nonAuCI, $vi);
 
+            if(count($_SESSION["last_solde"]) > 0 ) {
+                $solde_orange= $_SESSION["last_solde"][0]->solde_orange;
+                $solde_boa= $_SESSION["last_solde"][0]->solde_boa;
+            } else if(count($_SESSION["last_solde"]) === 0 ) {
+                $solde_orange= 0;
+                $solde_boa= 0;
+            }
+            
+            
             foreach($historique as $item ) {
+                $solde_orange += isset($item["solde"]) ? $item["solde"] : 0;
+                $solde_boa += isset($item["MONTANT"]) ? $item["MONTANT"] : 0;
+                $item["solde_orange"] = $solde_orange;
+                $item["solde_boa"] = $solde_boa;
                 $this->historique_orange_model->insert($item);
             }
 
@@ -171,31 +188,75 @@
 
 
 // ---------------------------------------------------------------------------------- INSERTION ----------------------------------------------------------------------------------
+            $totalSteps = 10; 
+            $currentStep = 0;
 
-            // foreach($normalCI[0] as $item) {
-            //     $this->orange_normal_model->insert_or_update_ci($item);
-            // }
-            // foreach($normalCO[0] as $item) {
-            //     $this->orange_normal_model->insert_or_update_co($item);
-            // }
+            $currentStep++; 
+            $progressPercent = ($currentStep / $totalSteps) * 100;
 
-            // foreach ($dat[0] as $item ) {
-            //     $this->boa_orange_anomalie_model->insert_or_update_dat($item);
-            // }
+            foreach($normalCI[0] as $item) {
+                $this->orange_normal_model->insert_or_update_ci($item);
+            }
 
-            // foreach ($cat[0] as $item ) {
-            //     $this->boa_orange_anomalie_model->insert_or_update_cat($item);
-            // }
+            $responseData = array(
+                'message' => 'Traitement en cours...',
+                'progress' => $progressPercent
+            );
 
-            // foreach($ind as $item) {
-            //     $this->orange_anomalie_model->insert_or_update_ind($item);
-            // }
-            // foreach($nonAuCI as $item) {
-            //     $this->boa_orange_anomalie_model->insert_or_update_nonAuCI($item);
-            // }
-            // foreach($nonAuCO as $item) {
-            //     $this->boa_orange_anomalie_model->insert_or_update_nonAuCO($item);
-            // }
+
+            foreach($normalCO[0] as $item) {
+                $this->orange_normal_model->insert_or_update_co($item);
+            }
+
+            $currentStep++; 
+            $progressPercent = ($currentStep / $totalSteps) * 100;
+
+
+
+            foreach ($dat[0] as $item ) {
+                $this->boa_orange_anomalie_model->insert_or_update_dat($item);
+            }
+
+            $responseData = array(
+                'message' => 'Traitement en cours...',
+                'progress' => $progressPercent
+            );
+
+
+            foreach ($cat[0] as $item ) {
+                $this->boa_orange_anomalie_model->insert_or_update_cat($item);
+            }
+
+            $currentStep++; 
+            $progressPercent = ($currentStep / $totalSteps) * 100;
+
+            foreach($ind as $item) {
+                $this->orange_anomalie_model->insert_or_update_ind($item);
+            }
+
+            $responseData = array(
+                'message' => 'Traitement en cours...',
+                'progress' => $progressPercent
+            );
+            foreach($nonAuCI as $item) {
+                $this->boa_orange_anomalie_model->insert_or_update_nonAuCI($item);
+            }
+
+            $currentStep++; 
+            $progressPercent = ($currentStep / $totalSteps) * 100;
+
+            foreach($nonAuCO as $item) {
+                $this->boa_orange_anomalie_model->insert_or_update_nonAuCO($item);
+            }
+
+            $responseData = array(
+                'message' => 'Traitement en cours...',
+                'progress' => $progressPercent
+            );
+
+            // $this->exporter($normalCI[0], $normalCO[0], $dat[0], $cat[0], $ind, $vi, $nonAuCI, $nonAuCO);
+
+            redirect("importer_orange");
 
 
         }
@@ -510,7 +571,7 @@
             return [[$mergeBoaOrange], [$boaAnomalie], [$orangeAnomalie]];
         }
 
-        public function exporter() {
+        public function exporter($normalCI, $normalCO, $dat, $cat, $ind, $vi, $nonAuCI, $nonAuCO) {
             $dateAujourdhui = date("Y-m-d");
             $nomFichier = "RapproOrange-" .$dateAujourdhui .".xlsx";
 

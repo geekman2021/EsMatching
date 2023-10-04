@@ -83,28 +83,28 @@
                   
                   <?php foreach($normal_ci as $item) { ?>
                     <tr>
-                    <td><?php echo $item->comm_code_agence ?></td>
-                    <td><?php echo $item->princ_date_oper ?></td>
-                    <td><?php echo $item->princ_date_val ?></td>
-                    <td><?php echo $item->comm_date_val ?></td>
-                    <td><?php echo $item->princ_montant ?></td>
-                    <td><?php echo $item->comm_montant ?></td>
-                    <td><?php echo "" ?></td>
-                    <td><?php echo $item->princ_devise?></td>
-                    <td><?php echo $item->princ_oper ?></td>
-                    <td><?php echo $item->princ_expl ?></td>
-                    <td><?php echo $item->princ_ref_igor ?></td>
-                    <td><?php echo $item->cle ?></td>
-                    <td><?php echo $item->orange_date ?></td>
-                    <td><?php echo $item->orange_heure ?></td>
-                    <td><?php echo $item->orange_ref ?></td>
-                    <td><?php echo $item->orange_service ?></td>
-                    <td><?php echo $item->orange_num_compte ?></td>
-                    <td><?php echo $item->orange_debit ?></td>
-                    <td><?php echo $item->orange_credit ?></td>
-                    <td><?php echo $item->orange_credit ?></td>
-                    <td><?php echo $item->orange_credit ?></td>
-                    <td><?php echo $item->orange_credit ?></td>
+                      <td><?php echo $item->comm_code_agence ?></td>
+                      <td><?php echo $item->princ_date_oper ?></td>
+                      <td><?php echo $item->princ_date_val ?></td>
+                      <td><?php echo $item->comm_date_val ?></td>
+                      <td><?php echo $item->princ_montant ?></td>
+                      <td><?php echo $item->comm_montant ?></td>
+                      <td><?php echo "" ?></td>
+                      <td><?php echo $item->princ_devise?></td>
+                      <td><?php echo $item->princ_oper ?></td>
+                      <td><?php echo $item->princ_expl ?></td>
+                      <td><?php echo $item->princ_ref_igor ?></td>
+                      <td><?php echo $item->cle ?></td>
+                      <td><?php echo $item->orange_date ?></td>
+                      <td><?php echo $item->orange_heure ?></td>
+                      <td><?php echo $item->orange_ref ?></td>
+                      <td><?php echo $item->orange_service ?></td>
+                      <td><?php echo $item->orange_num_compte ?></td>
+                      <td><?php echo $item->orange_debit ?></td>
+                      <td><?php echo $item->orange_credit ?></td>
+                      <td><?php echo $item->orange_credit ?></td>
+                      <td><?php echo $item->orange_credit ?></td>
+                      <td><?php echo $item->orange_credit ?></td>
                     </tr>
 
                   <?php  } ;?>
@@ -147,23 +147,23 @@
               <tbody>
                 <?php foreach($normal_co as $item) { ?>
                   <tr>
+                    <td><?php echo $item->princ_date_oper ?></td>
+                    <td><?php echo $item->princ_date_val ?></td>
+                    <td><?php echo $item->princ_montant ?></td>
+                    <td><?php echo $item->princ_devise ?></td>
+                    <td><?php echo $item->princ_oper ?></td>
+                    <td><?php echo $item->princ_expl ?></td>
+                    <td><?php echo $item->princ_ref_igor ?></td>
+                    <td><?php echo $item->cle ?></td>
                     <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                    <td><?php echo $item->cle ?></td>
+                    <td><?php echo $item->orange_date ?></td>
+                    <td><?php echo $item->orange_heure ?></td>
+                    <td><?php echo $item->orange_ref ?></td>
+                    <td><?php echo $item->orange_service ?></td>
+                    <td><?php echo $item->orange_num_compte ?></td>
+                    <td><?php echo $item->orange_debit ?></td>
+                    <td><?php echo $item->orange_credit ?></td>
                   </tr>
 
                 <?php } ?>
@@ -180,11 +180,12 @@
         <thead style="text-align: center ;">
           <tr>
               <th colspan="12" style="text-align: center ;">BOA</th>
-              <th style="text-align: center ;"></th>
+              <!-- <th style="text-align: center ;"></th>
               <th colspan="9" style="text-align: center ;">ORANGE</th>
-              <th colspan="3">Régularisation</th>
+              <th colspan="3">Régularisation</th> -->
           </tr>
           <tr>
+            <!-- <th></th> -->
             <th>Code_Agence</th>
             <th>Date_Oper</th>
             <th>princ_date_val</th>
@@ -202,7 +203,6 @@
         <tbody>  
           <?php foreach($dat as $item) { ?> 
             <tr>
-            <tr>
                     <td><?php echo $item->comm_code_agence ?></td>
                     <td><?php echo $item->princ_date_oper ?></td>
                     <td><?php echo $item->princ_date_val ?></td>
@@ -215,8 +215,7 @@
                     <td><?php echo $item->princ_expl ?></td>
                     <td><?php echo $item->princ_ref_igor ?></td>
                     <td><?php echo $item->cle ?></td>
-                    </tr>
-            </tr>
+              </tr>
           
           <?php } ?>  
         </tbody>
@@ -228,12 +227,6 @@
       <table class="table table-bordered" id="tableCat">
         <thead style="text-align: center ;">
           <tr>
-              <th colspan="8" style="text-align: center ;">BOA</th>
-              <th style="text-align: center ;"></th>
-              <th colspan="8" style="text-align: center ;">ORANGE</th>
-              <th colspan="3" style="text-align: center ;">Régularisation/th>
-          </tr>
-          <tr>
             <th>Date_Oper</th>
             <th>date_val</th>
             <th>montant</th>
@@ -242,46 +235,21 @@
             <th>Expl</th>
             <th>ReferenceIgor</th>
             <th>Cle</th>
-            <th></th>
-            <th>Cle</th>
-            <th>Date</th>
-            <th>Heure</th>
-            <th>Réference</th>
-            <th>Service</th>
-            <th>Num_Compte</th>
-            <th>Débit</th>
-            <th>Crédit</th>
-            <th>Etat</th>
-            <th>Date_régul</th>
-            <th>Action</th>
           </tr>
         </thead>
         <tbody>
         <?php foreach($cat as $item) { ?> 
             <tr>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
+              <td><?php echo $item->princ_date_oper ?></td>
+              <td><?php echo $item->princ_date_val ?></td>
+              <td><?php echo $item->princ_montant ?></td>
+              <td><?php echo $item->princ_devise ?></td>
+              <td><?php echo $item->princ_oper ?></td>
+              <td><?php echo $item->princ_expl ?></td>
+              <td><?php echo $item->princ_ref_igor ?></td>
+              <td><?php echo $item->cle ?></td>
             </tr>
-          <?php } ?> 
-          
+        <?php } ?> 
         </tbody>
       </table>
     </div>     
@@ -307,17 +275,15 @@
         <?php foreach($ind as $item) { ?> 
             <tr>
               <td></td>
+              <td><?php echo $item->cle ?></td>
               <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
+              <td><?php echo $item->orange_date ?></td>
+              <td><?php echo $item->orange_heure ?></td>
+              <td><?php echo $item->orange_ref ?></td>
+              <td><?php echo $item->orange_service ?></td>
+              <td><?php echo $item->orange_num_compte ?></td>
+              <td><?php echo $item->orange_debit ?></td>
             </tr>
-            
-
           <?php } ?> 
         </tbody>
       </table>

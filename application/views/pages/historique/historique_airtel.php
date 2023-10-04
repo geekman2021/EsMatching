@@ -1,13 +1,13 @@
 <div class="container mt-5">
     <div class="row">
-        <div class="form-group col-sm-6" >
-            <label for="date_debut">Date Debut</label>
-            <input type="date" class="form-control" id="dateDebut">
+      <div class="col-sm-6">
+          <label for="dateDebut">Date Debut</label>
+          <input type="text" class="form-control" id="min" name="min">
         </div>
-        <div class="form-group col-sm-6" >
-            <label for="date_fin">Date Fin</label>
-            <input type="date" class="form-control" id="dateFin">
-        </div>
+        <div class="col-sm-6">
+        <label for="dateDebut">Date Fin</label>
+          <input type="text" class="form-control" id="max" name="max">
+        </div> 
     </div>
 </div>
 
@@ -17,8 +17,10 @@
         <table class="table table-bordered" id="tableNormaleCashOut">
         <thead style="text-align: center ;">
             <tr>
-                <th colspan="10" style="text-align: center ;">BOA</th>
-                <th colspan="11" style="text-align: center ;">Airtel</th>
+                <th colspan="11" style="text-align: center ;">BOA</th>
+                <th style="background-color: rgba(242, 242, 242, 0.5);"></th>
+                <th colspan="9" style="text-align: center ;">Airtel</th>
+                <th style="text-align: center ;">Principal</th>
             </tr>
             <tr>
                 <th style="display: none;"></th>
@@ -33,7 +35,7 @@
                 <th>Transfer_Date</th>
                 <th>Reference_Igor</th>
                 <th>Solde</th>
-                <th style="background-color: green;"></th>
+                <th style="background-color: rgba(242, 242, 242, 0.5);"></th>
                 <th>External_Id</th>
                 <th>Account_No</th>
                 <th>Sender_MsiSDN</th>
@@ -43,6 +45,7 @@
                 <th>Service_Name</th>
                 <th>Reference_Number</th>
                 <th>Solde</th>
+                <th>Ecart</th>
             </tr>
         </thead>
             <tbody>
@@ -60,7 +63,7 @@
                     <td><?php echo $item->transfer_date ?></td>
                     <td ><?php echo $item->REF_IGOR ?></td>
                     <td><?php echo $item->solde_boa ?></td>
-                    <td style="background-color: green;"></td>
+                    <td style="background-color: rgba(242, 242, 242, 0.5);"></td>
                     <td><?php echo $item->external_id ?></td>
                     <td><?php echo $item->account_no ?></td>
                     <td><?php echo $item->sender_msisdn ?></td>
@@ -70,6 +73,7 @@
                     <td style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis ;max-width: 100px; "><?php echo $item->service_name ?></td>
                     <td style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis ;max-width: 100px; "><?php echo $item->reference_number ?></td>
                     <td><?php echo $item->solde_airtel ?></td>
+                    <td><?php echo $item->solde_airtel + $item->solde_boa  ?></td>
                 </tr>
                 <?php } ?>
             
@@ -79,10 +83,11 @@
 </div>
 
 
-    <script>
+    <!-- <script>
         $(document).ready(function () {
             $("#tableNormaleCashOut").DataTable( {
                 dom: 'Bfrtip',
+                scrollX: true,
                 buttons: [
                     'copy', 'csv', 'excel', 'pdf', 'print'
                     ],
@@ -92,4 +97,51 @@
             }
     });
         })
-    </script>
+    </script> -->
+
+
+<script>
+
+    let minDate, maxDate;
+    DataTable.ext.search.push(function (settings, data, dataIndex) {
+        let min = minDate.val();
+        let max = maxDate.val();
+        let date = new Date(data[1]);
+    
+        if (
+            (min === null && max === null) ||
+            (min === null && date <= max) ||
+            (min <= date && max === null) ||
+            (min <= date && date <= max)
+        ) {
+            return true;
+        }
+        return false;
+    });
+    
+    // Create date inputs
+    minDate = new DateTime('#min', {
+        format: 'LL', 
+        locale: 'fr', 
+    });
+
+    maxDate = new DateTime('#max', {
+        format: 'LL', 
+        locale: 'fr', 
+    });
+    
+    // DataTables initialisation
+    let table = new DataTable('#tableNormaleCashOut', {
+        scrollX: true,
+        language: {
+            url: '<?php echo base_url(); ?>assets/fr-FR.json',
+        }
+    });
+    document.querySelectorAll('#min, #max').forEach((el) => {
+        el.addEventListener('change', () => table.draw());
+    });
+ 
+</script>
+
+
+

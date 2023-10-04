@@ -13,7 +13,7 @@
                 <canvas id="myChart2" style="background-color:rgba(185, 240, 231, 0.5);"></canvas>
             </div> 
         </div> 
-        <div class="col-lg-12 mt-3" style="margin-top: 20px;">
+        <div class=" container col-lg-6 mt-3" style="margin-top: 20px;">
             <div class="p-3 border bg-light">
                 <button class="btn btn-info " id="save" style="position: absolute; top: 2px; right: 15px"><i class="fa fa-download"></i></button>
                 <canvas id="myChart3" style="background-color:rgba(185, 240, 231, 0.5);"></canvas>
@@ -24,14 +24,15 @@
 </div>
 
 <script>
-const data = {
+
+var chartDataAirtel = <?= json_encode($chart_data) ?>;
+const dataAirtel = {
   labels: [
     'Airtel',
     'BOA',
   ],
   datasets: [{
-    label: 'My First Dataset',
-    data: [300, 50],
+    data: [chartDataAirtel["airtel"]["solde"]["solde_airtel"] , chartDataAirtel["airtel"]["solde"]["solde_boa"]],
     backgroundColor: [
       'rgb(255, 99, 132)',
       'rgb(54, 162, 235)',
@@ -40,29 +41,79 @@ const data = {
   }]
 };
 
-const config = {
+const configAirtel = {
   type: 'doughnut',
-  data: data,
+  data: dataAirtel,
+};
+
+var chartDataTelma = <?= json_encode($chart_data) ?>;
+const dataTelma = {
+  labels: [
+    'Telma',
+    'BOA',
+  ],
+  datasets: [{
+    data: [chartDataTelma["telma"]["solde"]["solde_telma"] , chartDataTelma["telma"]["solde"]["solde_boa"]],
+    backgroundColor: [
+      'rgb(75, 192, 192)',
+      'rgb(54, 162, 235)',
+    ],
+    hoverOffset: 4
+  }]
+};
+
+const configTelma = {
+  type: 'doughnut',
+  data: dataTelma,
 };
 
 
-var chartDataAirtel = <?= json_encode($chart_data) ?>;
-var ctx = document.getElementById('myChart').getContext('2d');
+// var chartDataOrange = <?= json_encode($chart_data) ?>;
+const dataOrange = {
+  labels: [
+    'Orange',
+    'BOA',
+  ],
+  datasets: [{
+    data: [2100000000 , 2100005500],
+    backgroundColor: [
+      'rgb(255, 165, 0)',
+      'rgb(54, 162, 235)',
+    ],
+    hoverOffset: 4
+  }]
+};
+
+const configOrange = {
+  type: 'doughnut',
+  data: dataOrange,
+};
 
 
-var myChart = new Chart(ctx, config);
+let ctx = document.getElementById('myChart').getContext('2d');
 
-var chartDataOrange = <?= json_encode($chart_data) ?>;
-var ctx = document.getElementById('myChart2').getContext('2d');
+let myChart = new Chart(ctx, configAirtel);
+
+let ctx2 = document.getElementById('myChart2').getContext('2d');
+
+let myChart2 = new Chart(ctx2, configTelma);
+
+let ctx3= document.getElementById('myChart3').getContext('2d');
+
+let myChart3 = new Chart(ctx3, configOrange);
 
 
-var myChart = new Chart(ctx, {
-    type: 'doughnut',
-    data: chartDataOrange,
-    options: {
-        // Options du graphique
-    }
-});
+// var chartDataOrange = <?= json_encode($chart_data) ?>;
+// var ctx = document.getElementById('myChart2').getContext('2d');
+
+
+// var myChart = new Chart(ctx, {
+//     type: 'doughnut',
+//     data: chartDataOrange,
+//     options: {
+//         // Options du graphique
+//     }
+// });
 
 // var chartDataTelma = <?= json_encode($chart_data) ?>;
 // var ctx = document.getElementById('myChart3').getContext('2d');

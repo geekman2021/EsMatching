@@ -30,6 +30,16 @@
     </div>
 </form>
 
+<div id="progress-container" style="display: none;">
+    <div id="progress-bar" class="progress" style="height: 30px; background-color: #007bff; color: #fff;">
+        <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+            0%
+        </div>
+    </div>
+</div>
+
+
+
 <script>
 
 function checkFileExtension(inputId) {
@@ -63,45 +73,42 @@ function checkFileExtension(inputId) {
 }
 
     $(document).ready(function() {
-        // var inputfile= document.getElementById("orange");
-        // var inputfile= document.getElementById("com");
-        // var inputfile= document.getElementById("princ");
+        $("#addform").submit(function(event) {
+            event.preventDefault();
+            $("#progress-container").show();
+            $.ajax({
+                url: $(this).attr("action"),
+                type: $(this).attr("method"),
+                data: new FormData(this),
+                contentType: false,
+                processData: false,
+                xhr: function() {
+                    var xhr = new window.XMLHttpRequest();
 
-        // inputfile.addEventListener("change", function(e) {
-        //     e.preventDefault();
-        //     const fileName= this.value;
-        //     if(fileName) {
-        //         const extension = fileName.split(".").pop().toLowerCase();
-        //         if(extension ==="csv" || extension === "xls" || extension === "xlsx") {
-        //             document.getElementById("btn-ajouter").disabled = false;
-        //         } else if (extension !== "csv" || extension !== "xls" || extension !== "xlsx") {
-        //             document.getElementById("btn-ajouter").disabled = true;
-        //         } else {
-        //             document.getElementById("btn-ajouter").disabled = true;
-                    
-        //         }
-        //     }
-        // });
+                    xhr.upload.addEventListener("progress", function(evt) {
+                        if (evt.lengthComputable) {
+                            var percentComplete = (evt.loaded / evt.total) * 100;
+                            $("#progress-bar").attr("aria-valuenow", percentComplete).css("width", percentComplete + "%").text(percentComplete.toFixed(2) + "%");
+                        }
+                    }, false);
 
-        // function checkFileExtension(inputId) {
-        //     alert("hey");
-        //     var input = document.getElementById(inputId);
-        //     var file = input.files[0];
-        //     var fileName = file.name;
-        //     var fileExtension = fileName.split('.').pop().toLowerCase();
-        //     var warningMessage = document.getElementById('warning' + inputId.charAt(inputId.length - 1)); // Obtenez l'élément de message d'avertissement correspondant
-
-        //     if (fileExtension !== 'xls') {
-        //         warningMessage.textContent = 'Le fichier doit avoir une extension .xls';
-        //         warningMessage.style.display = 'block';
-        //         input.value = '';
-
-        //     } else {
-        //         warningMessage.textContent = '';
-        //         warningMessage.style.display = 'none';
-        //     }
-
-        // }
+                    return xhr;
+                },
+                success: function(response) {
+                    console.log(response);
+                    $("#progress-container").hide();
+                    swal({
+                        title: "Succès",
+                        text: "Données importer avec succès",
+                        icon: "success",
+                        button: "OK",
+                    });
+                },
+                error: function() {
+                    alert("Une erreur s'est produite lors de l'envoi du formulaire.");
+                }
+            });
+        });
 
     })
     

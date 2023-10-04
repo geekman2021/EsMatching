@@ -1,13 +1,13 @@
 <div class="container mt-5">
     <div class="row">
-        <div class="form-group col-sm-6" >
-            <label for="date_debut">Date Debut</label>
-            <input type="date" class="form-control" id="dateDebut">
+        <div class="col-sm-6">
+          <label for="dateDebut">Date Debut</label>
+          <input type="text" class="form-control" id="min" name="min">
         </div>
-        <div class="form-group col-sm-6" >
-            <label for="date_fin">Date Fin</label>
-            <input type="date" class="form-control" id="dateFin">
-        </div>
+        <div class="col-sm-6">
+            <label for="dateDebut">Date Fin</label>
+            <input type="text" class="form-control" id="max" name="max">
+        </div> 
     </div>
 </div>
 
@@ -45,6 +45,7 @@
                 <th>sender</th>
                 <th>receiver</th>
                 <th>Solde</th>
+                <th>Ecart</th>
                 
             </tr>
         </thead>
@@ -52,8 +53,8 @@
                 <?php foreach($historique as $item) { ?>
                 <tr>
                     <td style="display: none;"><?php echo $item->id; ?></td>
-                    <td><?php echo $item->DATE_OPER ?></td>
-                    <td><?php echo $item->DATE_VAL ?></td>
+                    <td><?php echo  date_format(date_create_from_format("d.m.Y", $item->DATE_OPER), "Y-m-d") ?></td>
+                    <td><?php echo date_format(date_create_from_format("d.m.Y", $item->DATE_VAL), "Y-m-d") ?></td>
                     <td><?php echo $item->COMPTE ?></td>
                     <td><?php echo $item->MONTANT ?></td>
                     <td><?php echo $item->DEVISE ?></td>
@@ -62,17 +63,18 @@
                     <td ><?php echo $item->REF_IGOR ?></td>
                     <td><?php echo $item->solde_boa ?></td>
                     <td><?php echo $item->cle ?></td>
-                      <td><?php echo substr($item->date_d, 0, 10) ?></td>
-                      <td><?php echo substr($item->date_d, 10) ?></td>
-                      <td><?php echo $item->trans_id ?></td>
-                      <td><?php echo $item->TYPE ?></td>
-                      <td><?php echo $item->channel ?></td>
-                      <td><?php echo $item->state ?></td>
-                      <td><?php echo $item->Amount_MGA ?></td>
-                      <td><?php echo $item->ACTION ?></td>
-                      <td><?php echo $item->sender ?></td>
-                      <td><?php echo $item->receiver ?></td>
-                      <td><?php echo $item->solde_telma ?></td>
+                    <td><?php echo substr($item->date_d, 0, 10) ?></td>
+                    <td><?php echo substr($item->date_d, 10) ?></td>
+                    <td><?php echo $item->trans_id ?></td>
+                    <td><?php echo $item->TYPE ?></td>
+                    <td><?php echo $item->channel ?></td>
+                    <td><?php echo $item->state ?></td>
+                    <td><?php echo $item->Amount_MGA ?></td>
+                    <td><?php echo $item->ACTION ?></td>
+                    <td><?php echo $item->sender ?></td>
+                    <td><?php echo $item->receiver ?></td>
+                    <td><?php echo $item->solde_telma ?></td>
+                    <td><?php echo $item->solde_telma + $item->solde_boa ?></td>
                 </tr>
                 <?php } ?>
             
@@ -82,7 +84,7 @@
 </div>
 
 
-    <script>
+    <!-- <script>
         $(document).ready(function () {
             $("#tableNormaleCashOut").DataTable( {
                 scrollX: true,
@@ -96,4 +98,47 @@
             }
     });
         })
-    </script>
+    </script> -->
+
+    <script>
+
+    let minDate, maxDate;
+    DataTable.ext.search.push(function (settings, data, dataIndex) {
+        let min = minDate.val();
+        let max = maxDate.val();
+        let date = new Date(data[1]);
+    
+        if (
+            (min === null && max === null) ||
+            (min === null && date <= max) ||
+            (min <= date && max === null) ||
+            (min <= date && date <= max)
+        ) {
+            return true;
+        }
+        return false;
+    });
+    
+    // Create date inputs
+    minDate = new DateTime('#min', {
+        format: 'LL', 
+        locale: 'fr', 
+    });
+
+    maxDate = new DateTime('#max', {
+        format: 'LL', 
+        locale: 'fr', 
+    });
+    
+    // DataTables initialisation
+    let table = new DataTable('#tableNormaleCashOut', {
+        scrollX: true,
+        language: {
+            url: '<?php echo base_url(); ?>assets/fr-FR.json',
+        }
+    });
+    document.querySelectorAll('#min, #max').forEach((el) => {
+        el.addEventListener('change', () => table.draw());
+    });
+ 
+</script>

@@ -1,26 +1,30 @@
-<div id="anormale" class="mt-5 container"><br>
+<div class="mt-5 container"><br>
     <ul class="nav nav-tabs">
-    <li class="nav-item col-sm-3">
-        <a class="nav-link" href="#tabDat">Débit à Tort</a>
-    </li>
-    <li class="nav-item col-sm-3">
-        <a class="nav-link" href="#tabCat">Crédit à Tort</a>
-    </li>
-    <li class="nav-item col-sm-3">
-        <a class="nav-link" href="#tabAmbi">Ambiguous</a>
-    </li>
-    <li class="nav-item col-sm-2">
-        <a class="nav-link" href="#tabDeallo">Deallocation</a>
-    </li>
-    <li class="nav-item col-sm-1">
-        <a class="nav-link" href="#tabVI">VI</a>
-    </li>
+      <li class="nav-item col-sm-6">
+          <a class="nav-link" data-toggle="tab" href="#tabBoa">BOA</a>
+      </li>
+      <li class="nav-item col-sm-6">
+          <a class="nav-link" data-toggle="tab" href="#tabAirtel">Airtel</a>
+      </li>
     </ul>
 </div>
 
-<!-- <div id="tabDat" class="container tab-pane "><br>   
-    <div class="table-responsive">
-      <table class="table table-bordered" id="tableDat">
+<!-- ONGLET BOA -->
+<div class="tab-content">
+
+  <div id="tabBoa" class="container mt-1 tab-pane "><br>
+    <div class="row">
+        <div class="col-sm-6">
+            <label for="dateDebut">Date Debut</label>
+            <input type="text" class="form-control" id="minBoa" name="minBoa">
+        </div>
+        <div class="col-sm-6">
+          <label for="dateDebut">Date Fin</label>
+            <input type="text" class="form-control" id="maxBoa" name="maxBoa">
+        </div> 
+    </div>
+    <div class="container mt-1">
+    <table class="table table-bordered" id="tableBoa">
         <thead style="text-align: center ;">
             <tr>
               <th>Compte</th>
@@ -46,142 +50,139 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
-              <td><a href="#" class="btn btn-info" data-toggle="modal" data-target="#myModal" ></a></td>
+              <td><a href="#" class="btn btn-info" data-toggle="modal" data-target="#myModalBoa" ></a></td>
             </tr>
         </tbody>
       </table>
     </div>
+      
   </div>
-  <form id="modifForm">
 
-  <div class="modal fade" id="myModal">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="card p-3">
-          <div class="text-center" style="font-size: 17px;">
-            <b>Régulariser</b>
-            <button type="button" class="close" data-dismiss="modal">&times;</button>
-          </div>
-            <div class="row form-group mt-2">
-                <div class="col-sm-6" style="display: none;">
-                  <label for="ref">ref</label>
-                  <input type="text" class="form-control" id="ref_igor" name="ref_igor">
-                </div>
-                <div class="col-sm-6">
-                  <label for="etat">Etat</label>
-                  <select name="etat" id="etat" class="form-control">
-                    <option value="Non">Non</option>
-                    <option value="En cours">En cours</option>
-                  </select>
-                </div>
-                <div class="col-sm-6">
-                  <label for="date">Date</label>
-                  <input type="date" class="form-control" id="date_regul" name="date_regul" required>
-                </div>
-                </div>
-                <div class="text-center">
-                  <button type="button" class="btn btn-danger" data-dismiss="modal">Annuler</button>
-                  <input type="submit" class="btn btn-success" value="Valider" />
-                </div>
-              </div>
-            </div>
+  <div id="tabAirtel" class="container mt-5 tab-pane ">
+    <div class="row">
+      <div class="col-sm-6">
+          <label for="dateDebut">Date Debut</label>
+          <input type="text" class="form-control" id="minAirtel" name="minAirtel">
       </div>
+        <div class="col-sm-6">
+          <label for="dateDebut">Date Fin</label>
+          <input type="text" class="form-control" id="maxAirtel" name="maxAirtel">
+        </div> 
     </div>
-  </div>
-  
-</form> -->
-
-
-
-<div class="container mt-5">
-  <div id="tabDat">
-    <div class="table-responsive">
-    <table id="dat" class="display" style="width:100%">
+    <div class="container mt-3">
+    <table class="table table-bordered" id="tableAirtel">
         <thead>
           <tr>
-            <th>Date_Oper</th>
-            <th>Date_Val </th>
-            <th>Devise</th>
+            <th>External_id</th>
+            <th>id_transfer </th>
+            <th>Transfer_date</th>
+            <th>Compte</th>
+            <th>sender_msiSDN</th>
+            <th>Dest_MsiSDN</th>
             <th>Montant</th>
-            <th>Libelle</th>
-            <th>Operation</th>
-            <th>Expl</th>
-            <th>ReferenceIgor</th>
-            <th>Date_régul</th>
+            <th>Description</th>
+            <th>Nom_Service</th>
+            <th>Num_réference</th>
             <th>Action</th>
           </tr>
         </thead>
         <tbody>
           <?php foreach($ci as $item)  { ?>
-            <tr>
-              
-              <td><?php echo $item->DATE_OPER; ?></td>
-              <td><?php echo $item->DATE_VAL; ?></td>
-              <td><?php echo $item->MONTANT; ?></td>
-              <td><?php echo $item->DEVISE; ?></td>
-              <td style=" overflow: hidden; white-space: nowrap;"><?php echo $item->LIBELLE; ?></td>
-              <td><?php echo $item->OPER; ?></td>
-              <td><?php echo $item->EXPL; ?></td>
-              <td><?php echo $item->REF_IGOR; ?></td>
-              <td><?php echo $item->date_regul; ?></td>
-              <td><a href="#" data-toggle="modal" data-target="#myModal<?php echo $item->id; ?>">Afficher Infos</a></td>
+            <tr> 
+              <td></td>
+              <td></td>
+              <td> </td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td><a href="#" data-toggle="modal" data-target="#myModalAirtel<?php echo $item->id; ?>">Afficher Infos</a></td>
             </tr>
           <?php } ?>
         </tbody>
     </table>
-
     </div>
-  </div>
     
+  </div>
 </div>
 
-<div class="container mt-5">
-  <div id="tabCat">
-    <div class="table-responsive">
-    <table id="dat" class="display" style="width:100%">
-        <thead>
-          <tr>
-            <th>TRANSFER_ID</th>
-            <th>transfer_date </th>
-            <th>external_id</th>
-            <th>account_no</th>
-            <th>sender_msisdn</th>
-            <th>dest_msisdn</th>
-            <th>amount</th>
-            <th>solde</th>
-            <th>description</th>
-            <th>service_name</th>
-            <th>reference_number</th>
-          </tr>
-        </thead>
-        <tbody>
-          <?php foreach($vi as $item)  { ?>
-            <tr>
+
+
+
+
+    <!-- ONGLET AIRTEL  -->
+
+
+
+
+
+  </div>
+</div>
+
+           <!-- modal AIRTEL -->
+
+<div class="modal fade" id="myModalAirtel<?php echo $item->id; ?>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
               
-              <td><?php echo $item->TRANSFER_ID; ?></td>
-              <td><?php echo $item->transfer_date; ?></td>
-              <td><?php echo $item->external_id; ?></td>
-              <td><?php echo $item->account_no; ?></td>
-              <td style=" overflow: hidden; white-space: nowrap;"><?php echo $item->sender_msisdn; ?></td>
-              <td><?php echo $item->dest_msisdn; ?></td>
-              <td><?php echo $item->amount; ?></td>
-              <td><?php echo $item->solde; ?></td>
-              <td><?php echo $item->description; ?></td>
-              <td><?php echo $item->service_name; ?></td>
-              <td><?php echo $item->reference_number; ?></td>
-              <td><a href="#" data-toggle="modal" data-target="#myModal<?php echo $item->id; ?>">Afficher Infos</a></td>
-            </tr>
-          <?php } ?>
-        </tbody>
-    </table>
-
+                <h6 class="text-center">Infos</h6>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+              <div class="row">
+                <div class="col-sm-7">
+                  <b>Régulariser</b>: 
+                  <?php
+                    $dateObj = new DateTime($item->date_regul);
+                    $formatter2 = new IntlDateFormatter('fr_FR', IntlDateFormatter::LONG, IntlDateFormatter::NONE);
+                    $formattedDate2 = $formatter2->format($dateObj);
+                  
+                  echo "le" .$formattedDate2 ?>
+                  
+                </div>
+                <div class="col-sm-5">
+                <b>Réf: </b><?php echo $item->ref_igor; ?> </p>
+                </div>
+                <div class="col-sm-7">
+                  <b>opération</b>: <?php echo $item->oper; ?> </p>
+                </div>
+                <div class="col-sm-5">
+                <b>Durée:</b>
+                <?php 
+                    $date1 = new DateTime($item->DATE_VAL);
+                    $date2 = new DateTime($item->date_regul);
+                    $interval = $date1->diff($date2);
+                    $diffInDays = $interval->days;
+                    echo $diffInDays ."Jours";
+                  ?>
+                </div>
+                <div class="col-sm-7">
+                <b> Montant: </b>
+                <?php 
+                    echo $item->montant ." MGA";
+                  ?>
+                </div>
+                <div class="col-sm-5">
+                <b> Exploitant: </b>
+                <?php 
+                    echo $item->expl;
+                ?>
+                </div>
+              </div>
+            </div>
+        </div>
     </div>
-  </div>
-    
 </div>
 
-<div class="modal fade" id="myModal<?php echo $item->id; ?>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+<!-- Modal BOA -->
+
+<div class="modal fade" id="myModalBoa<?php echo $item->id; ?>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -238,9 +239,91 @@
 </div>
 
 
+<script>
+  let minDateBoa, maxDateBoa;
+    DataTable.ext.search.push(function (settings, data, dataIndex) {
+        let minBoa = minDateBoa.val();
+        let max = maxDateBoa.val();
+        let date = new Date(data[1]);
+    
+        if (
+            (minBoa === null && max === null) ||
+            (minBoa === null && date <= max) ||
+            (minBoa <= date && max === null) ||
+            (minBoa <= date && date <= max)
+        ) {
+            return true;
+        }
+        return false;
+    });
+    
+    // Create date inputs
+    minDateBoa = new DateTime('#minBoa', {
+        format: 'LL', 
+        locale: 'fr', 
+    });
 
+    maxDateBoa = new DateTime('#maxBoa', {
+        format: 'LL', 
+        locale: 'fr', 
+    });
+    
+    // DataTables initialisation
+    let tableBoa = new DataTable('#tableBoa', {
+        scrollX: true,
+        language: {
+            url: '<?php echo base_url(); ?>assets/fr-FR.json',
+            }
+    });
+    document.querySelectorAll('#minBoa, #maxBoa').forEach((el) => {
+        el.addEventListener('change', () => tableBoa.draw());
+    });
+</script>
 
 <script>
+  let minDateAirtel, maxDateAirtel;
+    DataTable.ext.search.push(function (settings, data, dataIndex) {
+        let minAirtel = minDateAirtel.val();
+        let maxAirtel = maxDateAirtel.val();
+        let date = new Date(data[1]);
+    
+        if (
+            (minAirtel === null && maxAirtel === null) ||
+            (minAirtel === null && date <= maxAirtel) ||
+            (minAirtel <= date && maxAirtel === null) ||
+            (minAirtel <= date && date <= maxAirtel)
+        ) {
+            return true;
+        }
+        return false;
+    });
+    
+    // Create date inputs
+    minDateAirtel = new DateTime('#minAirtel', {
+        format: 'LL', 
+        locale: 'fr', 
+    });
+
+    maxDateAirtel = new DateTime('#maxAirtel', {
+        format: 'LL', 
+        locale: 'fr', 
+    });
+    
+    // DataTables initialisation
+    let tableAirtel = new DataTable('#tableAirtel', {
+        scrollX: true,
+        language: {
+            url: '<?php echo base_url(); ?>assets/fr-FR.json',
+            }
+    });
+    document.querySelectorAll('#minAirtel, #maxAirtel').forEach((el) => {
+        el.addEventListener('change', () => tableAirtel.draw());
+    });
+</script>
+
+<script>
+
+
 
 $("#dat").DataTable({
     scrollX: true,
@@ -314,6 +397,8 @@ $("#dat").DataTable({
 // });
 
 </script>
+
+
 
 
 

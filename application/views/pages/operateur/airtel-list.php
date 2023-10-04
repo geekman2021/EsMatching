@@ -15,7 +15,7 @@
 </div>
 
   <!-- Tab panes -->
-  <div class="tab-content">
+<div class="tab-content">
     <div id="normale" class="container tab-pane "><br>
       <ul class="nav nav-tabs">
         <li class="nav-item col-sm-6">
@@ -234,7 +234,13 @@
                 <a href="javascript:void(0);" class="text-warning" data-toggle="modal" data-target="#myModal" onClick="modifier('<?php echo $item->REF_IGOR ?>', '<?php echo $item->etat ?>', '<?php echo $item->date_regul ?>')">
                   <box-icon name='printer'  ></box-icon>Modifier
                 </a> 
-                <a href="javascript:void(0);" class="text-primary" onClick="ouvrirEtImprimer('<?php echo $item->DATE_OPER ?>? ', '<?php echo $item->REF_IGOR ?>?', '<?php echo $item->MONTANT ?>', '<?php echo $item->OPER ?>', '<?php echo $item->COMPTE ?>')">
+                <a href="javascript:void(0);" class="text-primary" data-target="#myModalFr10"
+                    data-compte="<?php echo $item->COMPTE ?>"
+                    data-date-oper="<?php echo $item->DATE_OPER ?>"
+                    data-montant="<?php echo $item->MONTANT ?>"
+                    data-libelle="<?php echo $item->LIBELLE ?>"
+                    data-oper="<?php echo $item->OPER ?>"
+                    data-ref-igor="<?php echo $item->REF_IGOR ?>" data-toggle="modal">
                   <box-icon name="printer"></box-icon>Imprimer
                 </a>
               </td>
@@ -263,7 +269,20 @@
               <td><?php echo $item->service_name ?></td>
               <td><?php echo $item->reference_number ?></td>
               <td></td>
-              <td></td>
+              <td>
+                <a href="javascript:void(0);" class="text-warning" data-toggle="modal" data-target="#myModal2" onClick="modifier2('<?php echo $item->REF_IGOR ?>', '<?php echo $item->etat ?>', '<?php echo $item->date_regul ?>')">
+                  <box-icon name='printer'  ></box-icon>Modifier
+                </a> 
+                <a href="javascript:void(0);" class="text-primary" data-target="#myModalFr10"
+                    data-compte="<?php echo $item->COMPTE ?>"
+                    data-date-oper="<?php echo $item->DATE_OPER ?>"
+                    data-montant="<?php echo $item->MONTANT ?>"
+                    data-libelle="<?php echo $item->LIBELLE ?>"
+                    data-oper="<?php echo $item->OPER ?>"
+                    data-ref-igor="<?php echo $item->REF_IGOR ?>" data-toggle="modal">
+                  <box-icon name="printer"></box-icon>Imprimer
+                </a>
+              </td>
               
             </tr>
           <?php } ?>
@@ -333,7 +352,13 @@
                 <a href="javascript:void(0);" class="text-warning" data-toggle="modal" data-target="#myModal2" onClick="modifier2('<?php echo $item->REF_IGOR ?>', '<?php echo $item->etat ?>', '<?php echo $item->date_regul ?>')">
                   <box-icon name='printer'  ></box-icon>Modifier
                 </a> 
-                <a href="javascript:void(0);" class="text-primary" onClick="ouvrirEtImprimer('<?php echo $item->DATE_OPER ?>? ', '<?php echo $item->REF_IGOR ?>?', '<?php echo $item->MONTANT ?>', '<?php echo $item->OPER ?>', '<?php echo $item->COMPTE ?>')">
+                <a href="javascript:void(0);" class="text-primary" data-target="#myModalFr10"
+                    data-compte="<?php echo $item->COMPTE ?>"
+                    data-date-oper="<?php echo $item->DATE_OPER ?>"
+                    data-montant="<?php echo $item->MONTANT ?>"
+                    data-libelle="<?php echo $item->LIBELLE ?>"
+                    data-oper="<?php echo $item->OPER ?>"
+                    data-ref-igor="<?php echo $item->REF_IGOR ?>" data-toggle="modal">
                   <box-icon name="printer"></box-icon>Imprimer
                 </a>
               </td>
@@ -564,7 +589,6 @@
 
 
 <form id="modifForm2">
-
   <div class="modal fade" id="myModal2">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -595,57 +619,52 @@
                   <input type="submit" class="btn btn-success" value="Valider" />
                 </div>
               </div>
-            </div>
-
-                  
-
-        <!-- En-tête de la modal -->
-        <!-- <div class="modal-header">
-          <h4 class="modal-title">Regularisation</h4>
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
-        </div> -->
-
-       
-        <!-- <form action="modifForm">
-
-          <div class="modal-body">
-
-            <div class="row">
-              <div class="col-sm-6" style="display: none;">
-                <label for="id">Id</label>
-                <input type="text" id="id" name="id">
-              </div>
-              <div class="col-sm-6">
-                <label for="etat">Etat</label>
-                <select name="etat" id="etat">
-                  <option value="Non">Non</option>
-                  <option value="En cours">En cours</option>
-                </select>
-              </div>
-              <div class="col-sm-6">
-                <label for="date">Date</label>
-                <input type="date" id="date_regul" name="date_regul">
-              </div>
-              </div>
-            </div>
-            
           </div>
-
-
-          <div class="modal-footer">
-            <button type="button" class="btn btn-danger" data-dismiss="modal">Annuler</button>
-            <input type="submit" class="btn btn-success">Valider</button>
-          </div>
-        </form> -->
-
-
       </div>
     </div>
   </div>
-  
 </form>
 
-
+<form id="modifFormfr10">
+  <div class="modal fade" id="myModalFr10">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="card p-3">
+          <div class="text-center" style="font-size: 17px;">
+            <b>Fr Dix</b>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+          </div>
+            <div class="row form-group mt-2">
+                <div class="col-sm-12">
+                  <label for="responsable">Résponsable de L'unité</label>
+                  <select name="responsable" id="responsable" class="form-control">
+                    <option value="hasina">Mme Hasina ANDRIAMAMPIANINA</option>
+                    <option value="laza">Mr Lazanirainy RANDRIANAIVOSON</option>
+                  </select>
+                </div>
+                <div class="col-sm-12 mt-1">
+                  <label for="nom">Nom initial</label>
+                  <input type="text" id="nom" name="nom" class="form-control" required>
+                </div>
+                <div class="col-sm-12">
+                  <label for="compte">Compte client</label>
+                  <input type="text" id="compte" name="compte" class="form-control" required>
+                </div>
+                <div class="col-sm-12">
+                  <label for="comm">Compte commission</label>
+                  <input type="text" id="comm" name="comm" class="form-control" required>
+                </div>
+              </div>
+                <div class="text-center">
+                  <button type="button" class="btn btn-warning" data-dismiss="modal">Annuler</button>
+                  <input type="submit" class="btn btn-info" value="Imprimer" />
+                </div>
+              </div>
+            </div>
+          </div>
+    </div>
+  </div>
+</form>
 
 <script>
   function modifier(ref_igor, etat, date) {
@@ -706,6 +725,55 @@ $(document).ready(function(){
     });    
   });
 
+ 
+
+  var compte, dateOper, montant, libelle, oper, refIgor;
+  $("#myModalFr10").on('show.bs.modal', function(event) {
+    link = $(event.relatedTarget);
+    compte = link.data('compte');
+    dateOper = link.data('date-oper');
+    montant = link.data('montant');
+    libelle = link.data('libelle');
+    oper = link.data('oper');
+    refIgor = link.data('ref-igor');
+});
+
+$("#modifFormfr10").submit(function(e) {
+    e.preventDefault();
+    var responsable = $("#responsable").val();
+    const nom= $("#nom").val();
+    const compte_client= $("#compte").val();
+    const comm= $("#comm").val();
+
+    if(responsable === "hasina") {
+      responsable = document.getElementById("responsable").options[ document.getElementById("responsable").selectedIndex].text;
+      responsable+= " Directeur Déléguée à la Monétique";
+    } else {
+      responsable = document.getElementById("responsable").options[ document.getElementById("responsable").selectedIndex].text;
+      responsable+= " Directeur Déléguée à la Monétique (p.i)";
+    }
+
+    // console.log(compte, dateOper, montant, libelle, oper, refIgor);
+
+    var url = '<?php echo site_url('Imprimer/imprimerDocument'); ?>' +
+      '?date=' + encodeURIComponent(dateOper) +
+      '&ref=' + encodeURIComponent(refIgor) +
+      '&oper=' + encodeURIComponent(oper)+
+      '&montant=' + encodeURIComponent(montant)+
+      '&libelle=' + encodeURIComponent(libelle)+
+      '&nom=' + encodeURIComponent(nom) +
+      '&responsable=' + encodeURIComponent(responsable) + 
+      '&compte_client=' + encodeURIComponent(compte_client) + 
+      '&compte_comm=' + encodeURIComponent(comm)+
+      '&compte=' + encodeURIComponent(compte)+
+      "&operateur="  + encodeURIComponent("AIRTEL") +
+      "&mobile_money=" + encodeURIComponent("AIRTEL MONEY")
+
+    var nouvelleFenetre = window.open(url, '_blank'); 
+
+});
+
+
   $("#modifForm2").submit(function(e) {
     e.preventDefault();
     const etat = $("#etat2").val();
@@ -732,6 +800,8 @@ $(document).ready(function(){
     });    
   });
 
+
+
   $("#tableNormaleCashOut").DataTable({
     responsive: true,
     "scrollX": true, // Active la barre de défilement horizontal
@@ -747,6 +817,7 @@ $(document).ready(function(){
 
     $('#tableNormaleCashIn').DataTable( {
         dom: 'Bfrtip',
+        scrollX: true,
         buttons: [
             'copy', 'csv', 'excel', 'pdf', 'print'
             ],
@@ -754,7 +825,6 @@ $(document).ready(function(){
           url: '<?php echo base_url(); ?>assets/fr-FR.json',
     }
     });
-
   $("#tableDat").DataTable({
     responsive: true,
     scrollX: true,

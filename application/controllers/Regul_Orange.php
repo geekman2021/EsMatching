@@ -12,6 +12,7 @@
 
         public function index() {
             $this->load->view("templates/sidebar");
+            $this->load->view("pages/regul/regul");
             $this->load->view("pages/regul/regul_orange");
 
         }

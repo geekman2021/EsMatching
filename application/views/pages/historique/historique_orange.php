@@ -1,13 +1,13 @@
 <div class="container mt-5">
     <div class="row">
-        <div class="form-group col-sm-6" >
-            <label for="date_debut">Date Debut</label>
-            <input type="date" class="form-control" id="dateDebut">
+      <div class="col-sm-6">
+          <label for="dateDebut">Date Debut</label>
+          <input type="text" class="form-control" id="min" name="min">
         </div>
-        <div class="form-group col-sm-6" >
-            <label for="date_fin">Date Fin</label>
-            <input type="date" class="form-control" id="dateFin">
-        </div>
+        <div class="col-sm-6">
+        <label for="dateDebut">Date Fin</label>
+          <input type="text" class="form-control" id="max" name="max">
+        </div> 
     </div>
 </div>
 
@@ -21,24 +21,19 @@
                     <th colspan="9" style="text-align: center ;">ORANGE</th>
                 </tr>
                 <tr>
-                    <th></th>
-                </tr>
-                <tr>
                     <th>Code_Agence</th>
                     <th>Date_Oper</th>
                     <th>princ_date_val</th>
                     <th>comm_date_val</th>
                     <th>princ_montant</th>
                     <th>comm_montant</th>
-                    <th>Montant</th>
                     <th>Devise</th>
                     <th>Oper</th>
                     <th>Expl</th>
                     <th>ReferenceIgor</th>
                     <th>Cle</th>
                     <th></th>
-                    <th>Cle</th>
-                    <th></th>
+                    
                     <th>Date</th>
                     <th>Heure</th>
                     <th>Réference</th>
@@ -46,6 +41,8 @@
                     <th>Num_Compte</th>
                     <th>Débit</th>
                     <th>Crédit</th>
+                    <th>solde</th>
+                    <th>solde</th>
                 </tr>
             </thead>
             <tbody>
@@ -53,24 +50,23 @@
                 <?php foreach($historique as $item) { ?>
                 <tr>
                 <td><?php echo $item->comm_code_agence ?></td>
-                <td><?php echo $item->princ_date_oper ?></td>
-                <td><?php echo $item->princ_date_val ?></td>
+                <td><?php echo date_format(date_create_from_format("d.m.Y", $item->princ_date_oper), "Y-m-d")  ?></td>
+                <td><?php echo date_format(date_create_from_format("d.m.Y", $item->princ_date_val), "Y-m-d") ?></td>
                 <td><?php echo $item->comm_date_val ?></td>
                 <td><?php echo $item->princ_montant ?></td>
                 <td><?php echo $item->comm_montant ?></td>
-                <td><?php echo "" ?></td>
                 <td><?php echo $item->princ_devise?></td>
                 <td><?php echo $item->princ_oper ?></td>
                 <td><?php echo $item->princ_expl ?></td>
                 <td><?php echo $item->princ_ref_igor ?></td>
                 <td><?php echo $item->cle ?></td>
+                <td><?php echo ""?></td>
                 <td><?php echo $item->orange_date ?></td>
                 <td><?php echo $item->orange_heure ?></td>
                 <td><?php echo $item->orange_ref ?></td>
                 <td><?php echo $item->orange_service ?></td>
                 <td><?php echo $item->orange_num_compte ?></td>
                 <td><?php echo $item->orange_debit ?></td>
-                <td><?php echo $item->orange_credit ?></td>
                 <td><?php echo $item->orange_credit ?></td>
                 <td><?php echo $item->orange_credit ?></td>
                 <td><?php echo $item->orange_credit ?></td>
@@ -83,7 +79,7 @@
 </div>
 
 
-    <script>
+    <!-- <script>
         $(document).ready(function () {
             $("#tableNormaleCashIn").DataTable( {
                 scrollX: true,
@@ -97,4 +93,49 @@
             }
     });
         })
-    </script>
+    </script> -->
+
+<script>
+
+    let minDate, maxDate;
+    DataTable.ext.search.push(function (settings, data, dataIndex) {
+        let min = minDate.val();
+        let max = maxDate.val();
+        let date = new Date(data[1]);
+    
+        if (
+            (min === null && max === null) ||
+            (min === null && date <= max) ||
+            (min <= date && max === null) ||
+            (min <= date && date <= max)
+        ) {
+            return true;
+        }
+        return false;
+    });
+    
+    // Create date inputs
+    minDate = new DateTime('#min', {
+        format: 'LL', 
+        locale: 'fr', 
+    });
+
+    maxDate = new DateTime('#max', {
+        format: 'LL', 
+        locale: 'fr', 
+    });
+    
+    // DataTables initialisation
+    let table = new DataTable('#tableNormaleCashIn', {
+        scrollX: true,
+        language: {
+            url: '<?php echo base_url(); ?>assets/fr-FR.json',
+            }
+    });
+
+    table.order([]).draw();
+    document.querySelectorAll('#min, #max').forEach((el) => {
+        el.addEventListener('change', () => table.draw());
+    });
+ 
+</script>
