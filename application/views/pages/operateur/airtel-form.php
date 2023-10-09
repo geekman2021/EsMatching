@@ -24,6 +24,60 @@
     </div>
 </form>
 
+<!-- <div class="modal fade" style="margin-left: auto; margin-right: auto; margin-left: 100px;" id="progressModal" tabindex="-1" role="dialog" aria-labelledby="progressModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="progressModalLabel">Progression de l'importation</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="progress"> -->
+          <!-- <div id="progress-bar" class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+          Traitement en cours ...
+          </div> -->
+        <!-- <button class="btn btn-primary" type="button" disabled>
+            <span class="spinner-border spinner-border-sm"  style="animation: spin 2s linear infinite;" role="status" aria-hidden="true"></span>
+            Traitement en cours ...
+        </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> -->
+
+<!-- <div class="container mt-5"> --> 
+    <!-- <h1>Progression en Temps Réel</h1> -->
+    <!-- <div class="progress">
+        <div class="progress-bar" id="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
+    </div>
+</div> -->
+ <!-- <div class="container mt-5">
+    <div class="modal fade" id="progressModal" tabindex="-1" role="dialog" aria-labelledby="progressModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document p-3">
+            <div class="modal-content">
+                <div class="modal-header">
+                     <h5 class="modal-title text-center" id="progressModalLabel">Progression de l'importation</h5> -->
+                         <!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button> -->
+                 <!-- </div>
+                <div class="modal-body">
+                    <div class="progress" >
+                        <div class="progress-bar" id="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
+                    </div>
+                    <div>
+                        
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> -->
+<!-- </div>  -->
+
 <script>
 
 function checkFileExtension(inputId) {
@@ -53,53 +107,75 @@ function checkFileExtension(inputId) {
         document.getElementById("btn-ajouter").disabled= true;
     }
 
-
-
 }
 
 
+// function updateProgressBar() {
+//     const progressBar = document.getElementById('progress-bar');
+//     let progressValue = 0;
 
-    $(document).ready(function() {
+//     const interval = setInterval(() => {
+//         if (progressValue >= 100) {
+//             clearInterval(interval);
+//             progressBar.style.width = '100%';
+//             progressBar.innerText = '100%';
+//             $('#progressModal').modal('hide');
+//             swal({
+//                     title: "Succès",
+//                     text: "Données importées avec succès",
+//                     icon: "success",
+//                     button: "OK",
+//                 }); 
+//         } else {
+//             progressValue += 1;
+//             progressBar.style.width = `${progressValue}%`;
+//             progressBar.innerText = `${progressValue}%`;
+//         }
+//     }, 100);
+// }
+// $(document).ready(function() {
+//     $('#progressModal').modal('show');
+//     updateProgressBar();
+// });
 
+// function showSpinner() {
+//     $('#spinner').show();
+// }
 
-        // var inputfile= document.getElementById("airtel");
-        // var inputfile= document.getElementById("igor");
-        // inputfile.addEventListener("change", function(e) {
-        //     e.preventDefault();
-        //     const fileName= this.value;
-        //     if(fileName) {
-        //         const extension = fileName.split(".").pop().toLowerCase();
-        //         if(extension ==="csv" || extension === "xls" || extension === "xlsx") {
-        //             document.getElementById("btn-ajouter").disabled = false;
-        //         } else if (extension !== "csv" || extension !== "xls" || extension !== "xlsx") {
-        //             document.getElementById("btn-ajouter").disabled = true;
-        //         } else {
-        //             document.getElementById("btn-ajouter").disabled = true;
-                    
-        //         }
-        //     }
-        // });
+// function hideSpinner() {
+//     $('#spinner').hide();
+// }
 
-        // function checkFileExtension(inputId) {
-        //     alert("hey");
-        //     var input = document.getElementById(inputId);
-        //     var file = input.files[0];
-        //     var fileName = file.name;
-        //     var fileExtension = fileName.split('.').pop().toLowerCase();
-        //     var warningMessage = document.getElementById('warning' + inputId.charAt(inputId.length - 1)); // Obtenez l'élément de message d'avertissement correspondant
+// $(document).ready(function() {
+//     $('#addform').submit(function(event) {
+//         event.preventDefault();
+//         // showSpinner(); 
+//         updateProgressBar();
 
-        //     if (fileExtension !== 'xls') {
-        //         warningMessage.textContent = 'Le fichier doit avoir une extension .xls';
-        //         warningMessage.style.display = 'block';
-        //         input.value = '';
+//         var formData = new FormData($(this)[0]); // Récupère les données du formulaire
 
-        //     } else {
-        //         warningMessage.textContent = '';
-        //         warningMessage.style.display = 'none';
-        //     }
-
-        // }
-
-    })
+//         $.ajax({
+//             url: '<?php echo site_url("importer_airtel/importer"); ?>', // 
+//             type: 'POST',
+//             data: formData,
+//             processData: false, 
+//             contentType: false, 
+//             success: function(data) {
+//                 // hideSpinner();
+//                 window.location.href ='<?php echo site_url("importer_airtel/importer") ?>';
+//                 swal({
+//                     title: "Succès",
+//                     text: "Données importées avec succès",
+//                     icon: "success",
+//                     button: "OK",
+//                 });                
+//             },
+//             error: function(error) {
+//                 // Gérez les erreurs ici
+//                 // hideSpinner(); 
+//             }
+//         });
+//     });
+// });
     
 </script>

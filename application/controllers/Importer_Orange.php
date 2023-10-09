@@ -38,13 +38,16 @@
                     $credit= str_replace([" ", ","], "", $orange_read[$i][7]);
                     $cle= $orange_read[$i][5] .$debit .$credit ;
                     $super_distri= str_replace([" ", ".0"], "", $orange_read[$i][8]); 
-                    $sous_distr= str_replace([" ", ".0"], "", $orange_read[$i][9]); 
-
-                    // $debit = floatval($debit);
-                    // $debit = intval($debit);
+                    $sous_distr= str_replace([" ", ".0"], "", $orange_read[$i][9]);   
+                    
+                    $date = date_create_from_format('d/m/Y', $orange_read[$i][1]);
+                    if ($date !== false) {
+                        $date = $date->format('Y-m-d');
+                    }
+                    // $date= $date->format('Y-m-d');
                     $orange[]= array(
                        "orange_num" => $orange_read[$i][0],
-                       "orange_date" =>  $orange_read[$i][1],
+                       "orange_date" =>  $date,
                        "orange_heure" => $orange_read[$i][2],
                        "orange_ref" => $orange_read[$i][3],
                        "orange_service" => $orange_read[$i][4],
@@ -64,10 +67,16 @@
 
                     $montant = strval($princ_read[$i][4]);
                     $montant = str_replace(".00", "" , $montant);
+                    $date_val = $princ_read[$i][2];
+                    $date_val = date_create_from_format('d.m.Y', $date_val);
+                
+                    $date_oper = $princ_read[$i][1];
+                    $date_oper = date_create_from_format('d.m.Y', $date_oper);
+
                     $princ[]= array(
                        "princ_compte" => $princ_read[$i][0],
-                       "princ_date_oper" =>  $princ_read[$i][1],
-                       "princ_date_val" => $princ_read[$i][2],
+                       "princ_date_oper" =>  $date_oper->format('Y-m-d'),
+                       "princ_date_val" => $date_val->format('Y-m-d'),
                        "princ_devise" => $princ_read[$i][3],
                        "princ_montant" => $montant,
                        "princ_libelle" => $princ_read[$i][5],
@@ -85,10 +94,16 @@
 
                     $codeAgence= $com_read[$i][9];
                     $codeAgence= explode("-", $codeAgence);
+
+                    $date_val= $com_read[$i][2];
+                    $date_val = date_create_from_format('d.m.Y', $date_val);
+                    
+                    $date_oper= $com_read[$i][1];
+                    $date_oper = date_create_from_format('d.m.Y', $date_oper);
                     $comm[]= array(
                        "comm_compte" => $com_read[$i][0],
-                       "comm_date_oper" =>  $com_read[$i][1],
-                       "comm_date_val" => $com_read[$i][2],
+                       "comm_date_oper" =>  $date_oper->format('Y-m-d'),
+                       "comm_date_val" => $date_val->format('Y-m-d'),
                        "comm_devise" => $com_read[$i][3],
                        "comm_montant" => $com_read[$i][4],
                        "comm_libelle" => $com_read[$i][5],
@@ -118,7 +133,7 @@
             $principalCO= $this->trierParCleCroissante($principalCO);
 
 
-// --------------------------------------------------------------------------- COMMISSION -----------------------------------------------------------------
+// // --------------------------------------------------------------------------- COMMISSION -----------------------------------------------------------------
             $comm= $this->supprimerEspace($comm);
             $commCI= $this->filtrerCommCI($comm);
             $commCI= $this->trierCommParRefIgor($commCI);
@@ -127,7 +142,7 @@
             $mergedComEtPrinc = $this->trierParCleCroissante($mergedComEtPrinc);
 
 
-// ---------------------------------------------------------------------------- ORANGE -------------------------------------------------------------------------------
+// // ---------------------------------------------------------------------------- ORANGE -------------------------------------------------------------------------------
             $orange= $this->supprimerEspace($orange);
             $ind= $this->filtrerInd($orange);
 
@@ -137,13 +152,13 @@
             $orangeCO = $this->trierParCleCroissante($orangeCO);
 
 
-//  ---------------------------------------------------------------------------- COMAPARAISON -------------------------------------------------------------------------------
+// //  ---------------------------------------------------------------------------- COMAPARAISON -------------------------------------------------------------------------------
 
             $resultatOrangeCI= $this->comparerBoaEtOrange($mergedComEtPrinc, $orangeCI);
             $resultatOrangeCO= $this->comparerBoaEtOrange($principalCO, $orangeCO);
 
 
-// -----------------------------------------------------------------------------RESULTAT -------------------------------------------------------------------------------------
+// // -----------------------------------------------------------------------------RESULTAT -------------------------------------------------------------------------------------
 
             $normalCI= $resultatOrangeCI[0];
             $normalCO= $resultatOrangeCO[0];
@@ -152,123 +167,103 @@
             $anomalieOrangeCI= $resultatOrangeCI[2];
             $anomalieOrangeCO= $resultatOrangeCO[2];
 
+            echo "<pre>";
+                print_r($dat[0]);
+            echo "</pre>";
 
-            // echo "<pre>";
-            //     print_r("mergedComEtPrinc");
-            // echo "</pre>";
-
-            
-
-          
 
 // ------------------------------------------------------------------------------- HISTORIQUE -----------------------------------------------------------
 
 
-            $historique= array_merge($normalCI[0], $normalCO[0], $dat[0], $cat[0], $anomalieOrangeCI[0], $anomalieOrangeCO[0], $ind, $nonAuCO, $nonAuCI, $vi);
+            // $historique= array_merge($normalCI[0], $normalCO[0], $dat[0], $cat[0], $anomalieOrangeCI[0], $anomalieOrangeCO[0], $ind, $nonAuCO, $nonAuCI, $vi);
 
-            if(count($_SESSION["last_solde"]) > 0 ) {
-                $solde_orange= $_SESSION["last_solde"][0]->solde_orange;
-                $solde_boa= $_SESSION["last_solde"][0]->solde_boa;
-            } else if(count($_SESSION["last_solde"]) === 0 ) {
-                $solde_orange= 0;
-                $solde_boa= 0;
-            }
+            // if(count($_SESSION["last_solde"]) > 0 ) {
+            //     $solde_orange= $_SESSION["last_solde"][0]->solde_orange;
+            //     $solde_boa= $_SESSION["last_solde"][0]->solde_boa;
+            // } else if(count($_SESSION["last_solde"]) === 0 ) {
+            //     $solde_orange= 0;
+            //     $solde_boa= 0;
+            // }
             
             
-            foreach($historique as $item ) {
-                $solde_orange += isset($item["solde"]) ? $item["solde"] : 0;
-                $solde_boa += isset($item["MONTANT"]) ? $item["MONTANT"] : 0;
-                $item["solde_orange"] = $solde_orange;
-                $item["solde_boa"] = $solde_boa;
-                $this->historique_orange_model->insert($item);
-            }
+            // foreach($historique as $item ) {
+            //     $solde_orange += isset($item["solde"]) ? $item["solde"] : 0;
+            //     $solde_boa += isset($item["MONTANT"]) ? $item["MONTANT"] : 0;
+            //     $item["solde_orange"] = $solde_orange;
+            //     $item["solde_boa"] = $solde_boa;
+            //     $this->historique_orange_model->insert($item);
+            // }
+
+
 
 // --------------------------------------------------------------------------------- REGULARISATION ------------------------------------------------------------------------------
 
 
 
 // ---------------------------------------------------------------------------------- INSERTION ----------------------------------------------------------------------------------
-            $totalSteps = 10; 
-            $currentStep = 0;
+            
+            // $currentStep= 1;
+            // $this->chargement($currentStep);
+            // foreach($normalCI[0] as $item) {
+            //     $this->orange_normal_model->insert_or_update_ci($item);
+            // }
 
-            $currentStep++; 
-            $progressPercent = ($currentStep / $totalSteps) * 100;
+            // $currentStep++;
+            // $this->chargement($currentStep);
 
-            foreach($normalCI[0] as $item) {
-                $this->orange_normal_model->insert_or_update_ci($item);
-            }
+            // foreach($normalCO[0] as $item) {
+            //     $this->orange_normal_model->insert_or_update_co($item);
+            // }
+            // $currentStep++;
+            // $this->chargement($currentStep);
 
-            $responseData = array(
-                'message' => 'Traitement en cours...',
-                'progress' => $progressPercent
-            );
+            // foreach ($dat[0] as $item ) {
+            //     $this->boa_orange_anomalie_model->insert_or_update_dat($item);
+            // }
 
+        // $currentStep++;
+        //     $this->chargement($currentStep);
 
-            foreach($normalCO[0] as $item) {
-                $this->orange_normal_model->insert_or_update_co($item);
-            }
+            // foreach ($cat[0] as $item ) {
+            //     $this->boa_orange_anomalie_model->insert_or_update_cat($item);
+            // }
 
-            $currentStep++; 
-            $progressPercent = ($currentStep / $totalSteps) * 100;
+        // $currentStep++;
+        //     $this->chargement($currentStep);
 
+            // foreach($ind as $item) {
+            //     $this->orange_anomalie_model->insert_or_update_ind($item);
+            // }
 
+        // $currentStep++;
+        //     $this->chargement($currentStep);
+            // foreach($nonAuCI as $item) {
+            //     $this->boa_orange_anomalie_model->insert_or_update_nonAuCI($item);
+            // }
 
-            foreach ($dat[0] as $item ) {
-                $this->boa_orange_anomalie_model->insert_or_update_dat($item);
-            }
+        // $currentStep++;
+        //     $this->chargement($currentStep);
+            // foreach($nonAuCO as $item) {
+            //     $this->boa_orange_anomalie_model->insert_or_update_nonAuCO($item);
+            // }
 
-            $responseData = array(
-                'message' => 'Traitement en cours...',
-                'progress' => $progressPercent
-            );
+        // $currentStep++;
+        //     $this->chargement($currentStep);
 
+        // $this->exporter($normalCI[0], $normalCO[0], $dat[0], $cat[0], $ind, $vi, $nonAuCI, $nonAuCO);
 
-            foreach ($cat[0] as $item ) {
-                $this->boa_orange_anomalie_model->insert_or_update_cat($item);
-            }
-
-            $currentStep++; 
-            $progressPercent = ($currentStep / $totalSteps) * 100;
-
-            foreach($ind as $item) {
-                $this->orange_anomalie_model->insert_or_update_ind($item);
-            }
-
-            $responseData = array(
-                'message' => 'Traitement en cours...',
-                'progress' => $progressPercent
-            );
-            foreach($nonAuCI as $item) {
-                $this->boa_orange_anomalie_model->insert_or_update_nonAuCI($item);
-            }
-
-            $currentStep++; 
-            $progressPercent = ($currentStep / $totalSteps) * 100;
-
-            foreach($nonAuCO as $item) {
-                $this->boa_orange_anomalie_model->insert_or_update_nonAuCO($item);
-            }
-
-            $responseData = array(
-                'message' => 'Traitement en cours...',
-                'progress' => $progressPercent
-            );
-
-            // $this->exporter($normalCI[0], $normalCO[0], $dat[0], $cat[0], $ind, $vi, $nonAuCI, $nonAuCO);
-
-            redirect("importer_orange");
-
-
+        // $currentStep+2;
+        //     $this->chargement($currentStep);
+            // redirect("importer_orange");
         }
 
         public function filtrerOrangeCI($data) {
             $resultat= array();
             foreach ($data as $item) {
-                if($item["orange_service"] ==="Cashin") {
+                if(!empty($item["orange_debit"]) && empty($item["orange_credit"]) && $item["orange_num_compte"] !=="IND01") {
                     $resultat[]= $item;
                 }
             }
-
             return $resultat;
         }
 
@@ -328,7 +323,12 @@
         public function supprimerEspace($data) {
             $resultat= array();
             foreach($data as $key=> $valeur) {
-                $resultat[$key] = str_replace(" ", "", $valeur);
+                if ($key !== 'LIBELLE') {
+                    $resultat[$key] = str_replace(" ", "", $valeur);
+                } else {
+                    $resultat[$key] = $valeur;
+                }
+                // $resultat[$key] = str_replace(" ", "", $valeur);
             }
 
             return $resultat;
@@ -478,40 +478,6 @@
             return $data;
         }
 
-        // public function comparerBoaEtOrange($boa, $orange) {
-        //     $anomalieBoa = array();
-        //     $anomalieOrange = array();
-        //     $normaleOrange = array();
-        //     $normaleBoa = array();
-        //     $boaCopy = $boa;
-        //     $orangeCopy = $orange;
-        
-        //     $ligne = min(count($boa), count($orange));
-        //     $isFinished = false;
-        //     $i = 0;
-        
-        //     while ($i < $ligne && !$isFinished) {
-        //         if ($boa[$i]["cle"] - $orange[$i]["cle"] == 0) {
-        //             $normaleOrange[] = $orange[$i];
-        //             $normaleBoa[] = $boa[$i];
-        //             $isFinished = true;
-        //             $i++;
-        //         } elseif ($boa[$i]["cle"] - $orange["cle"] < 0) {
-        //             $anomalieBoa[] = $boa[$i];
-        //             array_splice($boa, $i, 1);
-        //             $boa = array_values($boa);
-        //         } else {
-        //             $anomalieOrange[] = $orange;
-        //             array_splice($orange, $i, 1);
-        //             $orange = array_values($orange);
-        //         }
-        //     }
-
-
-        //     echo "<pre>";
-        //     print_r();
-        //     echo "</pre>";
-        // }
 
         public function comparerBoaEtOrange ($igorTab, $orangeTab) {
             $orangeNormal = array();
@@ -527,8 +493,8 @@
 
             while ($i < $boaCount && $j < $orangeCount) {
                 $cleIgor = $igorTab[$i]["cle"];
-                $cleTelma = $orangeTab[$j]["cle"];
-                $difference = $cleIgor - $cleTelma;
+                $cleOrange = $orangeTab[$j]["cle"];
+                $difference = $cleIgor - $cleOrange;
 
                 if ($difference === 0) {
                     $orangeNormal[] = $orangeTab[$j];
@@ -632,10 +598,33 @@
 
         }
 
-        
+        public function chargement($currentStep) {
+            
+            $progressPercent = ($currentStep / 10) * 100;
 
+            $responseData = array(
+                'message' => 'Traitement en cours...',
+                'progress' => $progressPercent
+            );
 
-        
+            echo json_encode($responseData);
+            ob_flush();
+            flush();
+            sleep(1);
+            $responseData = array(
+                'message' => 'Traitement terminé avec succès',
+                'progress' => 100 // Marquez le traitement comme terminé à 100%
+            );
+
+            if ($currentStep == 10) {
+                $responseData = array(
+                    'message' => 'Traitement terminé avec succès',
+                    'progress' => 100 // Marquer le traitement comme terminé à 100%
+                );
+                echo json_encode($responseData);
+            }
+
+        }    
 }
 
 ?>

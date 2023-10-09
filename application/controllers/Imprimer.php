@@ -27,6 +27,10 @@
             $montant= $this->input->get("montant");
             $oper= $this->input->get("oper");
             $date_oper= $this->input->get("date");
+            $tax= $this->input->get("tax");
+            $tva= $this->input->get("tva");
+            $montant_comm= $this->input->get("montant_comm");
+            $place = $this->input->get("place");
 
             $date= date("d/m/y");
             $annee= date("y");
@@ -48,6 +52,10 @@
                 'date' => $date,
                 'annee' => $annee,
                 "reference" => $reference,
+                'tva' => $tva,
+                'tax' => $tax,
+                'montant_comm' => $montant_comm,
+                "place" => $place
             ));
            
         }

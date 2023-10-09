@@ -40,23 +40,27 @@
             </tr>
         </thead>
         <tbody>
-            <tr>
-              <td></td>
-              <td></td>
-              <td> </td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td><a href="#" class="btn btn-info" data-toggle="modal" data-target="#myModalBoa" ></a></td>
+        <?php if (!empty($ci)) { ?>
+          <?php foreach($ci as $item)  { ?>
+            <tr> 
+              <td><?php echo $item->COMPTE ?></td>
+              <td><?php echo $item->DATE_OPER ?></td>
+              <td><?php echo $item->DATE_VAL ?></td>
+              <td><?php echo $item->DEVISE ?></td>
+              <td><?php echo $item->MONTANT ?></td>
+              <td><?php echo $item->LIBELLE ?></td>
+              <td><?php echo $item->OPER ?></td>
+              <td><?php echo $item->EXPL ?></td>
+              <td><?php echo $item->REF_IGOR ?></td>
+              <td><a href="#" data-toggle="modal" data-target="#myModalBoa<?php echo $item->id_nonau; ?>">Afficher Infos</a></td>
             </tr>
+          <?php } ?>
+        <?php } ?>
         </tbody>
       </table>
     </div>
-      
   </div>
+<!-- ONGLET AIRTEL -->
 
   <div id="tabAirtel" class="container mt-5 tab-pane ">
     <div class="row">
@@ -87,21 +91,43 @@
           </tr>
         </thead>
         <tbody>
-          <?php foreach($ci as $item)  { ?>
+        <?php if (!empty($deallo)) { ?>
+          <?php foreach($deallo as $item)  { ?>
             <tr> 
-              <td></td>
-              <td></td>
-              <td> </td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td><a href="#" data-toggle="modal" data-target="#myModalAirtel<?php echo $item->id; ?>">Afficher Infos</a></td>
+              <td><?php echo $item->external_id; ?></td>
+              <td><?php echo $item->TRANSFER_ID; ?></td>
+              <td><?php echo $item->transfer_date; ?></td>
+              <td><?php echo $item->account_no; ?></td>
+              <td><?php echo $item->sender_msisdn; ?></td>
+              <td><?php echo $item->dest_msisdn; ?></td>
+              <td><?php echo $item->amount; ?></td>
+              <td><?php echo $item->description; ?></td>
+              <td><?php echo $item->service_name; ?></td>
+              <td><?php echo $item->reference_number; ?></td>
+              <td><a href="#" data-toggle="modal" data-target="#myModalAirtel<?php echo $item->id_vi; ?>">Afficher Infos</a></td>
             </tr>
           <?php } ?>
+        <?php } ?>
+
+        <?php if (!empty($ambi)) { ?>
+          <?php foreach($ambi as $item)  { ?>
+            <tr> 
+              <td><?php echo $item->external_id; ?></td>
+              <td><?php echo $item->TRANSFER_ID; ?></td>
+              <td><?php echo $item->transfer_date; ?></td>
+              <td><?php echo $item->account_no; ?></td>
+              <td><?php echo $item->sender_msisdn; ?></td>
+              <td><?php echo $item->dest_msisdn; ?></td>
+              <td><?php echo $item->amount; ?></td>
+              <td><?php echo $item->description; ?></td>
+              <td><?php echo $item->service_name; ?></td>
+              <td><?php echo $item->reference_number; ?></td>
+              <td><a href="#" data-toggle="modal" data-target="#myModalAirtel<?php echo $item->id_rollback; ?>">Afficher Infos</a></td>
+            </tr>
+          <?php } ?>
+        <?php } ?>
+
+
         </tbody>
     </table>
     </div>
@@ -110,134 +136,115 @@
 </div>
 
 
-
-
-
-    <!-- ONGLET AIRTEL  -->
-
-
-
-
-
   </div>
 </div>
 
-           <!-- modal AIRTEL -->
+  
 
-<div class="modal fade" id="myModalAirtel<?php echo $item->id; ?>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-              
-                <h6 class="text-center">Infos</h6>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-              <div class="row">
-                <div class="col-sm-7">
-                  <b>Régulariser</b>: 
-                  <?php
-                    $dateObj = new DateTime($item->date_regul);
-                    $formatter2 = new IntlDateFormatter('fr_FR', IntlDateFormatter::LONG, IntlDateFormatter::NONE);
-                    $formattedDate2 = $formatter2->format($dateObj);
-                  
-                  echo "le" .$formattedDate2 ?>
-                  
-                </div>
-                <div class="col-sm-5">
-                <b>Réf: </b><?php echo $item->ref_igor; ?> </p>
-                </div>
-                <div class="col-sm-7">
-                  <b>opération</b>: <?php echo $item->oper; ?> </p>
-                </div>
-                <div class="col-sm-5">
-                <b>Durée:</b>
-                <?php 
-                    $date1 = new DateTime($item->DATE_VAL);
-                    $date2 = new DateTime($item->date_regul);
-                    $interval = $date1->diff($date2);
-                    $diffInDays = $interval->days;
-                    echo $diffInDays ."Jours";
-                  ?>
-                </div>
-                <div class="col-sm-7">
-                <b> Montant: </b>
-                <?php 
-                    echo $item->montant ." MGA";
-                  ?>
-                </div>
-                <div class="col-sm-5">
-                <b> Exploitant: </b>
-                <?php 
-                    echo $item->expl;
-                ?>
+<!-- MODAL AIRTEL  -->
+<?php if (!empty($ambi)) { ?>     
+  <div class="modal fade" id="myModalAirtel<?php echo $ambi[0]->id_rollback; ?>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+      <div class="modal-dialog" role="document">
+          <div class="modal-content">
+              <div class="modal-header">
+                  <h6 class="text-center">Infos</h6>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                  </button>
+              </div>
+              <div class="modal-body">
+                <div class="row">
+                  <div class="col-sm-7">
+                    <b>Régularisé</b>: 
+                    <?php
+                      //$dateObj = new DateTime($item->tansfer_date);
+                      //$formatter2 = new IntlDateFormatter('fr_FR', IntlDateFormatter::LONG, IntlDateFormatter::NONE);
+                      //$formattedDate2 = $formatter2->format($dateObj);
+                      //echo "le" .$formattedDate2 ?>
+                  </div>
+                  <div class="col-sm-5">
+                  <b>Réf: </b><?php // echo $item->reference_number; ?> </p>
+                  </div>
+                  <div class="col-sm-5">
+                    <b>Service: </b><?php echo $ambi[0]->rollback_service_name; ?> </p>
+                  </div>
+                  <div class="col-sm-7">
+                    <b>Montant</b>: <?php //echo $item->amount; ?> </p>
+                  </div>
+                  <!-- <div class="col-sm-5">
+                  <b>Durée:</b>
+                  <?php /*
+                      $date1 = new DateTime($item->DATE_VAL);
+                      $date2 = new DateTime($item->date_regul);
+                      $interval = $date1->diff($date2);
+                      $diffInDays = $interval->days;
+                      echo $diffInDays ."Jours";*/
+                    ?>
+                  </div> -->
                 </div>
               </div>
-            </div>
-        </div>
-    </div>
-</div>
+          </div>
+      </div>
+  </div>
+<?php } ?>
 
 <!-- Modal BOA -->
-
-<div class="modal fade" id="myModalBoa<?php echo $item->id; ?>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-              
-                <h6 class="text-center">Infos</h6>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-              <div class="row">
-                <div class="col-sm-7">
-                  <b>Régulariser</b>: 
-                  <?php
-                    $dateObj = new DateTime($item->date_regul);
-                    $formatter2 = new IntlDateFormatter('fr_FR', IntlDateFormatter::LONG, IntlDateFormatter::NONE);
-                    $formattedDate2 = $formatter2->format($dateObj);
-                  
-                  echo "le" .$formattedDate2 ?>
-                  
-                </div>
-                <div class="col-sm-5">
-                <b>Réf: </b><?php echo $item->ref_igor; ?> </p>
-                </div>
-                <div class="col-sm-7">
-                  <b>opération</b>: <?php echo $item->oper; ?> </p>
-                </div>
-                <div class="col-sm-5">
-                <b>Durée:</b>
-                <?php 
-                    $date1 = new DateTime($item->DATE_VAL);
-                    $date2 = new DateTime($item->date_regul);
-                    $interval = $date1->diff($date2);
-                    $diffInDays = $interval->days;
-                    echo $diffInDays ."Jours";
+<?php if (!empty($ci)) { ?>     
+  <div class="modal fade" id="myModalBoa<?php echo $ci[0]->id_nonau; ?>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+      <div class="modal-dialog" role="document">
+          <div class="modal-content">
+              <div class="modal-header">
+                  <h6 class="text-center">Infos</h6>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                  </button>
+              </div>
+              <div class="modal-body">
+                <div class="row">
+                  <div class="col-sm-7">
+                    <b>Régularisé</b>: 
+                    <?php
+                      $dateObj = new DateTime($ci[0]->date_regul);
+                      $formatter2 = new IntlDateFormatter('fr_FR', IntlDateFormatter::LONG, IntlDateFormatter::NONE);
+                      $formattedDate2 = $formatter2->format($dateObj);
+                    
+                    echo "le" .$formattedDate2 ?>
+                    
+                  </div>
+                  <div class="col-sm-5">
+                  <b>Réf: </b><?php echo $ci[0]->ref_igor; ?> </p>
+                  </div>
+                  <div class="col-sm-7">
+                    <b>opération</b>: <?php echo $ci[0]->oper; ?> </p>
+                  </div>
+                  <div class="col-sm-5">
+                  <b>Durée:</b>
+                  <?php 
+                      $date1 = new DateTime($ci[0]->DATE_OPER);
+                      $date2 = new DateTime($ci[0]->date_regul);
+                      $interval = $date1->diff($date2);
+                      $diffInDays = $interval->days;
+                      echo $diffInDays ."Jours";
+                    ?>
+                  </div>
+                  <div class="col-sm-7">
+                  <b> Montant: </b>
+                  <?php 
+                      echo $ci[0]->montant ." MGA";
+                    ?>
+                  </div>
+                  <div class="col-sm-5">
+                  <b> Exploitant: </b>
+                  <?php 
+                      echo $ci[0]->expl;
                   ?>
-                </div>
-                <div class="col-sm-7">
-                <b> Montant: </b>
-                <?php 
-                    echo $item->montant ." MGA";
-                  ?>
-                </div>
-                <div class="col-sm-5">
-                <b> Exploitant: </b>
-                <?php 
-                    echo $item->expl;
-                ?>
+                  </div>
                 </div>
               </div>
-            </div>
-        </div>
-    </div>
-</div>
-
+          </div>
+      </div>
+  </div>
+<?php } ?>
 
 <script>
   let minDateBoa, maxDateBoa;

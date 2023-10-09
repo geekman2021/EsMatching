@@ -20,14 +20,29 @@
 
         public function get_regul_ci() {
 
-            $this->db->select('nonau.*, igor_airtel_anomalie_ci.*');
-            $this->db->from('nonau');
-            $this->db->join('igor_airtel_anomalie_ci', 'nonau.ref_igor = igor_airtel_anomalie_ci.REF_IGOR');
+            $this->db->select('boa_airtel_nonau.*, igor_airtel_anomalie_ci.*');
+            $this->db->from('boa_airtel_nonau');
+            $this->db->join('igor_airtel_anomalie_ci', 'boa_airtel_nonau.ref_igor = igor_airtel_anomalie_ci.REF_IGOR');
             
             $query = $this->db->get();
-            
             return $query->result();
         }
 
+        public function get_regul_deallo() {
+            $this->db->select('igor_airtel_anomalie_vi.*, airtel_deallocation.*');
+            $this->db->from('igor_airtel_anomalie_vi');
+            $this->db->join('airtel_deallocation', 'airtel_deallocation.REF_IGOR = igor_airtel_anomalie_vi.REF_IGOR');
+            $query = $this->db->get();
+            return $query->result(); 
+        }
+
+        public function get_ambi() {
+            $this->db->select('airtel_rollback.*, airtel_ambiguous.*');
+            $this->db->from('airtel_ambiguous');
+            $this->db->join('airtel_rollback', 'airtel_ambiguous.TRANSFER_ID = airtel_rollback.rollback_reference_number', 'INNER');
+            $query = $this->db->get();
+            return $query->result();
+
+        }
     }
 ?>

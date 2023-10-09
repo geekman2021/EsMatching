@@ -175,8 +175,8 @@
       <table class="table table-bordered" id="tableDat">
         <thead style="text-align: center ;">
             <tr>
-                <th colspan="10" style="text-align: center ;">BOA</th>
-                <th colspan="9" style="text-align: center ;">Airtel</th>
+                <th colspan="9" style="text-align: center ;">BOA</th>
+                <!-- <th colspan="9" style="text-align: center ;">Airtel</th> -->
                 <th colspan="3" style="text-align: center ;">Regularisation</th>
             </tr>
             <tr>
@@ -190,7 +190,7 @@
               <th>Operation</th>
               <th>Expl</th>
               <th>ReferenceIgor</th>
-              <th>ExternalId</th>
+              <!-- <th>ExternalId</th>
               <th>TransferId</th>
               <th>TransferDate</th>
               <th>AccountNo</th>
@@ -199,7 +199,7 @@
               <th>Amount</th>
               <th>Description</th>
               <th>ServiceName</th>
-              <th>ReferenceNumber</th>
+              <th>ReferenceNumber</th> -->
               <th>Etat</th>
               <th>Date</th>
               <th>Action</th>
@@ -218,6 +218,7 @@
                 <td><?php echo $item->OPER ?></td>
                 <td><?php echo $item->EXPL ?></td>
                 <td><?php echo $item->REF_IGOR ?></td>
+                <!-- <td></td>
                 <td></td>
                 <td></td>
                 <td></td>
@@ -226,8 +227,7 @@
                 <td></td>
                 <td></td>
                 <td></td>
-                <td></td>
-                <td></td>
+                <td></td> -->
                 <td><?php echo $item->etat ?></td>
                 <td><?php echo $item->date_regul ?></td>
                 <td>
@@ -244,10 +244,11 @@
                   <box-icon name="printer"></box-icon>Imprimer
                 </a>
               </td>
-              </tr>
+            </tr>
           <?php } ?>
-          <?php foreach($anomalie_ci as $item) { ?>
+          <!-- <?php// foreach($anomalie_ci as $item) { ?>
             <tr>
+            <td style="display: none;"><?php echo $item->id ?></td>
               <td></td>
               <td></td>
               <td></td>
@@ -256,36 +257,36 @@
               <td></td>
               <td></td>
               <td></td>
+              <td><?php // echo $item->external_id ?></td>
+              <td><?php //echo $item->TRANSFER_ID ?></td>
+              <td><?php// echo $item->transfer_date ?></td>
+              <td><?php //echo $item->account_no ?></td>
+              <td><?php //echo $item->sender_msisdn ?></td>
+              <td><?php //echo $item->dest_msisdn ?></td>
+              <td><?php //echo $item->amount ?></td>
+              <td><?php //echo $item->description ?></td>
+              <td><?php //echo $item->service_name ?></td>
+              <td><?php //echo $item->reference_number ?></td>
               <td></td>
               <td></td>
-              <td><?php echo $item->external_id ?></td>
-              <td><?php echo $item->TRANSFER_ID ?></td>
-              <td><?php echo $item->transfer_date ?></td>
-              <td><?php echo $item->account_no ?></td>
-              <td><?php echo $item->sender_msisdn ?></td>
-              <td><?php echo $item->dest_msisdn ?></td>
-              <td><?php echo $item->amount ?></td>
-              <td><?php echo $item->description ?></td>
-              <td><?php echo $item->service_name ?></td>
-              <td><?php echo $item->reference_number ?></td>
               <td></td>
               <td>
                 <a href="javascript:void(0);" class="text-warning" data-toggle="modal" data-target="#myModal2" onClick="modifier2('<?php echo $item->REF_IGOR ?>', '<?php echo $item->etat ?>', '<?php echo $item->date_regul ?>')">
                   <box-icon name='printer'  ></box-icon>Modifier
                 </a> 
                 <a href="javascript:void(0);" class="text-primary" data-target="#myModalFr10"
-                    data-compte="<?php echo $item->COMPTE ?>"
-                    data-date-oper="<?php echo $item->DATE_OPER ?>"
-                    data-montant="<?php echo $item->MONTANT ?>"
-                    data-libelle="<?php echo $item->LIBELLE ?>"
-                    data-oper="<?php echo $item->OPER ?>"
-                    data-ref-igor="<?php echo $item->REF_IGOR ?>" data-toggle="modal">
+                    data-compte="<?php //echo $item->COMPTE ?>"
+                    data-date-oper="<?php //echo $item->DATE_OPER ?>"
+                    data-montant="<?php //echo $item->MONTANT ?>"
+                    data-libelle="<?php //echo $item->LIBELLE ?>"
+                    data-oper="<?php //echo $item->OPER ?>"
+                    data-ref-igor="<?php //echo $item->REF_IGOR ?>" data-toggle="modal">
                   <box-icon name="printer"></box-icon>Imprimer
                 </a>
               </td>
               
             </tr>
-          <?php } ?>
+          <?php //} ?> -->
         </tbody>
       </table>
     </div>
@@ -295,8 +296,8 @@
       <table class="table table-bordered" id="tableCat">
       <thead style="text-align: center ;">
             <tr>
-                <th colspan="10" style="text-align: center ;">BOA</th>
-                <th colspan="9" style="text-align: center ;">Airtel</th>
+                <th colspan="9" style="text-align: center ;">BOA</th>
+                <!-- <th colspan="9" style="text-align: center ;">Airtel</th> -->
                 <th colspan="3" style="text-align: center ;">Regularisation</th>
             </tr>
             <tr>
@@ -309,7 +310,7 @@
               <th>Operation</th>
               <th>Expl</th>
               <th>ReferenceIgor</th>
-              <th>ExternalId</th>
+              <!-- <th>ExternalId</th>
               <th>TransferId</th>
               <th>TransferDate</th>
               <th>AccountNo</th>
@@ -318,7 +319,7 @@
               <th>Amount</th>
               <th>Description</th>
               <th>ServiceName</th>
-              <th>ReferenceNumber</th>
+              <th>ReferenceNumber</th> -->
               <th>Etat</th>
               <th>Date</th>
               <th>Action</th>
@@ -336,6 +337,7 @@
                 <td><?php echo $item->OPER ?></td>
                 <td><?php echo $item->EXPL ?></td>
                 <td><?php echo $item->REF_IGOR ?></td>
+                <!-- <td></td>
                 <td></td>
                 <td></td>
                 <td></td>
@@ -344,15 +346,14 @@
                 <td></td>
                 <td></td>
                 <td></td>
-                <td></td>
-                <td></td>
+                <td></td> -->
                 <td><?php echo $item->etat ?></td>
                 <td><?php echo $item->date_regul ?></td>
                 <td>
                 <a href="javascript:void(0);" class="text-warning" data-toggle="modal" data-target="#myModal2" onClick="modifier2('<?php echo $item->REF_IGOR ?>', '<?php echo $item->etat ?>', '<?php echo $item->date_regul ?>')">
                   <box-icon name='printer'  ></box-icon>Modifier
                 </a> 
-                <a href="javascript:void(0);" class="text-primary" data-target="#myModalFr10"
+                <!-- <a href="javascript:void(0);" class="text-primary" data-target="#myModalFr10"
                     data-compte="<?php echo $item->COMPTE ?>"
                     data-date-oper="<?php echo $item->DATE_OPER ?>"
                     data-montant="<?php echo $item->MONTANT ?>"
@@ -360,12 +361,13 @@
                     data-oper="<?php echo $item->OPER ?>"
                     data-ref-igor="<?php echo $item->REF_IGOR ?>" data-toggle="modal">
                   <box-icon name="printer"></box-icon>Imprimer
-                </a>
+                </a> -->
               </td>
               </tr>
           <?php } ?>
-          <?php foreach($anomalie_co as $item) { ?>
-            <tr>
+          <?php //foreach($anomalie_co as $item) { ?>
+            <!-- <tr> -->
+              <!-- <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -374,23 +376,22 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td> -->
+              <!-- <td><?php //echo  $item->external_id ?></td>
+              <td><?php// echo $item->TRANSFER_ID ?></td>
+              <td><?php// echo $item->transfer_date ?></td>
+              <td><?php //echo $item->account_no ?></td>
+              <td><?php //echo $item->sender_msisdn ?></td>
+              <td><?php //echo $item->dest_msisdn ?></td>
+              <td><?php //echo $item->amount ?></td>
+              <td><?php //echo $item->description ?></td>
+              <td><?php //echo $item->service_name ?></td>
+              <td><?php //echo $item->reference_number ?></td>
               <td></td>
               <td></td>
-              <td><?php echo $item->external_id ?></td>
-              <td><?php echo $item->TRANSFER_ID ?></td>
-              <td><?php echo $item->transfer_date ?></td>
-              <td><?php echo $item->account_no ?></td>
-              <td><?php echo $item->sender_msisdn ?></td>
-              <td><?php echo $item->dest_msisdn ?></td>
-              <td><?php echo $item->amount ?></td>
-              <td><?php echo $item->description ?></td>
-              <td><?php echo $item->service_name ?></td>
-              <td><?php echo $item->reference_number ?></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-          <?php } ?>
+              <td></td> -->
+            <!-- </tr> -->
+          <?php //} ?>
         </tbody>
       </table>
     </div>     
@@ -471,37 +472,40 @@
       </table>
     </div>     
   </div>
-  <div id="tabVI" class="tab-pane"><br>
-      <div class="table-responsive">
-          <table class="table table-bordered" id="tableVI">
-              <thead style="text-align: center ;">
-                  <tr>
-                    <th>Compte</th>
-                    <th>DateOper</th>
-                    <th>DateVal</th>
-                    <th>Montant</th>
-                    <th>Devise</th>
-                    <th>ReferenceIgor</th>
-                    <th>Libelle</th>
-                    <th>Operation</th>
-                    <th>Expl</th>
-                  </tr>
-              </thead>
-              <tbody>
-                <?php foreach($vi as $item) { ?>
-                  <td><?php echo $item->COMPTE ?></td>
-                  <td><?php echo $item->DATE_OPER ?></td>
-                  <td><?php echo $item->DATE_VAL ?></td>
-                  <td><?php echo $item->MONTANT ?></td>
-                  <td><?php echo $item->DEVISE ?></td>
-                  <td><?php echo $item->REF_IGOR ?></td>
-                  <td><?php echo $item->LIBELLE ?></td>
-                  <td><?php echo $item->OPER ?></td>
-                  <td><?php echo $item->EXPL ?></td>
-                <?php } ?>
-              </tbody>
-          </table>
-      </div>
+  <div id="tabVI" class="container tab-pane "><br>   
+    <div class="table-responsive">
+      <table class="table table-bordered" id="tableVI">
+        <thead style="text-align: center ;">
+            <tr>
+              <th>Compte</th>
+              <th>Date_Oper</th>
+              <th>Date_Val </th>
+              <th>Devise</th>
+              <th>Montant</th>
+              <th>Libelle</th>
+              <th>Operation</th>
+              <th>Expl</th>
+              <th>ReferenceIgor</th>
+            </tr>
+        </thead>
+        <tbody>
+          <?php foreach($vi as $item) { ?>
+              <tr>
+                <td><?php echo $item->COMPTE ?></td>
+                <td><?php echo $item->DATE_OPER ?></td>
+                <td><?php echo $item->DATE_VAL ?></td>
+                <td><?php echo $item->DEVISE ?></td>
+                <td><?php echo $item->MONTANT ?></td>
+                <td><?php echo $item->LIBELLE ?></td>
+                <td><?php echo $item->OPER ?></td>
+                <td><?php echo $item->EXPL ?></td>
+                <td><?php echo $item->REF_IGOR ?></td>
+            </tr>
+          <?php } ?>
+    
+        </tbody>
+      </table>
+    </div>
   </div>
 </div>
 </div>
@@ -683,7 +687,7 @@
 </script>
 
 <script>
-   function ouvrirEtImprimer(date_oper, ref_igor, montant, oper, compte) {
+function ouvrirEtImprimer(date_oper, ref_igor, montant, oper, compte) {
 
     var url = '<?php echo site_url('Imprimer/imprimerDocument'); ?>' +
       '?date=' + encodeURIComponent(date_oper) +
@@ -732,7 +736,7 @@ $(document).ready(function(){
     link = $(event.relatedTarget);
     compte = link.data('compte');
     dateOper = link.data('date-oper');
-    montant = link.data('montant');
+    montant = link.data('montant').toLocaleString('fr-FR');
     libelle = link.data('libelle');
     oper = link.data('oper');
     refIgor = link.data('ref-igor');
@@ -744,16 +748,18 @@ $("#modifFormfr10").submit(function(e) {
     const nom= $("#nom").val();
     const compte_client= $("#compte").val();
     const comm= $("#comm").val();
+    let place;
 
     if(responsable === "hasina") {
       responsable = document.getElementById("responsable").options[ document.getElementById("responsable").selectedIndex].text;
-      responsable+= " Directeur Déléguée à la Monétique";
+      place= "Directeur Déléguée à la Monétique";
     } else {
       responsable = document.getElementById("responsable").options[ document.getElementById("responsable").selectedIndex].text;
-      responsable+= " Directeur Déléguée à la Monétique (p.i)";
+      place= "Directeur Déléguée à la Monétique (p.i)";
     }
 
-    // console.log(compte, dateOper, montant, libelle, oper, refIgor);
+
+    console.log(compte, dateOper, montant, libelle, oper, refIgor);
 
     var url = '<?php echo site_url('Imprimer/imprimerDocument'); ?>' +
       '?date=' + encodeURIComponent(dateOper) +
@@ -767,9 +773,15 @@ $("#modifFormfr10").submit(function(e) {
       '&compte_comm=' + encodeURIComponent(comm)+
       '&compte=' + encodeURIComponent(compte)+
       "&operateur="  + encodeURIComponent("AIRTEL") +
-      "&mobile_money=" + encodeURIComponent("AIRTEL MONEY")
+      "&mobile_money=" + encodeURIComponent("AIRTEL MONEY") + 
+      "&tax="  + encodeURIComponent("333,33") +
+      "&tva=" + encodeURIComponent("66,67") +
+      "&montant_comm=" + encodeURIComponent("400,00") +
+      '&place=' +  encodeURIComponent(place)
 
     var nouvelleFenetre = window.open(url, '_blank'); 
+
+    
 
 });
 
@@ -880,17 +892,13 @@ $("#modifFormfr10").submit(function(e) {
   });
 
   $("#tableVI").DataTable({
-    responsive: true,
     scrollX: true,
-
-    dom: 'Bfrtip',
-    buttons: [
-      'copy', 'csv', 'excel', 'pdf', 'print'
-    ],
     language: {
       url: '<?php echo base_url(); ?>assets/fr-FR.json',
+    },
+    autoFill: {
+        columns: 'every'
     }
-
   });
 
     // $("#tableAnormaleCashOut").DataTable();
@@ -907,7 +915,6 @@ $("#modifFormfr10").submit(function(e) {
     }
   });
 });
-
 </script>
 
 

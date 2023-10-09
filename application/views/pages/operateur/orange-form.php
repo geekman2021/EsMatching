@@ -30,86 +30,123 @@
     </div>
 </form>
 
-<div id="progress-container" style="display: none;">
-    <div id="progress-bar" class="progress" style="height: 30px; background-color: #007bff; color: #fff;">
-        <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
-            0%
-        </div>
+<!-- <div class="modal fade" style="margin-left: auto; margin-right: auto; margin-left: 100px;" id="progressModal" tabindex="-1" role="dialog" aria-labelledby="progressModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="progressModalLabel">Progression de l'importation</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="progress">
+          <div id="progress-bar" class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+            Traitement en cours ...
+          </div> -->
+        <!-- <button class="btn btn-primary" type="button" disabled>
+            <span class="spinner-border spinner-border-sm"  style="animation: spin 2s linear infinite;" role="status" aria-hidden="true"></span>
+            Traitement en cours ...
+        </button> -->
+        <!-- </div>
+      </div>
     </div>
-</div>
-
+  </div>
+</div> -->
 
 
 <script>
 
-function checkFileExtension(inputId) {
-    var input = document.getElementById(inputId);
-    var file = input.files[0];
-    var fileName = file.name;
-    var fileExtension = fileName.split('.').pop().toLowerCase();
-    var warningMessage = document.getElementById('warning' + inputId.charAt(inputId.length - 1)); // Obtenez l'élément de message d'avertissement correspondant
+// function checkFileExtension(inputId) {
+//     var input = document.getElementById(inputId);
+//     var file = input.files[0];
+//     var fileName = file.name;
+//     var fileExtension = fileName.split('.').pop().toLowerCase();
+//     var warningMessage = document.getElementById('warning' + inputId.charAt(inputId.length - 1)); // Obtenez l'élément de message d'avertissement correspondant
 
-    if (fileExtension === 'xls' || fileExtension === 'csv' || fileExtension=== 'xlsx' ) {
-        warningMessage.textContent = '';
-        warningMessage.style.display = 'none';
-        document.getElementById("btn-ajouter").disabled= false;
-    } else {
-        warningMessage.textContent = 'Le fichier doit avoir une extension .xls';
-        let element= $(".warning-message");
+//     if (fileExtension === 'xls' || fileExtension === 'csv' || fileExtension=== 'xlsx' ) {
+//         warningMessage.textContent = '';
+//         warningMessage.style.display = 'none';
+//         document.getElementById("btn-ajouter").disabled= false;
+//     } else {
+//         warningMessage.textContent = 'Le fichier doit avoir une extension .xls';
+//         let element= $(".warning-message");
 
-        element.css({
-            'color': 'red',
-            'font-weight': 'bold',
-            'margin-top': '10px',
-            'display': 'none'
-        });
-        warningMessage.style.display = 'block';
-        input.value = '';
-        document.getElementById("btn-ajouter").disabled= true;
-    }
+//         element.css({
+//             'color': 'red',
+//             'font-weight': 'bold',
+//             'margin-top': '10px',
+//             'display': 'none'
+//         });
+//         warningMessage.style.display = 'block';
+//         input.value = '';
+//         document.getElementById("btn-ajouter").disabled= true;
+//     }
 
 
 
-}
+// }
 
-    $(document).ready(function() {
-        $("#addform").submit(function(event) {
-            event.preventDefault();
-            $("#progress-container").show();
-            $.ajax({
-                url: $(this).attr("action"),
-                type: $(this).attr("method"),
-                data: new FormData(this),
-                contentType: false,
-                processData: false,
-                xhr: function() {
-                    var xhr = new window.XMLHttpRequest();
+// $(document).ready(function() {
+//     var xhr;
 
-                    xhr.upload.addEventListener("progress", function(evt) {
-                        if (evt.lengthComputable) {
-                            var percentComplete = (evt.loaded / evt.total) * 100;
-                            $("#progress-bar").attr("aria-valuenow", percentComplete).css("width", percentComplete + "%").text(percentComplete.toFixed(2) + "%");
-                        }
-                    }, false);
+//     $("#addform").submit(function(event) {
+//         event.preventDefault();
+//         $('#progressModal').modal('show');
 
-                    return xhr;
-                },
-                success: function(response) {
-                    console.log(response);
-                    $("#progress-container").hide();
-                    swal({
-                        title: "Succès",
-                        text: "Données importer avec succès",
-                        icon: "success",
-                        button: "OK",
-                    });
-                },
-                error: function() {
-                    alert("Une erreur s'est produite lors de l'envoi du formulaire.");
-                }
-            });
-        });
+//         xhr = $.ajax({
+//             url: $(this).attr("action"),
+//             type: $(this).attr("method"),
+//             data: new FormData(this),
+//             contentType: false,
+//             processData: false,
+//             xhr: function() {
+//                 var xhr = new window.XMLHttpRequest();
+//                 xhr.upload.addEventListener("progress", function(evt) {
+//                     if (evt.lengthComputable) {
+//                         var percentComplete = (evt.loaded / evt.total) * 100;
+//                         $("#progress-bar").attr("aria-valuenow", percentComplete).css("width", percentComplete + "%").text(percentComplete.toFixed(2) + "%");
+//                     }
+//                 }, false);
 
-    })
-    
+//                 xhr.onreadystatechange = function() {
+//                     if (xhr.readyState === 4 && xhr.status === 200) {
+//                         var response = JSON.parse(xhr.responseText);
+//                         if (response.progress !== undefined) {
+//                             var percentComplete = response.progress;
+//                             $("#progress-bar").attr("aria-valuenow", percentComplete).css("width", percentComplete + "%").text(percentComplete.toFixed(2) + "%");
+
+//                             if (percentComplete === 100) {
+//                                 $('#progressModal').modal('hide');
+//                                 swal({
+//                                     title: "Succès",
+//                                     text: response.message, 
+//                                     icon: "success",
+//                                     button: "OK",
+//                                 });
+//                             }
+//                         }
+//                     }
+//                 };
+//                 return xhr;
+//             },
+//             success: function(response) {
+//                 // console.log(response);
+//                 $('#progressModal').modal('hide');
+//                 swal({
+//                     title: "Succès",
+//                     text: "Données importées avec succès",
+//                     icon: "success",
+//                     button: "OK",
+//                 });
+
+//             },
+//             error: function() {
+//                 alert("Une erreur s'est produite lors de l'envoi du formulaire.");
+//             }
+//         });
+//     });
+// });
+
+
 </script> 

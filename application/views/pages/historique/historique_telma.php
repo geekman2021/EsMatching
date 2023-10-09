@@ -8,6 +8,9 @@
             <label for="dateDebut">Date Fin</label>
             <input type="text" class="form-control" id="max" name="max">
         </div> 
+        <div class="col-sm-12 mt-2">
+            <button id="exportExcel" class="btn btn-success">Exporter vers Excel </button>
+        </div>
     </div>
 </div>
 
@@ -32,7 +35,7 @@
                 <th>Expl</th>
                 <th>Reference_Igor</th>
                 <th>Solde</th>
-                <th>cle</th>
+                <th>Numero</th>
 
                 <th>Date</th>
                 <th>Heure</th>
@@ -53,16 +56,16 @@
                 <?php foreach($historique as $item) { ?>
                 <tr>
                     <td style="display: none;"><?php echo $item->id; ?></td>
-                    <td><?php echo  date_format(date_create_from_format("d.m.Y", $item->DATE_OPER), "Y-m-d") ?></td>
-                    <td><?php echo date_format(date_create_from_format("d.m.Y", $item->DATE_VAL), "Y-m-d") ?></td>
-                    <td><?php echo $item->COMPTE ?></td>
-                    <td><?php echo $item->MONTANT ?></td>
-                    <td><?php echo $item->DEVISE ?></td>
-                    <td><?php echo $item->OPER ?></td>
-                    <td><?php echo $item->EXPL ?></td>
+                    <td><?php echo  $item->DATE_OPER ?></td>
+                    <td><?php echo  $item->DATE_VAL ?></td>
+                    <td><?php echo  $item->COMPTE ?></td>
+                    <td><?php echo  $item->MONTANT ?></td>
+                    <td><?php echo  $item->DEVISE ?></td>
+                    <td><?php echo  $item->OPER ?></td>
+                    <td><?php echo  $item->EXPL ?></td>
                     <td ><?php echo $item->REF_IGOR ?></td>
                     <td><?php echo $item->solde_boa ?></td>
-                    <td><?php echo $item->cle ?></td>
+                    <td><?php echo substr($item->cle, 0 ,10); ?></td>
                     <td><?php echo substr($item->date_d, 0, 10) ?></td>
                     <td><?php echo substr($item->date_d, 10) ?></td>
                     <td><?php echo $item->trans_id ?></td>
@@ -141,4 +144,21 @@
         el.addEventListener('change', () => table.draw());
     });
  
+</script>
+
+<script>
+    document.getElementById('exportExcel').addEventListener('click', function() {
+
+    $.ajax({
+        url: '<?php echo site_url("historique_airtel/exporterVersExcel") ?>',
+        success: function(response) {
+            console.log(response);
+            window.location.href = '<?php echo site_url("historique_telma/exporterVersExcel") ?>';
+        },
+        error: function(xhr, status, error) {
+        console.error(error);
+        }
+    });
+    });
+
 </script>

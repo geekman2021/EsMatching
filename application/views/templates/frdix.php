@@ -36,11 +36,11 @@
         padding-top: 20px;
       }
 
-      section {
+      /* section {
         padding-top: 15px;
         padding-left: 0px;
         float: left;
-      }
+      } */
     </style>
     
     <title>Document</title>
@@ -60,11 +60,11 @@
                 REGULARISATION A FAIRE PAR : DDC <br>
             </div>
         </header>
-           <section>
+           <!-- <section>
              
-           </section>
+           </section> -->
               
-            <table border="1" cellpadding="8" cellspacing="0">
+            <table border="1" cellpadding="8" cellspacing="0" style="width: 100%">
             <caption style="font-size: 0.8rem; padding-top: 20px;"><b> <u> FICHE DE REGULATION ( Fr 10) </u> </b><br> <br> DATE D'ENVOI: __/__/____ </caption>
               <thead style="padding-top: 12px;">
                 
@@ -95,8 +95,8 @@
                 <td><?php echo $montant; ?></td>
                 <td>09194120000</td>
                 <td><?php echo $montant; ?></td>
-                <td>Une transaction de <b><?php echo $montant; ?> </b> MGA a été effectuée par le client le <b><?php echo $date_oper; ?></b> de IGOR vers Airtel money sous la référence <b><?php echo $ref_igor; ?></b>. L’opération sous référence n’a pas été prise en compte par Airtel money suivant la confirmation de Airtel  en pièce jointe.		</td>
-                <td>Annulation de la réference susmentionnée <b><?php echo $ref_igor; ?></b> du <b><?php echo $date_oper; ?></b></td>
+                <td>Une transaction de <b><?php echo $montant; ?> </b> MGA a été effectuée par le client le <b><?php echo $date_oper; ?></b> de IGOR vers <?php echo $mobile_money; ?> sous la référence <b><?php echo $ref_igor; ?></b>. L’opération sous référence n’a pas été prise en compte par <?php echo $mobile_money; ?> suivant la confirmation de Airtel  en pièce jointe.		</td>
+                <td><b> Annulation de la réference susmentionnée(<?php echo $ref_igor; ?>) du <?php echo $date_oper; ?></b></td>
               </tr>
               <tr>
                 <td></td>
@@ -104,9 +104,9 @@
                 <td></td>
                 <td></td>
                 <td><?php echo $compte_client;?></td>
-                <td>250,00</td>
+                <td><?php echo $montant_comm; ?></td>
                 <td><?php echo $compte_comm; ?></td>
-                <td>208,33</td>
+                <td><?php echo $tax; ?></td>
                 <td></td>
                 <td></td>
               </tr>
@@ -119,7 +119,7 @@
                 <td></td>
                 <td></td>
                 <td>09315120008</td>
-                <td>41,67</td>
+                <td><?php echo $tva; ?></td>
                 <td></td>
                 <td></td>
               </tr>
@@ -150,6 +150,7 @@
               </tr>
               <tr>
                 <td colspan="2"><?php echo $responsable; ?><br>
+                <?php echo $place; ?> <br>
                     Date : <?php echo $date; ?>
                 </td>
                 <td>Date: </td>
@@ -170,6 +171,15 @@
                 <td colspan="2"  style="text-align: center;"><b>REFERENCE DE L'OPERATION DE REGULARISATION</b></td>
                 <td colspan="2" style="text-align: center;"><b>INTERVENTIONS</b></td>
                 <td colspan="2" style="text-align: center;"><b>AUTRES OBSERVATIONS:</b></td>
+              </tr>
+              <tr>
+                <td style="height: 50px;"></td>
+                <td style="height: 50px;"></td>
+                <td colspan="2" style="height: 50px;"></td>
+                <td colspan="2" style="height: 50px;"></td>
+                <td colspan="2" style="height: 50px;"></td>
+                <td colspan="2" style="height: 50px;"></td>
+
               </tr>
             </tr> 
           

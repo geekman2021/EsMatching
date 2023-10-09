@@ -98,9 +98,10 @@
         }
 
         public function get_ambiguous() {
-            $this->db->select("*");
-            $this->db->from("airtel_ambiguous");
-            $query= $this->db->get();
+            $this->db->select('airtel_ambiguous.*');
+            $this->db->from('airtel_ambiguous');
+            $this->db->where('airtel_ambiguous.TRANSFER_ID NOT IN (SELECT reference_number FROM airtel_rollback)', NULL, FALSE);
+            $query = $this->db->get();
             return $query->result();
         }
 

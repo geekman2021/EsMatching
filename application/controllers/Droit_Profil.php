@@ -36,7 +36,6 @@
                 "id_droit" => $id_droit
             ));
         }
-
         public function remove_droit_user() {
             $id= $this->input->post("id");
             $this->Droit_Profil_Model->delete($id);

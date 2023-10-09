@@ -71,6 +71,11 @@
                 
                         for($i=1; $i < count($igor_read); $i++) {
                             $montant= str_replace(".00", "", $igor_read[$i][4]);
+                            $date_val= $igor_read[$i][2];
+                            $date_val = date_create_from_format('d.m.Y', $date_val);
+                            
+                            $date_oper= $igor_read[$i][1];
+                            $date_oper = date_create_from_format('d.m.Y', $date_oper);
 
                             $igor[]= array(
                                "COMPTE" => $igor_read[$i][0],
@@ -113,10 +118,11 @@
                     $rollback= $this->filtrerRollBack($telma);
 
                     $telmaCI= $this->filtrerCI($reste);
-                    $telmaCI= $this->trierParCleCroissante($telmaCI);
+                    $telmaCI= $this->trierParCleEtHeure($telmaCI);
+                    $telmaCI= $this->trierParCleEtHeure($telmaCI);
 
                     $telmaCO= $this->filtrerCO($reste);
-                    $telmaCO= $this->trierParCleCroissante($telmaCO);
+                    $telmaCO= $this->trierParCleEtHeure($telmaCO);
 
 
 // -------------------------------------------------------------------------------------IGOR ---------------------------------------------------------------------------
@@ -126,9 +132,15 @@
                     $vi= $this->filtrerVI($igor);
                     $nonAu= $this->filtrerNonAu($igor);
                     $igorCI= $this->filtrerCIIgor($igor);
-                    $igorCI= $this->trierParCleCroissante($igorCI);
+
+                    
+                    $igorCI= $this->trierParCleEtHeure($igorCI);
                     $igorCO= $this->filtrerCOIgor($igor);
-                    $igorCO= $this->trierParCleCroissante($igorCO);
+                    $igorCO= $this->trierParCleEtHeure($igorCO);
+
+                    echo "<pre>";
+                        print_r($telmaCI);
+                    echo "</pre>";
 
                     $reverseEtAnnule= $this->reverseEtAnnule($indexAnnul, $telma);
 
@@ -147,17 +159,13 @@
                     $cat= $resultatCO[1];
 
                     echo "<pre>";
-                        print_r($telmaCI);
+                        print_r($cat[0]);
                     echo "</pre>";
 
                     // $telmaAnomalieCI= $resultatCI[2];
                     // $telmaAnomalieCO= $resultatCO[2];
 
                     // $this->comparerTelmaEtIgor($igorCI, $telmaCI);
-
-                  
-                    
-
 
 // ------------------------------------------------------------------------------REGULARISATION ----------------------------------------------------------------------
 
@@ -179,7 +187,7 @@
                     //     $solde_boa= 0;
                     // }
 
-                    // $historique =array_merge($normalCI[0], $normalCO[0], $dat[0], $cat[0], $reverseEtAnnule, $rollback, $admin, $nonAu);
+                    $historique =array_merge($normalCI[0], $normalCO[0], $dat[0], $cat[0], $reverseEtAnnule, $rollback, $admin, $nonAu);
 
                     // foreach ($historique as $item) {
                     //     $solde_telma += isset($item["solde"]) ? $item["solde"] : 0;
@@ -202,8 +210,8 @@
 
                     
 
-                    // // // $this->telma_normal_model->insert_or_update_ci($normalCI);
-                    // // // $this->telma_normal_model->insert_or_update_co($normalCO);
+                    // // $this->telma_normal_model->insert_or_update_ci($normalCI);
+                    // // $this->telma_normal_model->insert_or_update_co($normalCO);
 
                     // foreach($admin as $item) {
                     //     $this->telma_anomalie_model->insert_or_update_admin($item);
@@ -239,7 +247,7 @@
                     // $this->exporter($normalCI[0], $normalCO[0], $reverseEtAnnule,$admin, $rollback, $dat[0], $cat[0], $vi, $nonAu);
                 }
 
-                // redirect("importer_telma");
+                redirect("importer_telma");
             }
 
 
@@ -268,7 +276,12 @@
         public function supprimerEspace($data) {
             $resultat= array();
             foreach($data as $key=> $valeur) {
-                $resultat[$key] = str_replace(" ", "", $valeur);
+                if ($key !== 'LIBELLE') {
+                    $resultat[$key] = str_replace(" ", "", $valeur);
+                } else {
+                    $resultat[$key] = $valeur;
+                }
+                // $resultat[$key] = str_replace(" ", "", $valeur);
             }
 
             return $resultat;
@@ -341,6 +354,7 @@
                 if($item["ACTION"] ==="bank_to_wallet") {
                     $item["cle"] = $item["receiver"] .$item["Amount_MGA"];
                     $item["solde"] = $item["Amount_MGA"] * -1;
+                    $item["telma_heure"] = substr($item["date_d"], 10);
                     $resultat[]= $item;
                 }
             }
@@ -353,26 +367,49 @@
                 if($item["ACTION"] ==="wallet_to_bank") {
                     $item["cle"] = $item["Sender"] .$item["Amount_MGA"];
                     $item["solde"] = $item["Amount_MGA"] * 1;
+                    $item["telma_heure"] = substr($item["date_d"], 10);
                     $resultat[]= $item;
                 }
             }
             return $resultat;
         }
 
-        public function trierParCleCroissante($data) {
+        public function trierParCleEtHeure($data) {
 
             usort($data, function ($a, $b) {
                 $cleA = intval($a['cle']);
                 $cleB = intval($b['cle']);
 
                 if ($cleA == $cleB) {
-                    return 0;
+
+                    $heureA = isset($a['telma_heure']) ? $a['telma_heure'] : $a['BOA_HEURE'];
+                    $heureB = isset($b['telma_heure']) ? $b['telma_heure'] : $b['BOA_HEURE'];
+
+                    return strcmp($heureA, $heureB);
                 }
                 return ($cleA < $cleB) ? -1 : 1;
             });
-
             return $data;
         }
+
+
+
+
+
+        public function trierParDate($data) {
+            usort($data, function ($a, $b) {
+                $dateA = DateTime::createFromFormat('d/m/YH:i:s', $a['date_d']);
+                $dateB = DateTime::createFromFormat('d/m/YH:i:s', $b['date_d']);
+        
+                if ($dateA === $dateB) {
+                    return 0;
+                }
+            return ($dateA < $dateB) ? -1 : 1;
+            });
+        
+            return $data;
+        }
+        
 
         public function trierParTransId($data) {
             usort($data, function($a, $b) {
@@ -463,6 +500,7 @@
                     $libelle= $item["LIBELLE"];
                     if (preg_match('/tel:(\d+)/', $libelle, $matches)) {
                         $numeroTelephone = $matches[1];
+                        $item["BOA_HEURE"]= substr($item["LIBELLE"], -8);
                         $item["cle"] = $numeroTelephone .$item["MONTANT"]; 
                         $resultat[]= $item;                       
                     }
@@ -478,6 +516,7 @@
                     $libelle= $item["LIBELLE"];
                     if (preg_match('/tel:(\d+)/', $libelle, $matches)) {
                         $numeroTelephone = $matches[1];
+                        $item["BOA_HEURE"]= substr($item["LIBELLE"], -8);
                         $item["cle"] = $numeroTelephone .-($item["MONTANT"]); 
                         $resultat[]= $item;                       
                     }
@@ -962,10 +1001,23 @@
                 $difference = $cleIgor - $cleTelma;
 
                 if ($difference === 0) {
-                    $telmaNormale[] = $telmaTab[$j];
-                    $igorNormale[] = $igorTab[$i];
-                    $i++;
-                    $j++;
+                    $heureIgor = substr($igorTab[$i]['LIBELLE'], -8);
+                    $heureTelma = substr($telmaTab[$j]['date_d'], -8);
+                    $timeDiff = strtotime($heureIgor) - strtotime($heureTelma);
+
+
+                    // echo $timeDiff ."\n";
+                    if($timeDiff < -180) {
+                        $telmaNormale[] = $telmaTab[$j];
+                        $igorAnomalie[] = $igorTab[$i];
+                        $i++;
+                    } else {
+                        $telmaNormale[] = $telmaTab[$j];
+                        $igorNormale[] = $igorTab[$i];
+                        $i++;
+                        $j++;
+                    }
+                   
                 } elseif ($difference < 0) {
                     
                     $igorTab[$i]["etat"] = "Non";

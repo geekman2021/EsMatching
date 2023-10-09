@@ -53,11 +53,11 @@
       <div class="col-sm-6">
           <label for="dateDebut">Date Debut</label>
           <input type="text" class="form-control" id="min" name="min">
-        </div>
-        <div class="col-sm-6">
+      </div>
+      <div class="col-sm-6">
         <label for="dateDebut">Date Fin</label>
           <input type="text" class="form-control" id="max" name="max">
-        </div> 
+      </div> 
     </div>
         <div class="table-responsive mt-1">
             <table class="table table-bordered" id="tableNormaleCashIn">
@@ -92,8 +92,8 @@
                 <tbody>
                   <?php foreach($normal_ci as $item) { ?>
                     <tr>
-                      <td><?php echo date_format(date_create_from_format('d.m.Y', $item->DATE_OPER), 'Y-m-d') ?></td>
-                      <td><?php echo date_format(date_create_from_format('d.m.Y', $item->DATE_VAL), 'Y-m-d') ?></td>
+                      <td><?php echo $item->DATE_OPER ?></td>
+                      <td><?php echo $item->DATE_VAL ?></td>
                       <td><?php echo $item->DEVISE ?></td>
                       <td><?php echo $item->MONTANT ?></td>
                       <td style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis ;max-width: 100px; "><?php echo $item->LIBELLE ?></td>
@@ -125,16 +125,16 @@
 
 
     <div id="tabNormaleCashOut" class="container tab-pane "><br>
-        <div class="row">
-            <div class="col-lg-6">
-                <label for="daDeb">Date Debut</label>
-                <input class="form-control" type="date" name="dateDebNormCI" id="dateDebNormCI" />
-            </div>
-            <div class="col-sm-6">
-                <label for="daDeb">Date Fin</label>
-                <input class="form-control" type="date" name="dateFinNormCI" id="dateFinNormCI" />
-            </div>
-        </div>
+        <!-- <div class="row">
+          <div class="col-sm-6">
+              <label for="dateDebut">Date Debut</label>
+              <input type="text" class="form-control" id="min" name="min">
+          </div>
+          <div class="col-sm-6">
+            <label for="dateDebut">Date Fin</label>
+              <input type="text" class="form-control" id="max" name="max">
+          </div> 
+        </div> -->
         <div class="table-responsive">
             <table class="table table-bordered" id="tableNormaleCashOut">
             <thead style="text-align: center ;">
@@ -169,8 +169,8 @@
                 <tbody>
                   <?php foreach($normal_co as $item) { ?>
                     <tr>
-                      <td><?php echo date_format(date_create_from_format('d.m.Y', $item->DATE_OPER), 'Y-m-d') ?></td>
-                      <td><?php echo date_format(date_create_from_format('d.m.Y', $item->DATE_VAL), 'Y-m-d') ?></td>
+                      <td><?php echo $item->DATE_OPER ?></td>
+                      <td><?php echo $item->DATE_VAL?></td>
                       <td><?php echo $item->DEVISE ?></td>
                       <td><?php echo $item->MONTANT ?></td>
                       <td style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis ;max-width: 100px; "><?php echo $item->LIBELLE ?></td>
@@ -205,7 +205,7 @@
       <table class="table table-bordered" id="tableDat">
       <thead style="text-align: center ;">
         <tr>
-            <th colspan="8" style="text-align: center ;">BOA</th>
+            <th colspan="9" style="text-align: center ;">BOA</th>
             <th colspan="3" style="text-align: center ;">Régularisation</th>
         </tr>
         <tr>
@@ -227,11 +227,11 @@
         <?php foreach($dat as $item) { ?>
           <tr>
           <td><?php echo $item->COMPTE ?></td>
-            <td><?php echo date_format(date_create_from_format('d.m.Y', $item->DATE_OPER), 'Y-m-d') ?></td>
-            <td><?php echo date_format(date_create_from_format('d.m.Y', $item->DATE_VAL), 'Y-m-d') ?></td>
+            <td><?php echo $item->DATE_OPER ?></td>
+            <td><?php echo $item->DATE_VAL ?></td>
             <td><?php echo $item->DEVISE ?></td>
             <td><?php echo $item->MONTANT ?></td>
-            <td style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis ;max-width: 100px; "><?php echo $item->LIBELLE ?></td>
+            <td><?php echo $item->LIBELLE ?></td>
             <td><?php echo $item->OPER ?></td>
             <td><?php echo $item->EXPL ?></td>
             <td><?php echo $item->REF_IGOR ?></td>
@@ -282,11 +282,11 @@
         <tbody>
         <?php foreach($cat as $item) { ?>
           <tr>
-            <td><?php echo date_format(date_create_from_format('d.m.Y', $item->DATE_OPER), 'Y-m-d') ?></td>
-            <td><?php echo date_format(date_create_from_format('d.m.Y', $item->DATE_VAL), 'Y-m-d') ?></td>
+            <td><?php echo $item->DATE_OPER ?></td>
+            <td><?php echo $item->DATE_VAL ?></td>
             <td><?php echo $item->DEVISE ?></td>
             <td><?php echo $item->MONTANT ?></td>
-            <td style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis ;max-width: 100px; "><?php echo $item->LIBELLE ?></td>
+            <td><?php echo $item->LIBELLE ?></td>
             <td><?php echo $item->OPER ?></td>
             <td><?php echo $item->EXPL ?></td>
             <td><?php echo $item->REF_IGOR ?></td>
@@ -330,7 +330,7 @@
             <td><?php echo $item->date_d ?></td>
             <td><?php echo $item->date_d ?></td>
             <td><?php echo $item->trans_id ?></td>
-            <td style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis ;max-width: 100px; "><?php echo $item->TYPE ?></td>
+            <td><?php echo $item->TYPE ?></td>
             <td><?php echo $item->channel ?></td>
             <td><?php echo $item->state ?></td>
             <td><?php echo $item->Amount_MGA ?></td>
@@ -377,7 +377,7 @@
                     <td><?php echo $item->MONTANT ?></td>
                     <td><?php echo $item->DEVISE ?></td>
                     <td><?php echo $item->REF_IGOR ?></td>
-                    <td style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis ;max-width: 100px; "><?php echo $item->LIBELLE ?></td>
+                    <td><?php echo $item->LIBELLE ?></td>
                     <td ><?php echo $item->OPER ?></td>
                     <td><?php echo $item->EXPL ?></td>
                     <td><?php echo $item->etat ?></td>
@@ -981,7 +981,7 @@ var compte, dateOper, montant, libelle, oper, refIgor;
     link = $(event.relatedTarget);
     compte = link.data('compte');
     dateOper = link.data('date-oper');
-    montant = link.data('montant');
+    montant = link.data('montant').toLocaleString('fr-FR');
     libelle = link.data('libelle');
     oper = link.data('oper');
     refIgor = link.data('ref-igor');
@@ -993,13 +993,14 @@ $("#modifFormfr10").submit(function(e) {
     const nom= $("#nom").val();
     const compte_client= $("#compte").val();
     const comm= $("#comm").val();
+    let place;
 
     if(responsable === "hasina") {
       responsable = document.getElementById("responsable").options[ document.getElementById("responsable").selectedIndex].text;
-      responsable+= " Directeur Déléguée à la Monétique";
+      place= "Directeur Déléguée à la Monétique";
     } else {
       responsable = document.getElementById("responsable").options[ document.getElementById("responsable").selectedIndex].text;
-      responsable+= " Directeur Déléguée à la Monétique (p.i)";
+      place= " Directeur Déléguée à la Monétique (p.i)";
     }
 
     // console.log(compte, dateOper, montant, libelle, oper, refIgor);
@@ -1015,8 +1016,12 @@ $("#modifFormfr10").submit(function(e) {
       '&compte_client=' + encodeURIComponent(compte_client) + 
       '&compte_comm=' + encodeURIComponent(comm)+
       '&compte=' + encodeURIComponent(compte)+
-      "&operateur="  + encodeURIComponent("AIRTEL") +
-      "&mobile_money=" + encodeURIComponent("AIRTEL MONEY")
+      "&operateur="  + encodeURIComponent("MVL") +
+      "&mobile_money=" + encodeURIComponent("M VOLA") +
+      "&tax="  + encodeURIComponent("333,33") +
+      "&tva=" + encodeURIComponent("66,67") +
+      "&montant_comm=" + encodeURIComponent("400,00") +
+      "&place=" + encodeURIComponent(place)
 
     var nouvelleFenetre = window.open(url, '_blank'); 
 

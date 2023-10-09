@@ -8,6 +8,9 @@
         <label for="dateDebut">Date Fin</label>
           <input type="text" class="form-control" id="max" name="max">
         </div> 
+        <div class="col-sm-12 mt-2">
+            <button id="exportExcel" class="btn btn-success">Exporter vers Excel </button>
+        </div>
     </div>
 </div>
 
@@ -31,7 +34,7 @@
                     <th>Oper</th>
                     <th>Expl</th>
                     <th>ReferenceIgor</th>
-                    <th>Cle</th>
+                    <th>Numero</th>
                     <th></th>
                     
                     <th>Date</th>
@@ -50,8 +53,8 @@
                 <?php foreach($historique as $item) { ?>
                 <tr>
                 <td><?php echo $item->comm_code_agence ?></td>
-                <td><?php echo date_format(date_create_from_format("d.m.Y", $item->princ_date_oper), "Y-m-d")  ?></td>
-                <td><?php echo date_format(date_create_from_format("d.m.Y", $item->princ_date_val), "Y-m-d") ?></td>
+                <td><?php echo $item->princ_date_oper ?></td>
+                <td><?php echo $item->princ_date_val ?></td>
                 <td><?php echo $item->comm_date_val ?></td>
                 <td><?php echo $item->princ_montant ?></td>
                 <td><?php echo $item->comm_montant ?></td>
@@ -59,7 +62,7 @@
                 <td><?php echo $item->princ_oper ?></td>
                 <td><?php echo $item->princ_expl ?></td>
                 <td><?php echo $item->princ_ref_igor ?></td>
-                <td><?php echo $item->cle ?></td>
+                <td><?php echo substr($item->cle, 0, 10)  ?></td>
                 <td><?php echo ""?></td>
                 <td><?php echo $item->orange_date ?></td>
                 <td><?php echo $item->orange_heure ?></td>
@@ -138,4 +141,21 @@
         el.addEventListener('change', () => table.draw());
     });
  
+</script>
+
+<script>
+    document.getElementById('exportExcel').addEventListener('click', function() {
+
+    $.ajax({
+        url: '<?php echo site_url("historique_airtel/exporterVersExcel") ?>',
+        success: function(response) {
+            console.log(response);
+            window.location.href = '<?php echo site_url("historique_airtel/exporterVersExcel") ?>';
+        },
+        error: function(xhr, status, error) {
+        console.error(error);
+        }
+    });
+    });
+
 </script>

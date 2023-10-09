@@ -22,7 +22,6 @@
 
         public function get_last_solde() {
             $sql= "SELECT solde_airtel, solde_boa FROM historique_airtel ORDER BY id DESC LIMIT 1";
-
             $query= $this->db->query($sql);
 
             return $query->result();

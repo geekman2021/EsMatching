@@ -8,6 +8,9 @@
         <label for="dateDebut">Date Fin</label>
           <input type="text" class="form-control" id="max" name="max">
         </div> 
+        <div class="col-sm-12 mt-2">
+            <button id="exportExcel" class="btn btn-success">Exporter vers Excel </button>
+        </div>
     </div>
 </div>
 
@@ -83,23 +86,6 @@
 </div>
 
 
-    <!-- <script>
-        $(document).ready(function () {
-            $("#tableNormaleCashOut").DataTable( {
-                dom: 'Bfrtip',
-                scrollX: true,
-                buttons: [
-                    'copy', 'csv', 'excel', 'pdf', 'print'
-                    ],
-                language: {
-                url: '<?php echo base_url(); ?>assets/fr-FR.json',
-                ordering: false
-            }
-    });
-        })
-    </script> -->
-
-
 <script>
 
     let minDate, maxDate;
@@ -132,15 +118,33 @@
     
     // DataTables initialisation
     let table = new DataTable('#tableNormaleCashOut', {
-        scrollX: true,
-        language: {
-            url: '<?php echo base_url(); ?>assets/fr-FR.json',
-        }
-    });
+                scrollX: true,
+                language: {
+                    url: '<?php echo base_url(); ?>assets/fr-FR.json',
+                }
+            });
+
     document.querySelectorAll('#min, #max').forEach((el) => {
         el.addEventListener('change', () => table.draw());
     });
  
+</script>
+
+<script>
+    document.getElementById('exportExcel').addEventListener('click', function() {
+
+    $.ajax({
+        url: '<?php echo site_url("historique_airtel/exporterVersExcel") ?>',
+        success: function(response) {
+            console.log(response);
+            window.location.href = '<?php echo site_url("historique_airtel/exporterVersExcel") ?>';
+        },
+        error: function(xhr, status, error) {
+        console.error(error);
+        }
+    });
+    });
+
 </script>
 
 
