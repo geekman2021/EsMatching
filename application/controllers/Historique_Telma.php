@@ -80,31 +80,38 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 
             $historique = $this->getData();
             $lastRow = $sheet->getHighestRow() + 2;
-            foreach ($historique["historique"] as $dataRow) {
-                $sheet->setCellValue($cell_array[0] .$lastRow, $dataRow->DATE_OPER);
-                $sheet->setCellValue($cell_array[1] .$lastRow, $dataRow->DATE_VAL);
-                $sheet->setCellValue($cell_array[2] .$lastRow, $dataRow->DEVISE);
-                $sheet->setCellValue($cell_array[3] .$lastRow,$dataRow->MONTANT);
-                $sheet->setCellValue($cell_array[4] .$lastRow,$dataRow->LIBELLE);
-                $sheet->setCellValue($cell_array[5] .$lastRow,$dataRow->OPER);
-                $sheet->setCellValue($cell_array[6] .$lastRow,$dataRow->EXPL);
-                $sheet->setCellValue($cell_array[7] .$lastRow,$dataRow->REF_IGOR);
-                $sheet->setCellValue($cell_array[8] .$lastRow,$dataRow->solde_boa);
-                $sheet->setCellValue($cell_array[10] .$lastRow,$dataRow->TRANSFER_ID);
-                $sheet->setCellValue($cell_array[11] .$lastRow,$dataRow->transfer_date);
-                $sheet->setCellValue($cell_array[12] .$lastRow,$dataRow->external_id);
-                $sheet->setCellValue($cell_array[13] .$lastRow,$dataRow->account_no);
-                $sheet->setCellValue($cell_array[14] .$lastRow,$dataRow->sender_msisdn);
-                $sheet->setCellValue($cell_array[15] .$lastRow,$dataRow->dest_msisdn);
-                $sheet->setCellValue($cell_array[16] .$lastRow,$dataRow->amount);
-                $sheet->setCellValue($cell_array[17] .$lastRow,$dataRow->description);
-                $sheet->setCellValue($cell_array[18] .$lastRow,$dataRow->service_name);
-                $sheet->setCellValue($cell_array[19] .$lastRow,$dataRow->reference_number);
-                $sheet->setCellValue($cell_array[20] .$lastRow,$dataRow->solde);
-                $sheet->setCellValue($cell_array[21] .$lastRow,$dataRow->solde_airtel);
-                $sheet->setCellValue($cell_array[22] .$lastRow,$dataRow->MONTANT - $dataRow->solde);
-                $lastRow++;
-            }
+            // foreach ($historique["historique"] as $dataRow) {
+                // $sheet->setCellValue($cell_array[0] .$lastRow, $dataRow["DATE_OPER"]);
+                // $sheet->setCellValue($cell_array[1] .$lastRow, $dataRow["DATE_VAL"]);
+                // $sheet->setCellValue($cell_array[2] .$lastRow, $dataRow["DEVISE"]);
+                // $sheet->setCellValue($cell_array[3] .$lastRow, $dataRow["MONTANT"]);
+                // $sheet->setCellValue($cell_array[4] .$lastRow, $dataRow["LIBELLE"]);
+                // $sheet->setCellValue($cell_array[5] .$lastRow, $dataRow["OPER"]);
+                // $sheet->setCellValue($cell_array[6] .$lastRow, $dataRow["EXPL"]);
+                // $sheet->setCellValue($cell_array[7] .$lastRow, $dataRow["REF_IGOR"]);
+                // $sheet->setCellValue($cell_array[9] .$lastRow, $dataRow["cle"]);
+                // $sheet->setCellValue($cell_array[12] .$lastRow, $dataRow["date_d"]);
+                // $sheet->setCellValue($cell_array[13] .$lastRow, $dataRow["trans_id"]);
+                // $sheet->setCellValue($cell_array[14] .$lastRow, $dataRow["initiator"]);
+                // $sheet->setCellValue($cell_array[15] .$lastRow, $dataRow["TYPE"]);
+                // $sheet->setCellValue($cell_array[16] .$lastRow, $dataRow["Channel"]);
+                // $sheet->setCellValue($cell_array[17] .$lastRow, $dataRow["State"]);
+                // $sheet->setCellValue($cell_array[18] .$lastRow, $dataRow["Wallet"]);
+                // $sheet->setCellValue($cell_array[19] .$lastRow, $dataRow["Amount_MGA"]);
+                // $sheet->setCellValue($cell_array[20] .$lastRow, $dataRow["Sender"]);
+                // $sheet->setCellValue($cell_array[21] .$lastRow, $dataRow["Sender_name"]);
+                // $sheet->setCellValue($cell_array[22] .$lastRow, $dataRow["receiver"]);
+                // $sheet->setCellValue($cell_array[23] .$lastRow, $dataRow["receiver_name"]);
+                // $sheet->setCellValue($cell_array[24] .$lastRow, $dataRow["details1"]);
+                // $sheet->setCellValue($cell_array[25] .$lastRow, $dataRow["Confirming_agent"]);
+                // $sheet->setCellValue($cell_array[26] .$lastRow, $dataRow["origine"]);
+                // $sheet->setCellValue($cell_array[27] .$lastRow, $dataRow["TVA"]);
+                // $sheet->setCellValue($cell_array[29] .$lastRow, $dataRow["ACTION"]);
+                // $sheet->setCellValue($cell_array[30] .$lastRow, $dataRow["AA1_GROUP"]);
+                // $sheet->setCellValue($cell_array[31] .$lastRow, $dataRow["PAR"]);
+                // $sheet->setCellValue($cell_array[32] .$lastRow, $dataRow["solde"]);
+                // $lastRow++;
+            // }
             
             // NORMALE CI 
             $writer = new PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);

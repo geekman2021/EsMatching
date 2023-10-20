@@ -53,6 +53,36 @@
             return $query->result();
         }
 
+        public function insert_or_update_nonAu($data) {
+            $this->db->where("ref_igor", $data["ref_igor"]);
+            $exist= $this->db->get("boa_airtel_nonau");
+
+            if($exist->num_rows() == 0) {
+                return $this->db->insert("boa_airtel_nonau", $data);
+            } else {
+                $this->db->where("ref_igor", $data["ref_igor"]);
+                return $this->db->update("boa_airtel_nonau", $data);
+            }
+        }
+
+
+        public function insert_or_update_deallo_vi($data) {
+            $this->db->where("TRANSFER_ID", $data["TRANSFER_ID"]);
+            $exist= $this->db->get("deallo_vi");
+            if($exist->num_rows() == 0) {
+                return $this->db->insert("deallo_vi", $data);
+            } else {
+                $this->db->where("TRANSFER_ID", $data["TRANSFER_ID"]);
+                return $this->db->update("deallo_vi", $data);
+            }
+        }
+
+        public function get_deallo_vi() {
+            $this->db->select("*");
+            $this->db->from("deallo_vi");
+            $query= $this->db->get();
+        }
+
         
 
     

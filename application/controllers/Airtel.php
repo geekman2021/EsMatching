@@ -30,6 +30,9 @@
             $data["igor_anomalie_co"]= $this->igor_airtel_anomalie_model->get_anomalie_co();
             $data["deallocation"] = $this->airtel_anomalie_model->get_deallocation();
             $data["ambiguous"] = $this->airtel_anomalie_model->get_ambiguous();
+            $data["ambiguousCO"] = $this->airtel_anomalie_model->get_ambiguousCO();
+            $data["success_no_refCO"] = $this->airtel_anomalie_model->get_SuccessNoReferenceCO();
+            $data["success_no_refCI"] = $this->airtel_anomalie_model->get_SuccessNoReferenceCI();
             $data["normale_ci"]= $this->igor_airtel_model->get_ci();
             $data["normale_co"] = $this->igor_airtel_model->get_co();
             $data["vi"] = $this->igor_airtel_anomalie_model->get_vi();

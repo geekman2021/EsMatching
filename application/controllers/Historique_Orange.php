@@ -16,8 +16,6 @@
             $data["historique"] = $this->historique_orange_model->get_historique();
             return $data; 
         }
-
-
  }
 
 

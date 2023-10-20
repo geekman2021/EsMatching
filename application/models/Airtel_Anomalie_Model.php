@@ -35,12 +35,12 @@
 
         public function insert_or_update_rb($data) {
 
-            $this->db->where("TRANSFER_ID", $data["TRANSFER_ID"]);
+            $this->db->where("rollback_TRANSFER_ID", $data["rollback_TRANSFER_ID"]);
             $exist= $this->db->get("airtel_rollback");
             if($exist->num_rows() == 0) {
                 return $this->db->insert("airtel_rollback", $data);
             } else {
-            $this->db->where("TRANSFER_ID", $data["TRANSFER_ID"]);
+            $this->db->where("rollback_TRANSFER_ID", $data["rollback_TRANSFER_ID"]);
             
             return $this->db->update("airtel_rollback", $data);
             }
@@ -60,7 +60,6 @@
         }
 
         public function insert_or_update_ambiguous($data) {
-
             $this->db->where("TRANSFER_ID", $data["TRANSFER_ID"]);
             $exist= $this->db->get("airtel_ambiguous");
             if($exist->num_rows() == 0) {
@@ -97,10 +96,45 @@
             return $query->result();
         }
 
+
+
         public function get_ambiguous() {
             $this->db->select('airtel_ambiguous.*');
             $this->db->from('airtel_ambiguous');
-            $this->db->where('airtel_ambiguous.TRANSFER_ID NOT IN (SELECT reference_number FROM airtel_rollback)', NULL, FALSE);
+            $this->db->where('airtel_ambiguous.TRANSFER_ID NOT IN (SELECT rollback_reference_number FROM airtel_rollback)', NULL, FALSE);
+            $this->db->where('(airtel_ambiguous.service_name = "BanktoWalletTransfer" OR airtel_ambiguous.service_name = "ChannelBanktoWalletTransfer")');
+            $query = $this->db->get();
+            return $query->result();
+        }
+        public function get_ambiguousCO() {
+            $this->db->select('airtel_ambiguous.*');
+            $this->db->from('airtel_ambiguous');
+            $this->db->where('airtel_ambiguous.TRANSFER_ID NOT IN (SELECT rollback_reference_number FROM airtel_rollback)', NULL, FALSE);
+            $this->db->where('(airtel_ambiguous.service_name = "WalletToBankTransfer" OR airtel_ambiguous.service_name = "ChannelWalletToBankTransfer" OR airtel_ambiguous.service_name = "AutoSweepMoneyTransfer" )');
+            $query = $this->db->get();
+            return $query->result();
+        }
+
+        public function get_SuccessNoReferenceCO() {
+            $this->db->select('airtel_ambiguous.*');
+            $this->db->from('airtel_ambiguous');
+            $this->db->where('airtel_ambiguous.TRANSFER_ID NOT IN (SELECT rollback_reference_number FROM airtel_rollback)', NULL, FALSE);
+            $this->db->where("(airtel_ambiguous.service_name = 'WalletToBankTransfer' 
+                 OR airtel_ambiguous.service_name = 'ChannelWalletToBankTransfer' 
+                 OR airtel_ambiguous.service_name = 'AutoSweepMoneyTransfer')");
+            $this->db->where('airtel_ambiguous.description', 'TransactionSuccess');
+            $query = $this->db->get();
+            return $query->result();
+
+        }
+
+        public function get_SuccessNoReferenceCI() {
+            $this->db->select('airtel_ambiguous.*');
+            $this->db->from('airtel_ambiguous');
+            $this->db->where('airtel_ambiguous.TRANSFER_ID NOT IN (SELECT rollback_reference_number FROM airtel_rollback)', NULL, FALSE);
+            $this->db->where("(airtel_ambiguous.service_name = 'BanktoWalletTransfer' 
+                 OR airtel_ambiguous.service_name = 'ChannelBanktoWalletTransfer')");
+            $this->db->where('airtel_ambiguous.description', 'TransactionSuccess');
             $query = $this->db->get();
             return $query->result();
         }
@@ -145,6 +179,8 @@
             $this->db->where("reference_number", $data["reference_number"]);
             return $this->db->update("airtel_deallocation", $data);
         }
+
+        
 
     }
 ?>

@@ -57,7 +57,6 @@
                 'montant_comm' => $montant_comm,
                 "place" => $place
             ));
-           
         }
 
     }

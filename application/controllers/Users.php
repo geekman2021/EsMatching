@@ -36,7 +36,6 @@
             $nom = $this->input->post('nom');
             $code_profile = $this->input->post('code_profile');
             $code_unite= $this->input->post("code_unite");
-            
             $this->user_model->insert_user(array(
                 "matricule" => $num_mat,
                 "code_profil" => $code_profile,

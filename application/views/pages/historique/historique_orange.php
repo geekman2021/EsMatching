@@ -150,7 +150,7 @@
         url: '<?php echo site_url("historique_airtel/exporterVersExcel") ?>',
         success: function(response) {
             console.log(response);
-            window.location.href = '<?php echo site_url("historique_airtel/exporterVersExcel") ?>';
+            window.location.href = '<?php echo site_url("historique_orange/exporterVersExcel") ?>';
         },
         error: function(xhr, status, error) {
         console.error(error);

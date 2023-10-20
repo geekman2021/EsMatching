@@ -43,8 +43,8 @@
     <script src="<?php echo base_url(); ?>assets/jquery/datatables.min.js"> </script>
     <link rel="stylesheet" href="<?php echo base_url(); ?>assets/jquery/datatables.css" />
     <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>assets/jquery/buttons.dataTables.min.css">
-    <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>assets/font-awesome/css/all.css" >
-    <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>assets/font-awesome/css/fontawesome.min.css" >
+    <!-- <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>assets/font-awesome/css/all.css" >
+    <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>assets/font-awesome/css/fontawesome.min.css" > -->
     <script src="<?php echo base_url(); ?>assets/jquery/jquery.dataTables.min.js"></script>
     <link href="https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="<?php echo base_url();?>assets/style.css">
@@ -52,7 +52,7 @@
 
   </head>
   <body>
-    <div class="sidebar close">
+    <div class="sidebar">
       <div class="logo-details">
         <i class="bx bxl-c-plus-plus"></i>
         <span class="logo_name">Monétique</span>

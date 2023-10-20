@@ -47,7 +47,7 @@
         public function get_anomalie_ci() {
             $this->db->select("*");
             $this->db->from("igor_airtel_anomalie_ci");
-            $this->db->where("etat", "Non");
+            $this->db->where_in("etat", array("Non", "En cours"));
             $query= $this->db->get();
 
             return $query->result();
@@ -56,7 +56,7 @@
         public function get_anomalie_co() {
             $this->db->select("*");
             $this->db->from("igor_airtel_anomalie_co");
-            $this->db->where("etat", "Non");
+            $this->db->where_in("etat", array("Non", "En cours"));
             $query= $this->db->get();
             return $query->result();
         }
@@ -70,7 +70,7 @@
             $this->db->select('*');
             $this->db->select_sum('MONTANT', 'total');
             $this->db->from('igor_airtel_anomalie_vi');
-            $this->db->where("etat", "Non");
+            // $this->db->where("etat", "Non");
             $this->db->group_by('REF_IGOR');
             $query = $this->db->get();
             return $query->result();
@@ -105,9 +105,6 @@
             $this->db->select("*");
             $this->db->from("igor_airtel_anomalie_co");
         }
-
-        
-
         
     }
 

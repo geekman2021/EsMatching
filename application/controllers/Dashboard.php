@@ -29,7 +29,7 @@ class Dashboard extends CI_Controller {
         ];
 
 
-        
+
         // $data = [
         //     'labels' => ['Solde BOA', 'Solde Telma', 'Vert'],
         //     'datasets' => [
@@ -41,7 +41,6 @@ class Dashboard extends CI_Controller {
         //     "airtel" => $airtel,
         //     // "orange" => [$orange],
         //     'telma' => $telma
-            
             
         // ];
         return $data;

@@ -19,10 +19,13 @@
 
 
         public function index () {
-            session_start();
+            
             $this->load->view("templates/sidebar");
             $this->load->view("pages/importer/importer");
             $this->load->view("pages/operateur/telma-form");
+
+            $_SESSION["dat"] = $this->boa_telma_anomalie_model->get_ci();
+            session_start();
             
             
         }
@@ -95,9 +98,6 @@
 
 // -------------------------------------------------------------------------TELMA -----------------------------------------------------------------------------
 
-
-
-
                     $telma = $this->supprimerEspace($telma);
                     $telma = $this->trierParTransId($telma);
 
@@ -138,9 +138,6 @@
                     $igorCO= $this->filtrerCOIgor($igor);
                     $igorCO= $this->trierParCleEtHeure($igorCO);
 
-                    echo "<pre>";
-                        print_r($telmaCI);
-                    echo "</pre>";
 
                     $reverseEtAnnule= $this->reverseEtAnnule($indexAnnul, $telma);
 
@@ -158,99 +155,95 @@
                     $dat= $resultatCI[1];
                     $cat= $resultatCO[1];
 
-                    echo "<pre>";
-                        print_r($cat[0]);
-                    echo "</pre>";
-
-                    // $telmaAnomalieCI= $resultatCI[2];
-                    // $telmaAnomalieCO= $resultatCO[2];
-
-                    // $this->comparerTelmaEtIgor($igorCI, $telmaCI);
+                    $telmaAnomalieCI= $resultatCI[2];
+                    $telmaAnomalieCO= $resultatCO[2];
+                    $this->comparerTelmaEtIgor($igorCI, $telmaCI);
 
 // ------------------------------------------------------------------------------REGULARISATION ----------------------------------------------------------------------
-
-
-
-
+                    // $dat2= array();
+                    // foreach($_SESSION["dat"] as $sessionItem) {
+                    //     $dat2[] = get_object_vars($sessionItem);
+                    // }
+                    // if(!empty($dat2) && !empty($nonAu)) {
+                    //     foreach($dat2 as $itemDat) {
+                    //         foreach($nonAu as $itemNonAu) {
+                    //             if($itemDat["REF_IGOR"] === $itemNonAu["ref_igor"]) {
+                    //                 $this->boa_telma_anomalie_model->update_dat($itemDat["REF_IGOR"], "Oui", $itemNonAu["date_oper"]);
+                    //             }
+                    //         }
+                    //     }
+                    // }
 // ------------------------------------------------------------------------------------INSERTION --------------------------------------------------------------------
 
+                    // echo "<pre>";
+                    //     print_r($reverseEtAnnule);
+                    // echo "</pre>";
 
-                        
-
-                    // $_SESSION["last_solde"] = $this->historique_telma_model->get_last_solde();
-
-                    // if(count($_SESSION["last_solde"]) > 0 ) {
-                    //     $solde_telma= $_SESSION["last_solde"][0]->solde_telma;
-                    //     $solde_boa= $_SESSION["last_solde"][0]->solde_boa;
-                    // } else if(count($_SESSION["last_solde"]) === 0 ) {
-                    //     $solde_telma= 0;
-                    //     $solde_boa= 0;
-                    // }
-
+                    $_SESSION["last_solde"] = $this->historique_telma_model->get_last_solde();
+                    if(count($_SESSION["last_solde"]) > 0 ) {
+                        $solde_telma= $_SESSION["last_solde"][0]->solde_telma;
+                        $solde_boa= $_SESSION["last_solde"][0]->solde_boa;
+                    } else if(count($_SESSION["last_solde"]) === 0 ) {
+                        $solde_telma= 0;
+                        $solde_boa= 0;
+                    }
                     $historique =array_merge($normalCI[0], $normalCO[0], $dat[0], $cat[0], $reverseEtAnnule, $rollback, $admin, $nonAu);
 
-                    // foreach ($historique as $item) {
-                    //     $solde_telma += isset($item["solde"]) ? $item["solde"] : 0;
-                    //     $solde_boa += isset($item["MONTANT"]) ? $item["MONTANT"] : 0;
-                    //     $item["solde_telma"] = $solde_telma;
-                    //     $item["solde_boa"] = $solde_boa;
-                    //     $this->historique_telma_model->insert($item);
-                    // }
+                    foreach ($historique as $item) {
+                        $solde_telma += isset($item["solde"]) ? $item["solde"] : 0;
+                        $solde_boa += isset($item["MONTANT"]) ? $item["MONTANT"] : 0;
+                        $item["solde_telma"] = $solde_telma;
+                        $item["solde_boa"] = $solde_boa;
+                        $this->historique_telma_model->insert($item);
+                    }
 
-                    // foreach ($normalCI[0] as $item) {
-                    //     // $solde_telma += isset($item["solde"]) ? $item["solde"] : 0;
-                    //     // $solde_boa += isset($item["MONTANT"]) ? $item["MONTANT"] : 0;
-                    //     $this->telma_normal_model->insert_or_update_ci($item);
+                    foreach ($normalCI[0] as $item) {
+                        // $solde_telma += isset($item["solde"]) ? $item["solde"] : 0;
+                        // $solde_boa += isset($item["MONTANT"]) ? $item["MONTANT"] : 0;
+                        $this->telma_normal_model->insert_or_update_ci($item);
                         
-                    // }
-                    // foreach ($normalCO[0] as $item) {
-                    //     $this->telma_normal_model->insert_or_update_co($item);
-                    
-                    // }
+                    }
+                    foreach ($normalCO[0] as $item) {
+                        $this->telma_normal_model->insert_or_update_co($item);
+                    }
 
-                    
-
-                    // // $this->telma_normal_model->insert_or_update_ci($normalCI);
-                    // // $this->telma_normal_model->insert_or_update_co($normalCO);
-
-                    // foreach($admin as $item) {
-                    //     $this->telma_anomalie_model->insert_or_update_admin($item);
+                    foreach($admin as $item) {
+                        $this->telma_anomalie_model->insert_or_update_admin($item);
                             
-                    // }
-                    // foreach($reverseEtAnnule as $item) {
-                    //     $this->telma_anomalie_model->insert_or_update_reverse($item);
+                    }
+                    foreach($reverseEtAnnule as $item) {
+                        $this->telma_anomalie_model->insert_or_update_reverse($item);
                             
-                    // }
-                    // foreach($rollback as $item) {
-                    //     $this->telma_anomalie_model->insert_or_update_rollback($item);
+                    }
+                    foreach($rollback as $item) {
+                        $this->telma_anomalie_model->insert_or_update_rollback($item);
                     
-                    // }
-                    // foreach($dat[0] as $item) {
-                    //     $this->boa_telma_anomalie_model->insert_or_update_dat($item);
+                    }
+                    foreach($dat[0] as $item) {
+                        $item["etat"] = "Non";
+                        $this->boa_telma_anomalie_model->insert_or_update_dat($item);
                     
-                    // }
+                    }
                   
-                    // foreach($cat[0] as $item) {
-                    //     $this->boa_telma_anomalie_model->insert_or_update_cat($item);
+                    foreach($cat[0] as $item) {
+                        $item["etat"] = "Non";
+                        $this->boa_telma_anomalie_model->insert_or_update_cat($item);
                     
-                    // }
-                    // foreach($nonAu as $item) {
-                    //     $this->boa_telma_anomalie_model->insert_or_update_nonAu($item);
+                    }
+                     $newNonAu = $this->changerCle($nonAu);
+                    foreach($newNonAu as $item) {
+                        $this->boa_telma_anomalie_model->insert_or_update_nonAu($item);
                     
-                    // }
-                    // foreach($vi as $item) {
-                    //     $this->boa_telma_anomalie_model->insert_or_update_vi($item);
+                    }
+                    foreach($vi as $item) {
+                        $this->boa_telma_anomalie_model->insert_or_update_vi($item);
                     
-                    // }
+                    }
 
-
-                    // $this->exporter($normalCI[0], $normalCO[0], $reverseEtAnnule,$admin, $rollback, $dat[0], $cat[0], $vi, $nonAu);
+                    $this->exporter($normalCI[0], $normalCO[0], $reverseEtAnnule,$admin, $rollback, $dat[0], $cat[0], $vi, $nonAu);
                 }
-
-                redirect("importer_telma");
+                // redirect("importer_telma");
             }
-
-
         }
 
         public function readData($upload_file, $upload_tmp) {
@@ -392,10 +385,6 @@
             return $data;
         }
 
-
-
-
-
         public function trierParDate($data) {
             usort($data, function ($a, $b) {
                 $dateA = DateTime::createFromFormat('d/m/YH:i:s', $a['date_d']);
@@ -481,7 +470,6 @@
             return $index;
         }
 
-
         public function supprimerIndices($telma, $indicesASupprimer) {
             foreach ($indicesASupprimer as $indice) {
                 if (isset($telma[$indice])) {
@@ -547,12 +535,20 @@
             return true; 
         }
 
+        public function changerCle($data) {
+            $resultat= array();
+            foreach ($data as &$item) {
+                $item = array_change_key_case($item, CASE_LOWER);
+                $resultat[]= $item;
+            }
 
+            return $resultat;
+        }
 
         public function exporter($normalCI, $normalCO, $reverseEtAnnule, $admin, $rollback, $dat, $cat, $vi, $nonAu) {
             $dateAujourdhui = date("Y-m-d");
             $nomFichier = "RapproTelma-" .$dateAujourdhui .".xlsx";
-
+            
             header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
             header("Content-Disposition: attachment; filename=\"" . $nomFichier . "\"");
             
@@ -693,26 +689,26 @@
             $lastRow = $sheet->getHighestRow() + 3;
             
             foreach ($reverseEtAnnule as $dataRow) {
-                $sheet->getStyle($cell_array[12] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('404040');
-                $sheet->getStyle($cell_array[13] .$lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('404040');
-                $sheet->getStyle($cell_array[14] .$lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('404040');
-                $sheet->getStyle($cell_array[15] .$lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('404040');
-                $sheet->getStyle($cell_array[16] .$lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('404040');
-                $sheet->getStyle($cell_array[17] .$lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('404040');
-                $sheet->getStyle($cell_array[18] .$lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('404040');
-                $sheet->getStyle($cell_array[19] .$lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('404040');
-                $sheet->getStyle($cell_array[20] .$lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('404040');
-                $sheet->getStyle($cell_array[21] .$lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('404040');
-                $sheet->getStyle($cell_array[22] .$lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('404040');
-                $sheet->getStyle($cell_array[23] .$lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('404040');
-                $sheet->getStyle($cell_array[24] .$lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('404040');
-                $sheet->getStyle($cell_array[25] .$lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('404040');
-                $sheet->getStyle($cell_array[26] .$lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('404040');
-                $sheet->getStyle($cell_array[27] .$lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('404040');
-                $sheet->getStyle($cell_array[29] .$lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('404040');
-                $sheet->getStyle($cell_array[30] .$lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('404040');
-                $sheet->getStyle($cell_array[31] .$lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('404040');
-                $sheet->getStyle($cell_array[32] .$lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('404040');
+                $sheet->getStyle($cell_array[12] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('D3D3D3');
+                $sheet->getStyle($cell_array[13] .$lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('D3D3D3');
+                $sheet->getStyle($cell_array[14] .$lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('D3D3D3');
+                $sheet->getStyle($cell_array[15] .$lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('D3D3D3');
+                $sheet->getStyle($cell_array[16] .$lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('D3D3D3');
+                $sheet->getStyle($cell_array[17] .$lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('D3D3D3');
+                $sheet->getStyle($cell_array[18] .$lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('D3D3D3');
+                $sheet->getStyle($cell_array[19] .$lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('D3D3D3');
+                $sheet->getStyle($cell_array[20] .$lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('D3D3D3');
+                $sheet->getStyle($cell_array[21] .$lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('D3D3D3');
+                $sheet->getStyle($cell_array[22] .$lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('D3D3D3');
+                $sheet->getStyle($cell_array[23] .$lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('D3D3D3');
+                $sheet->getStyle($cell_array[24] .$lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('D3D3D3');
+                $sheet->getStyle($cell_array[25] .$lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('D3D3D3');
+                $sheet->getStyle($cell_array[26] .$lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('D3D3D3');
+                $sheet->getStyle($cell_array[27] .$lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('D3D3D3');
+                $sheet->getStyle($cell_array[29] .$lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('D3D3D3');
+                $sheet->getStyle($cell_array[30] .$lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('D3D3D3');
+                $sheet->getStyle($cell_array[31] .$lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('D3D3D3');
+                $sheet->getStyle($cell_array[32] .$lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('D3D3D3');
 
 
 
@@ -1020,11 +1016,10 @@
                    
                 } elseif ($difference < 0) {
                     
-                    $igorTab[$i]["etat"] = "Non";
+
                     $igorAnomalie[] = $igorTab[$i];
                     $i++;
                 } else {
-                    $telmaTab[$i]["etat"] = "Non";
                     $telmaAnomalie[] = $telmaTab[$j];
                     $j++;
                 }
@@ -1032,21 +1027,18 @@
 
             // Traiter les éléments restants dans $igorTab comme des anomalies
             while ($i < $igorCount) {
-                $igorTab[$i]["etat"] = "Non";
                 $igorAnomalie[] = $igorTab[$i];
                 $i++;
             }
 
             // Traiter les éléments restants dans $telmaTab comme des anomalies
             while ($j < $telmaCount) {
-                $telmaTab[$i]["etat"] = "Non";
                 $telmaAnomalie[] = $telmaTab[$j];
                 $j++;
             }
 
-
             for($i=0; $i < count($igorNormale); $i++) {
-                $mergeIgorTelma []= array_merge($igorNormale[$i], $telmaNormale[$i]);
+                $mergeIgorTelma[]= array_merge($igorNormale[$i], $telmaNormale[$i]);
             } 
 
             return [[$mergeIgorTelma], [$igorAnomalie], [$telmaAnomalie]];
@@ -1061,13 +1053,6 @@
             }
             return $resultat;
         }
-
-
-        
-
-        
-        
-
     }
 
 

@@ -70,14 +70,14 @@
                     <tr> 
                         <th>Date_Oper</th>
                         <th>Date_Val</th>
-                        <th>Devise</th>
+                        <th>Heure</th>
                         <th>Montant</th>
+                        <th>Devise</th>
                         <th>Libelle</th>
                         <th>Operation</th>
                         <th>Expl</th>
                         <th>ReferenceIgor</th>
-                        <th>Cle</th>
-                        <th></th>
+                        <th>Numero</th>
                         <th>Date</th>
                         <th>Heure</th>
                         <th>Transfer_id</th>
@@ -94,23 +94,24 @@
                     <tr>
                       <td><?php echo $item->DATE_OPER ?></td>
                       <td><?php echo $item->DATE_VAL ?></td>
+                      <td><?php echo $item->BOA_HEURE ?></td>
+                      <td><?php echo number_format($item->MONTANT, 0, ',', " ") ?></td>
                       <td><?php echo $item->DEVISE ?></td>
-                      <td><?php echo $item->MONTANT ?></td>
                       <td style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis ;max-width: 100px; "><?php echo $item->LIBELLE ?></td>
                       <td><?php echo $item->OPER ?></td>
                       <td><?php echo $item->EXPL ?></td>
                       <td><?php echo $item->REF_IGOR ?></td>
                       <td><?php echo $item->cle ?></td>
-                      <td></td>
                       <td><?php echo $item->date_d ?></td>
-                      <td><?php echo $item->cle ?></td>
-                      <td><?php echo $item->cle ?></td>
-                      <td><?php echo $item->cle ?></td>
-                      <td><?php echo $item->cle ?></td>
-                      <td><?php echo $item->cle ?></td>
-                      <td><?php echo $item->cle ?></td>
-                      <td><?php echo $item->cle ?></td>
-                      <td><?php echo $item->cle ?></td>
+                      <td><?php echo $item->telma_heure ?></td>
+                      <td><?php echo $item->trans_id ?></td>
+                      <td><?php echo $item->TYPE ?></td>
+                      <td><?php echo $item->channel ?></td>
+                      <td><?php echo $item->state ?></td>
+                      <td><?php echo number_format($item->Amount_MGA, 0, ',', " ") ?></td>
+                      <td><?php echo $item->sender_name ?></td>
+                      <td><?php echo $item->receiver_name ?></td>
+                      
                     </tr>
 
                   <?php }?>
@@ -145,49 +146,49 @@
                     </tr>
                     <tr>
                         
-                        <th>Date_Oper</th>
-                        <th>Date_Val</th>
-                        <th>Devise</th>
-                        <th>Montant</th>
-                        <th>Libelle</th>
-                        <th>Operation</th>
-                        <th>Expl</th>
-                        <th>ReferenceIgor</th>
-                        <th>Cle</th>
-                        <th></th>
-                        <th>Date</th>
-                        <th>Heure</th>
-                        <th>Transfer_id</th>
-                        <th>Type</th>
-                        <th>Channel</th>
-                        <th>Etat</th>
-                        <th>Montant</th>
-                        <th>sender</th>
-                        <th>receiver</th>
+                      <th>Date_Oper</th>
+                      <th>Date_Val</th>
+                      <th>Heure</th>
+                      <th>Montant</th>
+                      <th>Devise</th>
+                      <th>Libelle</th>
+                      <th>Operation</th>
+                      <th>Expl</th>
+                      <th>ReferenceIgor</th>
+                      <th>Numero</th>
+                      <th>Date</th>
+                      <th>Heure</th>
+                      <th>Transfer_id</th>
+                      <th>Type</th>
+                      <th>Channel</th>
+                      <th>Etat</th>
+                      <th>Montant</th>
+                      <th>sender</th>
+                      <th>receiver</th>
                     </tr>
                 </thead>
                 <tbody>
                   <?php foreach($normal_co as $item) { ?>
                     <tr>
-                      <td><?php echo $item->DATE_OPER ?></td>
-                      <td><?php echo $item->DATE_VAL?></td>
+                    <td><?php echo $item->DATE_OPER ?></td>
+                      <td><?php echo $item->DATE_VAL ?></td>
+                      <td><?php echo $item->BOA_HEURE ?></td>
+                      <td><?php echo number_format($item->MONTANT, 0, ',', " ") ?></td>
                       <td><?php echo $item->DEVISE ?></td>
-                      <td><?php echo $item->MONTANT ?></td>
                       <td style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis ;max-width: 100px; "><?php echo $item->LIBELLE ?></td>
                       <td><?php echo $item->OPER ?></td>
                       <td><?php echo $item->EXPL ?></td>
                       <td><?php echo $item->REF_IGOR ?></td>
-                      <td><?php echo $item->cle ?></td>
-                      <td></td>
+                      <td><?php echo substr($item->cle, 0, 10) ?></td>
                       <td><?php echo $item->date_d ?></td>
-                      <td><?php echo $item->cle ?></td>
-                      <td><?php echo $item->cle ?></td>
-                      <td><?php echo $item->cle ?></td>
-                      <td><?php echo $item->cle ?></td>
-                      <td><?php echo $item->cle ?></td>
-                      <td><?php echo $item->cle ?></td>
-                      <td><?php echo $item->cle ?></td>
-                      <td><?php echo $item->cle ?></td>
+                      <td><?php echo $item->telma_heure ?></td>
+                      <td><?php echo $item->trans_id ?></td>
+                      <td><?php echo $item->TYPE ?></td>
+                      <td><?php echo $item->channel ?></td>
+                      <td><?php echo $item->state ?></td>
+                      <td><?php echo number_format($item->Amount_MGA, 0, ',', " ") ?></td>
+                      <td><?php echo $item->sender_name ?></td>
+                      <td><?php echo $item->receiver_name ?></td>
 
                   <?php }?>
 
@@ -230,16 +231,16 @@
             <td><?php echo $item->DATE_OPER ?></td>
             <td><?php echo $item->DATE_VAL ?></td>
             <td><?php echo $item->DEVISE ?></td>
-            <td><?php echo $item->MONTANT ?></td>
+            <td><?php echo number_format($item->MONTANT, 0, ',', " ") ?></td>
             <td><?php echo $item->LIBELLE ?></td>
             <td><?php echo $item->OPER ?></td>
             <td><?php echo $item->EXPL ?></td>
             <td><?php echo $item->REF_IGOR ?></td>
             <td><?php echo $item->etat ?></td>
             <td><?php echo "" ?></td>
-            <td>
+            <td style="text-align-center;">
               <a href="javascript:void(0);" class="text-warning" data-toggle="modal" data-target="#myModal" onClick="modifier('<?php echo $item->REF_IGOR ?>', '<?php echo $item->etat ?>', '<?php echo $item->date_regul ?>')">
-                  <box-icon name='printer'  ></box-icon>Modifier
+              <i class="bx bx-edit" style="font-size: 20px;"></i>
               </a> 
               <a href="javascript:void(0);" class="text-primary" data-target="#myModalFr10"
                     data-compte="<?php echo $item->COMPTE ?>"
@@ -248,7 +249,7 @@
                     data-libelle="<?php echo $item->LIBELLE ?>"
                     data-oper="<?php echo $item->OPER ?>"
                     data-ref-igor="<?php echo $item->REF_IGOR ?>" data-toggle="modal">
-                  <box-icon name="printer"></box-icon>Imprimer
+                    <i class="bx bx-printer" style="font-size: 20px;"></i>
                 </a>
             </td>
           </tr>
@@ -285,7 +286,7 @@
             <td><?php echo $item->DATE_OPER ?></td>
             <td><?php echo $item->DATE_VAL ?></td>
             <td><?php echo $item->DEVISE ?></td>
-            <td><?php echo $item->MONTANT ?></td>
+            <td><?php echo number_format($item->MONTANT, 0, ',', " ") ?></td>
             <td><?php echo $item->LIBELLE ?></td>
             <td><?php echo $item->OPER ?></td>
             <td><?php echo $item->EXPL ?></td>
@@ -308,7 +309,7 @@
           <tr>
             <th style="display: none;"></th>
             <th>Date</th>
-            <th>Heure</th>
+            <!-- <th>Heure</th> -->
             <th>Transfer_id</th>
             <th>Type</th>
             <th>Channel</th>
@@ -328,19 +329,19 @@
           <tr>
             <td style="display: none;"><?php echo $item->id ?></td>
             <td><?php echo $item->date_d ?></td>
-            <td><?php echo $item->date_d ?></td>
+            <!-- <td><?php //echo $item->telma_heure ?></td> -->
             <td><?php echo $item->trans_id ?></td>
             <td><?php echo $item->TYPE ?></td>
             <td><?php echo $item->channel ?></td>
             <td><?php echo $item->state ?></td>
-            <td><?php echo $item->Amount_MGA ?></td>
+            <td><?php echo number_format($item->Amount_MGA, 0, ',', " ") ?></td>
             <td><?php echo $item->sender ?></td>
             <td><?php echo $item->receiver ?></td>
             <td><?php echo $item->etat ?></td>
             <td><?php echo $item->date_regul ?></td>
             <td>
               <a href="javascript:void(0);" class="text-warning" data-toggle="modal" data-target="#myModal" onClick="modifier('<?php echo $item->id ?>', '<?php echo $item->etat ?>', '<?php echo $item->date_regul ?>')">
-                <box-icon name='printer'  ></box-icon>Modifier
+                Modifier
               </a> 
             </td>
           </tr>
@@ -374,7 +375,7 @@
                   <tr>
                     <td><?php echo $item->DATE_OPER ?></td>
                     <td><?php echo $item->DATE_VAL ?></td>
-                    <td><?php echo $item->MONTANT ?></td>
+                    <td><?php echo number_format($item->MONTANT, 0, ',', " ") ?></td>
                     <td><?php echo $item->DEVISE ?></td>
                     <td><?php echo $item->REF_IGOR ?></td>
                     <td><?php echo $item->LIBELLE ?></td>
@@ -1022,7 +1023,6 @@ $("#modifFormfr10").submit(function(e) {
       "&tva=" + encodeURIComponent("66,67") +
       "&montant_comm=" + encodeURIComponent("400,00") +
       "&place=" + encodeURIComponent(place)
-
     var nouvelleFenetre = window.open(url, '_blank'); 
 
 });

@@ -42,11 +42,8 @@
             $this->db->select("*");
             $this->db->from("boa_orange_normale_co");
             $query= $this->db->get();
-
             return $query->result();
         }
-
-        
 
         
     }

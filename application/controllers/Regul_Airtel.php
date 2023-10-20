@@ -15,9 +15,10 @@
         }
 
         public function get_data() {
+
             $data["ci"] = $this->regul_airtel_model->get_regul_ci();
-            $data["deallo"] = $this->regul_airtel_model->get_regul_deallo();
             $data["ambi"] = $this->regul_airtel_model->get_ambi();
+            $data["deallo_vi"] = $this->regul_airtel_model->get_deallo_vi();
             return $data;
         }
         

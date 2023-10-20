@@ -19,29 +19,7 @@
             }
         } 
 
-        public function insert_or_update_nonAuCI($data) {
-            $this->db->where("orange_ref", $data["orange_ref"]);
-            $exist= $this->db->get("orange_anomalie_ci");
-
-            if($exist->num_rows() ==0 ){
-                return $this->db->insert("orange_anomalie_ci", $data);
-            } else {
-                $this->db->where("orange_ref", $data["orange_ref"]);
-                return $this->db->update("orange_anomalie_ci", $data);
-            }
-        } 
-        public function insert_or_update_nonAuCO($data) {
-            $this->db->where("orange_ref", $data["orange_ref"]);
-            $exist= $this->db->get("orange_anomalie_ci");
-
-            if($exist->num_rows() ==0 ){
-                return $this->db->insert("orange_anomalie_ci", $data);
-            } else {
-                $this->db->where("orange_ref", $data["orange_ref"]);
-                return $this->db->update("orange_anomalie_ci", $data);
-            }
-        }
-
+        
         public function insert_or_update_co($data) {
             $this->db->where("orange_ref", $data["orange_ref"]);
             $exist= $this->db->get("orange_anomalie_co");

@@ -191,7 +191,7 @@
             <th>Oper</th>
             <th>Expl</th>
             <th>ReferenceIgor</th>
-            <th>Cle</th>
+            <th>Numéro</th>
             <th>Etat</th>
             <th>Date_regul</th>
             <th>Action</th>
@@ -204,23 +204,30 @@
                     <td><?php echo $item->princ_date_oper ?></td>
                     <td><?php echo $item->princ_date_val ?></td>
                     <td><?php echo $item->comm_date_val ?></td>
-                    <td><?php echo $item->princ_montant ?></td>
-                    <td><?php echo $item->comm_montant ?></td>
+                    <td><?php echo number_format($item->princ_montant, 0, ',', ' ') ?></td>
+                    <td><?php echo number_format($item->comm_montant, 0, ',', ' ') ?></td>
                     <td><?php echo "" ?></td>
                     <td><?php echo $item->princ_devise?></td>
                     <td><?php echo $item->princ_oper ?></td>
                     <td><?php echo $item->princ_expl ?></td>
                     <td><?php echo $item->princ_ref_igor ?></td>
-                    <td><?php echo $item->cle ?></td>
+                    <td><?php echo substr($item->cle, 0, 10) ?></td>
                     <td>Non</td>
                     <td></td>
-                    <td>
-                        <a href="javascript:void(0);" class="text-warning" data-toggle="modal" data-target="#myModal" onClick="modifier('<?php echo $item->princ_ref_igor ?>', 'Non', '')">
-                            <box-icon name='printer'  ></box-icon>Modifier
-                        </a> 
-                       
-                      </td>
-                    
+                    <td style="text-align: center;">
+                      <a href="javascript:void(0);" class="text-warning" data-toggle="modal" data-target="#myModal" onClick="modifier('<?php echo $item->princ_ref_igor ?>', 'Non', '')">
+                        <i class="bx bx-edit" style="font-size: 20px;"></i>
+                      </a> 
+                      <a href="javascript:void(0);" class="text-primary" data-target="#myModalFr10"
+                              data-compte="<?php echo $item->princ_compte ?>"
+                              data-date-oper="<?php echo $item->princ_date_oper ?>"
+                              data-montant="<?php echo $item->princ_montant ?>"
+                              data-libelle="<?php echo $item->princ_libelle ?>"
+                              data-oper="<?php echo $item->princ_oper ?>"
+                              data-ref-igor="<?php echo $item->princ_ref_igor ?>" data-toggle="modal">
+                        <i class="bx bx-printer" style="font-size: 20px;"></i>
+                      </a>
+                    </td>
               </tr>
           
           <?php } ?>  
@@ -244,7 +251,7 @@
             <th>Oper</th>
             <th>Expl</th>
             <th>ReferenceIgor</th>
-            <th>Cle</th>
+            <th>Numero</th>
             <th>Etat</th>
             <th>Date_regul</th>
             <th>Action</th>
@@ -255,17 +262,17 @@
             <tr>
               <td><?php echo $item->princ_date_oper ?></td>
               <td><?php echo $item->princ_date_val ?></td>
-              <td><?php echo $item->princ_montant ?></td>
+              <td><?php echo number_format($item->princ_montant, 0, ",", " ") ?></td>
               <td><?php echo $item->princ_devise ?></td>
               <td><?php echo $item->princ_oper ?></td>
               <td><?php echo $item->princ_expl ?></td>
               <td><?php echo $item->princ_ref_igor ?></td>
-              <td><?php echo $item->cle ?></td>
+              <td><?php echo substr($item->cle, 0, 10) ?></td>
               <td>Non</td>
               <td></td>
-              <td>
+              <td style="text-align:center;">
                 <a href="javascript:void(0);" class="text-warning" data-toggle="modal" data-target="#myModal" onClick="modifier('<?php echo $item->princ_ref_igor ?>', 'Non', '')">
-                            <box-icon name='printer'  ></box-icon>Modifier
+                  <i class="bx bx-edit"></i>
                 </a> 
                 <a href="javascript:void(0);" class="text-primary" data-target="#myModalFr10"
                               data-compte="<?php echo $item->princ_compte ?>"
@@ -274,7 +281,7 @@
                               data-libelle="<?php echo $item->princ_libelle ?>"
                               data-oper="<?php echo $item->princ_oper ?>"
                               data-ref-igor="<?php echo $item->princ_ref_igor ?>" data-toggle="modal">
-                <box-icon name="printer"></box-icon>Imprimer
+                <i class="bx bx-printer"></i>
                 </a>
               </td>
             </tr>
@@ -289,9 +296,6 @@
       <table class="table table-bordered" id="tableInd">
         <thead>
           <tr>
-            <th></th>
-            <th>Cle</th>
-            <th></th>
             <th>Date</th>
             <th>Heure</th>
             <th>Réference</th>
@@ -303,9 +307,6 @@
         <tbody>
         <?php foreach($ind as $item) { ?> 
             <tr>
-              <td></td>
-              <td><?php echo $item->cle ?></td>
-              <td></td>
               <td><?php echo $item->orange_date ?></td>
               <td><?php echo $item->orange_heure ?></td>
               <td><?php echo $item->orange_ref ?></td>
@@ -399,6 +400,43 @@
   </div>
 </form>
 
+<form id="modifForm">
+  <div class="modal fade" id="myModal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="card p-3">
+          <div class="text-center" style="font-size: 17px;">
+            <b>Régulariser</b>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+          </div>
+            <div class="row form-group mt-2">
+                <div class="col-sm-6" style="display: none;">
+                  <label for="ref">ref</label>
+                  <input type="text" class="form-control" id="ref_igor" name="ref_igor">
+                </div>
+                <div class="col-sm-6">
+                  <label for="etat">Etat</label>
+                  <select name="etat" id="etat" class="form-control">
+                    <option value="Non">Non</option>
+                    <option value="En cours">En cours</option>
+                  </select>
+                </div>
+                <div class="col-sm-6">
+                  <label for="date">Date</label>
+                  <input type="date" class="form-control" id="date_regul" name="date_regul" required>
+                </div>
+                </div>
+                <div class="text-center">
+                  <button type="button" class="btn btn-danger" data-dismiss="modal">Annuler</button>
+                  <input type="submit" class="btn btn-success" value="Valider" />
+                </div>
+              </div>
+            </div>
+      </div>
+    </div>
+  </div>
+</form>
+
 <script>
   var compte, dateOper, montant, libelle, oper, refIgor;
   $("#myModalFr10").on('show.bs.modal', function(event) {
@@ -441,12 +479,11 @@ $("#modifFormfr10").submit(function(e) {
       '&compte_comm=' + encodeURIComponent(comm)+
       '&compte=' + encodeURIComponent(compte)+
       "&operateur="  + encodeURIComponent("OM") +
-      "&mobile_money=" + encodeURIComponent("M VOLA") +
+      "&mobile_money=" + encodeURIComponent("ORANGE") +
       "&tax="  + encodeURIComponent("") +
       "&tva=" + encodeURIComponent("") +
       "&montant_comm=" + encodeURIComponent("") +
       "&place=" + encodeURIComponent(place)
-
     var nouvelleFenetre = window.open(url, '_blank'); 
 
 });

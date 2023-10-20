@@ -28,17 +28,20 @@
     </div>
     <div id="anormale" class="container tab-pane fade"><br>
       <ul class="nav nav-tabs">
-        <li class="nav-item col-sm-3">
+        <li class="nav-item col-sm-2">
           <a class="nav-link" href="#tabDat">Débit à Tort</a>
         </li>
-        <li class="nav-item col-sm-3">
+        <li class="nav-item col-sm-2">
           <a class="nav-link" href="#tabCat">Crédit à Tort</a>
         </li>
+        <li class="nav-item col-sm-2">
+          <a class="nav-link" href="#tabAmbi">Ambigu</a>
+        </li>
         <li class="nav-item col-sm-3">
-          <a class="nav-link" href="#tabAmbi">Ambiguous</a>
+          <a class="nav-link" href="#tabSucces">Succès Sans Réf</a>
         </li>
         <li class="nav-item col-sm-2">
-          <a class="nav-link" href="#tabDeallo">Deallocation</a>
+          <a class="nav-link" href="#tabDeallo">Dealloc</a>
         </li>
         <li class="nav-item col-sm-1">
           <a class="nav-link" href="#tabVI">VI</a>
@@ -85,7 +88,7 @@
                       <td><?php echo $item->DATE_OPER ?></td>
                       <td><?php echo $item->DATE_VAL ?></td>
                       <td><?php echo $item->DEVISE ?></td>
-                      <td><?php echo $item->MONTANT ?></td>
+                      <td><?php echo number_format($item->MONTANT, 0, ',', " ")  ?></td>
                       <td><?php echo $item->LIBELLE ?></td>
                       <td><?php echo $item->OPER ?></td>
                       <td><?php echo $item->EXPL ?></td>
@@ -96,7 +99,7 @@
                       <td><?php echo $item->account_no ?></td>
                       <td><?php echo $item->sender_msisdn ?></td>
                       <td><?php echo $item->dest_msisdn ?></td>
-                      <td><?php echo $item->amount ?></td>
+                      <td><?php echo number_format($item->amount, 0, ',', " ")  ?></td>
                       <td><?php echo $item->description ?></td>
                       <td><?php echo $item->service_name ?></td>
                       <td><?php echo $item->reference_number ?></td>
@@ -144,7 +147,7 @@
                       <td><?php echo $item->DATE_OPER ?></td>
                       <td><?php echo $item->DATE_VAL ?></td>
                       <td><?php echo $item->DEVISE ?></td>
-                      <td><?php echo $item->MONTANT ?></td>
+                      <td><?php echo number_format($item->MONTANT, 0, ',', " ")  ?></td>
                       <td><?php echo $item->LIBELLE ?></td>
                       <td><?php echo $item->OPER ?></td>
                       <td><?php echo $item->EXPL ?></td>
@@ -155,7 +158,7 @@
                       <td><?php echo $item->account_no ?></td>
                       <td><?php echo $item->sender_msisdn ?></td>
                       <td><?php echo $item->dest_msisdn ?></td>
-                      <td><?php echo $item->amount ?></td>
+                      <td><?php echo number_format($item->amount, 0, ',', " ")  ?></td>
                       <td><?php echo $item->description ?></td>
                       <td><?php echo $item->service_name ?></td>
                       <td><?php echo $item->reference_number ?></td>
@@ -213,7 +216,7 @@
                 <td><?php echo $item->DATE_OPER ?></td>
                 <td><?php echo $item->DATE_VAL ?></td>
                 <td><?php echo $item->DEVISE ?></td>
-                <td><?php echo $item->MONTANT ?></td>
+                <td><?php echo number_format($item->MONTANT, 0, ',', " ")  ?></td>
                 <td><?php echo $item->LIBELLE ?></td>
                 <td><?php echo $item->OPER ?></td>
                 <td><?php echo $item->EXPL ?></td>
@@ -232,7 +235,7 @@
                 <td><?php echo $item->date_regul ?></td>
                 <td>
                 <a href="javascript:void(0);" class="text-warning" data-toggle="modal" data-target="#myModal" onClick="modifier('<?php echo $item->REF_IGOR ?>', '<?php echo $item->etat ?>', '<?php echo $item->date_regul ?>')">
-                  <box-icon name='printer'  ></box-icon>Modifier
+                <i class="bx bx-edit" style="font-size: 25px;"></i>
                 </a> 
                 <a href="javascript:void(0);" class="text-primary" data-target="#myModalFr10"
                     data-compte="<?php echo $item->COMPTE ?>"
@@ -241,7 +244,7 @@
                     data-libelle="<?php echo $item->LIBELLE ?>"
                     data-oper="<?php echo $item->OPER ?>"
                     data-ref-igor="<?php echo $item->REF_IGOR ?>" data-toggle="modal">
-                  <box-icon name="printer"></box-icon>Imprimer
+                  <!-- <box-icon name="printer"></box-icon>Imprimer --><i class="bx bx-printer" style="font-size: 25px;"></i>
                 </a>
               </td>
             </tr>
@@ -332,7 +335,8 @@
                 <td><?php echo $item->DATE_OPER ?></td>
                 <td><?php echo $item->DATE_VAL ?></td>
                 <td><?php echo $item->DEVISE ?></td>
-                <td><?php echo $item->MONTANT ?></td>
+                <td><?php echo  number_format($item->MONTANT, 0, ',', " ") ?></td>
+               
                 <td><?php echo $item->LIBELLE ?></td>
                 <td><?php echo $item->OPER ?></td>
                 <td><?php echo $item->EXPL ?></td>
@@ -351,7 +355,7 @@
                 <td><?php echo $item->date_regul ?></td>
                 <td>
                 <a href="javascript:void(0);" class="text-warning" data-toggle="modal" data-target="#myModal2" onClick="modifier2('<?php echo $item->REF_IGOR ?>', '<?php echo $item->etat ?>', '<?php echo $item->date_regul ?>')">
-                  <box-icon name='printer'  ></box-icon>Modifier
+                <i class="bx bx-edit" style="font-size: 25px;"></i>
                 </a> 
                 <!-- <a href="javascript:void(0);" class="text-primary" data-target="#myModalFr10"
                     data-compte="<?php echo $item->COMPTE ?>"
@@ -399,6 +403,15 @@
 
   <div id="tabAmbi" class="container tab-pane "><br>    
     <div class="table-responsive">
+    <div class="card">
+      <div class="card-header">
+          <div class="row">
+            <div class="col-lg-6">
+              <b>Liste Ambigu CASH IN</b>
+            </div>
+          </div>
+      </div>
+      <div class="card-body">
       <table class="table table-bordered" id="tableAmbi">
         <thead>
           <tr>
@@ -423,7 +436,7 @@
             <td><?php echo $item->account_no ?></td>
             <td><?php echo $item->sender_msisdn ?></td>
             <td><?php echo $item->dest_msisdn ?></td>
-            <td><?php echo $item->amount ?></td>
+            <td><?php echo number_format($item->amount, 0, ',', " ") ?></td>
             <td><?php echo $item->description ?></td>
             <td><?php echo $item->service_name ?></td>
             <td><?php echo $item->reference_number ?></td>
@@ -432,8 +445,154 @@
 
         </tbody>
       </table>
+    </div>
+    </div>
+  </div>
+    <div class="table-responsive mt-5">
+      <div class="card">
+        <div class="card-header">
+          <div class="row">
+            <div class="col-lg-6">
+              <b>Liste Ambigu Cash Out</b>
+            </div>
+          </div>
+        </div>
+        <div class="card-body">
+        <table class="table table-bordered" id="tableAmbiCO">
+        <thead>
+          <tr>
+              <th>TransferId</th>
+              <th>TransferDate</th>
+              <th>ExternalId</th>
+              <th>AccountNo</th>
+              <th>SenderMsiSDN</th>
+              <th>DestMsiSDN</th>
+              <th>Amount</th>
+              <th>Description</th>
+              <th>ServiceName</th>
+              <th>ReferenceNumber</th>
+          </tr>
+        </thead>
+        <tbody>
+          <?php foreach ($ambiguousCO as $item) { ?>
+          <tr>
+            <td><?php echo $item->TRANSFER_ID ?></td>
+            <td><?php echo $item->transfer_date ?></td>
+            <td><?php echo $item->external_id ?></td>
+            <td><?php echo $item->account_no ?></td>
+            <td><?php echo $item->sender_msisdn ?></td>
+            <td><?php echo $item->dest_msisdn ?></td>
+            <td><?php echo number_format($item->amount, 0, ',', " ") ?></td>
+            <td><?php echo $item->description ?></td>
+            <td><?php echo $item->service_name ?></td>
+            <td><?php echo $item->reference_number ?></td>
+          </tr>   
+          <?php } ?>
+
+        </tbody>
+      </table> 
+        </div>
+      </div>
+      
     </div>     
   </div>
+
+<div id="tabSucces" class="container tab-pane "><br>    
+    <div class="table-responsive">
+    <div class="card">
+      <div class="card-header">
+          <div class="row">
+            <div class="col-lg-6">
+              <b>Liste Succès CASH IN</b>
+            </div>
+          </div>
+      </div>
+      <div class="card-body">
+      <table class="table table-bordered" id="tableSuccesCI">
+        <thead>
+          <tr>
+              <th>TransferId</th>
+              <th>TransferDate</th>
+              <th>ExternalId</th>
+              <th>AccountNo</th>
+              <th>SenderMsiSDN</th>
+              <th>DestMsiSDN</th>
+              <th>Amount</th>
+              <th>Description</th>
+              <th>ServiceName</th>
+              <th>ReferenceNumber</th>
+          </tr>
+        </thead>
+        <tbody>
+          <?php foreach ($success_no_refCI as $item) { ?>
+          <tr>
+            <td><?php echo $item->TRANSFER_ID ?></td>
+            <td><?php echo $item->transfer_date ?></td>
+            <td><?php echo $item->external_id ?></td>
+            <td><?php echo $item->account_no ?></td>
+            <td><?php echo $item->sender_msisdn ?></td>
+            <td><?php echo $item->dest_msisdn ?></td>
+            <td><?php echo number_format($item->amount, 0, ',', " ") ?></td>
+            <td><?php echo $item->description ?></td>
+            <td><?php echo $item->service_name ?></td>
+            <td><?php echo $item->reference_number ?></td>
+          </tr>   
+          <?php } ?>
+
+        </tbody>
+      </table>
+    </div>
+    </div>
+  </div>
+    <div class="table-responsive mt-5">
+      <div class="card">
+        <div class="card-header">
+          <div class="row">
+            <div class="col-lg-6">
+              <b>Liste Succès Cash Out</b>
+            </div>
+          </div>
+        </div>
+        <div class="card-body">
+        <table class="table table-bordered" id="tableSuccesCO">
+        <thead>
+          <tr>
+              <th>TransferId</th>
+              <th>TransferDate</th>
+              <th>ExternalId</th>
+              <th>AccountNo</th>
+              <th>SenderMsiSDN</th>
+              <th>DestMsiSDN</th>
+              <th>Amount</th>
+              <th>Description</th>
+              <th>ServiceName</th>
+              <th>ReferenceNumber</th>
+          </tr>
+        </thead>
+        <tbody>
+          <?php foreach ($success_no_refCO as $item) { ?>
+          <tr>
+            <td><?php echo $item->TRANSFER_ID ?></td>
+            <td><?php echo $item->transfer_date ?></td>
+            <td><?php echo $item->external_id ?></td>
+            <td><?php echo $item->account_no ?></td>
+            <td><?php echo $item->sender_msisdn ?></td>
+            <td><?php echo $item->dest_msisdn ?></td>
+            <td><?php echo number_format($item->amount, 0, ',', " ") ?></td>
+            <td><?php echo $item->description ?></td>
+            <td><?php echo $item->service_name ?></td>
+            <td><?php echo $item->reference_number ?></td>
+          </tr>   
+          <?php } ?>
+
+        </tbody>
+      </table> 
+        </div>
+      </div>
+      
+    </div>     
+  </div>
+ 
 
   <div id="tabDeallo" class="container tab-pane "><br>    
     <div class="table-responsive">
@@ -461,7 +620,7 @@
             <td><?php echo $item->account_no ?></td>
             <td><?php echo $item->sender_msisdn ?></td>
             <td><?php echo $item->dest_msisdn ?></td>
-            <td><?php echo $item->amount ?></td>
+            <td><?php echo number_format($item->amount, 0, ',', " ")  ?></td>
             <td><?php echo $item->description ?></td>
             <td><?php echo $item->service_name ?></td>
             <td><?php echo $item->reference_number ?></td>
@@ -495,7 +654,7 @@
                 <td><?php echo $item->DATE_OPER ?></td>
                 <td><?php echo $item->DATE_VAL ?></td>
                 <td><?php echo $item->DEVISE ?></td>
-                <td><?php echo $item->MONTANT ?></td>
+                <td><?php echo number_format($item->MONTANT, 0, ',', " ")  ?></td>
                 <td><?php echo $item->LIBELLE ?></td>
                 <td><?php echo $item->OPER ?></td>
                 <td><?php echo $item->EXPL ?></td>
@@ -814,29 +973,29 @@ $("#modifFormfr10").submit(function(e) {
 
 
 
-  $("#tableNormaleCashOut").DataTable({
-    responsive: true,
-    "scrollX": true, // Active la barre de défilement horizontal
-    "autoWidth": false,
-    dom: 'Bfrtip',
-    buttons: [
-      'copy', 'csv', 'excel', 'pdf', 'print'
-    ],
-    language: {
-        url: '<?php echo base_url(); ?>assets/fr-FR.json',
-    }
-  });
+$("#tableNormaleCashOut").DataTable({
+  responsive: true,
+  "scrollX": true, // Active la barre de défilement horizontal
+  "autoWidth": false,
+  dom: 'Bfrtip',
+  buttons: [
+    'copy', 'csv', 'excel', 'pdf', 'print'
+  ],
+  language: {
+      url: '<?php echo base_url(); ?>assets/fr-FR.json',
+  }
+});
 
-    $('#tableNormaleCashIn').DataTable( {
-        dom: 'Bfrtip',
-        scrollX: true,
-        buttons: [
-            'copy', 'csv', 'excel', 'pdf', 'print'
-            ],
-        language: {
-          url: '<?php echo base_url(); ?>assets/fr-FR.json',
-    }
-    });
+  $('#tableNormaleCashIn').DataTable( {
+      dom: 'Bfrtip',
+      scrollX: true,
+      buttons: [
+          'copy', 'csv', 'excel', 'pdf', 'print'
+          ],
+      language: {
+        url: '<?php echo base_url(); ?>assets/fr-FR.json',
+  }
+  });
   $("#tableDat").DataTable({
     responsive: true,
     scrollX: true,
@@ -878,6 +1037,47 @@ $("#modifFormfr10").submit(function(e) {
   });
 
   $("#tableAmbi").DataTable({
+    responsive: true,
+    scrollX: true,
+
+    dom: 'Bfrtip',
+    buttons: [
+      'copy', 'csv', 'excel', 'pdf', 'print'
+    ],
+    language: {
+      url: '<?php echo base_url(); ?>assets/fr-FR.json',
+    }
+
+  });
+
+
+  $("#tableSuccesCO").DataTable({
+    responsive: true,
+    scrollX: true,
+
+    dom: 'Bfrtip',
+    buttons: [
+      'copy', 'csv', 'excel', 'pdf', 'print'
+    ],
+    language: {
+      url: '<?php echo base_url(); ?>assets/fr-FR.json',
+    }
+
+  });
+  $("#tableSuccesCI").DataTable({
+    responsive: true,
+    scrollX: true,
+
+    dom: 'Bfrtip',
+    buttons: [
+      'copy', 'csv', 'excel', 'pdf', 'print'
+    ],
+    language: {
+      url: '<?php echo base_url(); ?>assets/fr-FR.json',
+    }
+
+  });
+  $("#tableAmbiCO").DataTable({
     responsive: true,
     scrollX: true,
 

@@ -110,13 +110,12 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
         }
 
         
-        
         private function getData() {
             $data["historique"] = $this->historique_airtel_model->get_historique();
             return $data;
         }
 
- }
+}
 
 
 
