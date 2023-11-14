@@ -1,55 +1,27 @@
 <!DOCTYPE html>
-<!-- Coding by CodingNepal | www.codingnepalweb.com -->
 <html lang="en" dir="ltr">
   <head>
     <meta charset="UTF-8" />
     <title>Rapprochement</title>
 
+    <link rel="stylesheet" href="<?php echo base_url(); ?>assets/bootstrap/css/bootstrap.css" />
     <script src="<?php echo base_url(); ?>assets/jquery/jquery-3.7.1.min.js"></script>
     <script src="<?php  echo base_url(); ?>assets/jquery/jquery.dataTables.min.js"></script>
-     <script src="<?php echo base_url(); ?>assets/moment.min.js"></script>
-     <script src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.39.0/js/tempusdominus-bootstrap-4.min.js"></script>
+    <script src="<?php echo base_url(); ?>assets/moment.min.js"></script>
+    <script src="<?php echo base_url(); ?>assets/jquery/dataTables.dateTime.min.js"></script>
+    <script src="<?php echo base_url(); ?>assets/fr.js"></script>
 
-<!-- Inclure le fichier de langue française -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/locale/fr.js"></script>
-     <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.1.2/js/tempusdominus-bootstrap-4.min.js"></script>
-
-     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/locale/fr.js"></script> -->
-     <script src="<?php echo base_url(); ?>assets/jquery/dataTables.dateTime.min.js"></script>
-     <script src="<?php echo base_url(); ?>assets/jquery/dataTables.buttons.min.js"></script>
-    <!-- <script src="<?php echo base_url(); ?>assets/jquery/jszip.min.js"></script>
-    <script src="<?php echo base_url(); ?>assets/jquery/pdfmake.min.js"></script>
-    <script src="<?php echo base_url(); ?>assets/jquery/vfs_fonts.js"></script>
-    <script src="<?php echo base_url(); ?>assets/jquery/buttons.html5.min.js"></script>
-    <script src="<?php echo base_url(); ?>assets/jquery/vfs_fonts.js"></script>
-    <script src="<?php echo base_url(); ?>assets/jquery/buttons.html5.min.js"></script>
-    <script src="<?php echo base_url(); ?>assets/jquery/buttons.print.min.js"></script>-->
-    
-    <!-- <script  src="<?php echo base_url(); ?>assets/bootstrap/js/popper.js"></script> -->
     <script src="<?php echo base_url(); ?>assets/sweetalert.min.js"></script> 
-    
-
+    <script src="<?php echo base_url(); ?>assets/bootstrap/js/popper.min.js"></script>
     <script src="<?php echo base_url(); ?>assets/bootstrap/js/bootstrap.min.js"></script>
-
-    <script src="<?php echo base_url(); ?>assets/chart/chart.js"> </script>
-    <link rel="stylesheet" href="<?php echo base_url(); ?>assets/bootstrap/css/bootstrap.css" />
-    <!-- <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.4/dist/jquery.slim.min.js"></script> -->
-    <!-- Inclure le fichier CSS Bootstrap -->
-<!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-pzjw8f+ua7Kw1TIq0v8FqFjcJ6pajs/rfdfs3SO+k5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5G5r5 -->
-
- 
-    <link rel="stylesheet" href="<?php  echo base_url(); ?>assets/jquery/jquery.dataTables.min.css" />
-    <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>assets/dataTables.dateTime.min.css" >
-    <script src="<?php echo base_url(); ?>assets/jquery/datatables.min.js"> </script>
+    <script src="<?php echo base_url(); ?>assets/chart/Chart.js"> </script>
+    <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>assets/jquery.dataTables.min.css" >
+    <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>assets/dataTables.dateTime.min.css" > 
     <link rel="stylesheet" href="<?php echo base_url(); ?>assets/jquery/datatables.css" />
-    <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>assets/jquery/buttons.dataTables.min.css">
-    <!-- <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>assets/font-awesome/css/all.css" >
-    <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>assets/font-awesome/css/fontawesome.min.css" > -->
-    <script src="<?php echo base_url(); ?>assets/jquery/jquery.dataTables.min.js"></script>
-    <link href="https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css" rel="stylesheet" />
+    <link href="<?php echo base_url() ?>assets/boxicons/css/boxicons.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="<?php echo base_url();?>assets/style.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
+  
   </head>
   <body>
     <div class="sidebar">
@@ -59,15 +31,16 @@
       </div>
       <ul class="nav-links">
         <li>
-          <a href="<?php echo site_url("dashboard") ?>">
+          <a href="<?php echo site_url("Dashboard") ?>">
             <i class="bx bx-grid-alt"></i>
             <span class="link_name">Dashboard</span>
           </a>
           <ul class="sub-menu blank">
-            <li><a class="link_name" href="<?php echo site_url("dashboard") ?>">Dashboard</a></li>
+            <li><a class="link_name" href="<?php echo site_url("Dashboard") ?>">Dashboard</a></li>
           </ul>
         </li>
         <li>
+        <?php if (isset($_SESSION["userExist"]) && isset($_SESSION["userExist"]->code_profil) && $_SESSION["userExist"]->code_profil ==="002") { ?>  
           <div class="iocn-link">
             <a href="<?php echo site_url("users") ?>">
               <i class="bx bx-collection"></i>
@@ -75,38 +48,73 @@
             </a>
           </div>
           <ul class="sub-menu blank">
-            <li><a class="link_name" href="<?php echo site_url("users") ?>">Utilisateur</a></li>
+            <li><a class="link_name" href="<?php echo site_url("Users") ?>">Utilisateur</a></li>
           </ul>
         </li>
         <li>
           <div class="iocn-link">
-            <a href="<?php echo site_url("profiles") ?>">
+            <a href="<?php echo site_url("Profiles") ?>">
               <i class="bx bx-book-alt"></i>
               <span class="link_name">Profil</span>
             </a>
           </div>
           <ul class="sub-menu blank">
-            <li><a class="link_name" href="<?php echo site_url("profiles") ?>">Profil</a></li>
+            <li><a class="link_name" href="<?php echo site_url("Profiles") ?>">Profil</a></li>
           </ul>
         </li>
         <li>
-          <div class="iocn-link">
+          <!-- <div class="iocn-link">
             <a href="<?php echo site_url("droits") ?>">
               <i class="bx bx-book-alt"></i>
               <span class="link_name">Droit Utlisateur</span>
             </a>
-          </div>
-          <ul class="sub-menu blank">
+          </div> -->
+          <!-- <ul class="sub-menu blank">
             <li><a class="link_name" href="<?php echo site_url("droits") ?>">Droit Utilisateur</a></li>
+          </ul> -->
+        </li>
+        <li>
+          <div class="iocn-link">
+            <a href="#">
+              <i class="bx bx-plug"></i>
+              <span class="link_name">Operateur</span>
+            </a>
+            <i class="bx bxs-chevron-down arrow"></i>
+          </div>
+          <ul class="sub-menu">
+            <li><a class="link_name" href="#">Operateur</a></li>
+            <li><a href="<?php echo site_url("Airtel") ?>">Airtel</a></li>
+            <li><a href="<?php echo site_url("Orange") ?>">Orange</a></li>
+            <li><a href="<?php echo site_url("Telma") ?>">Telma</a></li>
+          </ul>
+        </li>
+
+        <li>
+          <a href="<?php echo site_url("Regul") ?>">
+            <i class="bx bx-compass"></i>
+            <span class="link_name">Regularisation</span>
+          </a>
+          <ul class="sub-menu blank">
+            <li><a class="link_name" href="<?php echo site_url("Regul") ?>">Regularisation</a></li>
           </ul>
         </li>
         <li>
-          <a href="<?php echo site_url("importer") ?>">
+          <a href="<?php echo site_url("Historique") ?>">
+            <i class="bx bx-history"></i>
+            <span class="link_name">Historique</span>
+          </a>
+          <ul class="sub-menu blank">
+            <li><a class="link_name" href="<?php echo site_url("Historique") ?>">Historique</a></li>
+          </ul>
+        </li>
+      <?php } else if((isset($_SESSION["userExist"]) && isset($_SESSION["userExist"]->code_profil) && $_SESSION["userExist"]->code_profil ==="003")) { ?>
+        <li>
+          <a href="<?php echo site_url("Importer") ?>">
             <i class="bx bx-compass"></i>
             <span class="link_name">Importer</span>
           </a>
           <ul class="sub-menu blank">
-            <li><a class="link_name" href="<?php echo site_url("importer") ?>">Importer</a></li>
+            <li><a class="link_name" href="<?php echo site_url("Importer") ?>">Importer</a></li>
           </ul>
         </li>
         <li>
@@ -119,43 +127,32 @@
           </div>
           <ul class="sub-menu">
             <li><a class="link_name" href="#">Operateur</a></li>
-            <li><a href="<?php echo site_url("airtel") ?>">Airtel</a></li>
-            <li><a href="<?php echo site_url("orange") ?>">Orange</a></li>
-            <li><a href="<?php echo site_url("telma") ?>">Telma</a></li>
+            <li><a href="<?php echo site_url("Airtel") ?>">Airtel</a></li>
+            <li><a href="<?php echo site_url("Orange") ?>">Orange</a></li>
+            <li><a href="<?php echo site_url("Telma") ?>">Telma</a></li>
           </ul>
         </li>
 
         <li>
-          <a href="<?php echo site_url("regul") ?>">
+          <a href="<?php echo site_url("Regul") ?>">
             <i class="bx bx-compass"></i>
             <span class="link_name">Regularisation</span>
           </a>
           <ul class="sub-menu blank">
-            <li><a class="link_name" href="<?php echo site_url("regul") ?>">Regularisation</a></li>
+            <li><a class="link_name" href="<?php echo site_url("Regul") ?>">Regularisation</a></li>
           </ul>
         </li>
         <li>
-          <a href="<?php echo site_url("historique") ?>">
+          <a href="<?php echo site_url("Historique") ?>">
             <i class="bx bx-history"></i>
             <span class="link_name">Historique</span>
           </a>
           <ul class="sub-menu blank">
-            <li><a class="link_name" href="<?php echo site_url("historique") ?>">Historique</a></li>
+            <li><a class="link_name" href="<?php echo site_url("Historique") ?>">Historique</a></li>
           </ul>
         </li>
-        <li>
-          <!-- <div class="profile-details">
-            <div class="profile-content">
-              <img src="image/profile.jpg" alt="profileImg" />
-            </div>
-            <div class="name-job">
-              <div class="profile_name">Prem Shahi</div>
-              <div class="job">Web Desginer</div>
-            </div>
-            <i class="bx bx-log-out"></i>
-          </div> -->
-        </li>
-      </ul>
+      <?php } ?>
+    </ul>
     </div>
     <section class="home-section">
       <div class="home-content">
@@ -164,15 +161,56 @@
             <i class="bx bx-menu"></i>
           </div>
           <div style="position: absolute; right: 0px;">
-          <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <img class="img-profile rounded-circle" src="<?php echo base_url(); ?>assets/images/undraw_profile.svg" style="width: 50px; height: 50px;">
-          </a>
+              <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+                  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?php echo $_SESSION["userExist"]->nom  ?></span>
+                  <img class="img-profile rounded-circle" src="<?= base_url()?>assets/images/undraw_profile.svg" style="width: 40px; height: 40px;">
+              </a>
+              <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                  aria-labelledby="userDropdown">
+                  <!-- <a class="dropdown-item" href="#">
+                      <i class="bx bxs-user"></i>
+                      Profile
+                  </a>
+                  <a class="dropdown-item" href="#">
+                      <i class="bx bxs-cog"></i>
+                      Paramètre
+                  </a> -->
+                  <!-- <div class="dropdown-divider"></div> -->
+                  <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                      <i class='bx bxs-log-out'></i>
+                      Deconnexion
+                  </a>
+              </div>
           </div>
         </div>
       </div>
 
-    
-  
+
+<div class="modal fade" id="logoutModal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h6 class="modal-title">Êtes-vous sûr de vouloir vous déconnecter ?</h6>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+
+        <div class="modal-body">
+          <p>Toute session en cours sera fermée, et vous devrez vous reconnecter pour accéder à nouveau à votre compte.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+          <form action="<?php echo site_url("auth/logOut") ?>" method="post">
+            <button type="submit" class="btn btn-danger">Deconnecter</button>
+          </form>
+        </div>
+        
+      </div>
+    </div>
+</div>
+
+
+
 </html>
 <script>
       let arrow = document.querySelectorAll(".arrow");
@@ -188,5 +226,6 @@
       sidebarBtn.addEventListener("click", () => {
         sidebar.classList.toggle("close");
       });
+
 </script>
 

@@ -1,3 +1,6 @@
+<?php if($_SESSION["isLogin"] !==true) {
+  redirect("auth");
+}?>
 <div class="container mt-5">
     <div class="row">
         <div class="col-sm-6">
@@ -150,7 +153,7 @@
     document.getElementById('exportExcel').addEventListener('click', function() {
 
     $.ajax({
-        url: '<?php echo site_url("historique_airtel/exporterVersExcel") ?>',
+        url: '<?php echo site_url("Historique_Telma/exporterVersExcel") ?>',
         success: function(response) {
             console.log(response);
             window.location.href = '<?php echo site_url("historique_telma/exporterVersExcel") ?>';

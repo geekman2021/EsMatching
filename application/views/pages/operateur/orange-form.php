@@ -1,7 +1,21 @@
 
-<?php // print_r($_SESSION["userExist"]) ; ?>
+<?php if($_SESSION["isLogin"] !==true) {
+  redirect("auth");
+}?>
 
-<form id="addform" method="post"  action="<?php echo site_url("importer_orange/importer"); ?>" enctype="multipart/form-data" >
+<?php
+ if(isset($_SESSION["importer"])) { ?>
+
+<script>
+  alert("hey");
+</script>
+
+<?php } ?>
+
+
+
+
+<form id="addform" method="post"  action="<?php echo site_url("Importer_Orange/importer"); ?>" enctype="multipart/form-data" >
     <div class="container mt-5">
         <div class="row">
             <div class="form-group col-lg-6">

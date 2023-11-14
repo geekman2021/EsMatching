@@ -1,4 +1,8 @@
-<div class="container mt-5">
+<?php if($_SESSION["isLogin"] !==true) {
+  redirect("auth");
+}?>
+
+<div class="container-fluid mt-5">
     <div class="row">
       <div class="col-sm-6">
           <label for="dateDebut">Date Debut</label>
@@ -14,65 +18,109 @@
     </div>
 </div>
 
-<div id="tabNormaleCashOut" style="padding-left: 5vw; padding-right: 5vw;" class="tab-pane "><br>
-    <div class="table-responsive" ">
+<div id="tabNormaleCashOut" class="container-fluid tab-pane "><br>
+    <div class="container-fluid table-responsive" >
         <table class="table table-bordered" id="tableNormaleCashIn">
             <thead style="text-align: center ;">
                 <tr>
-                    <th colspan="12" style="text-align: center ;">BOA</th>
-                    <th style="text-align: center ;"></th>
-                    <th colspan="9" style="text-align: center ;">ORANGE</th>
+                    <th colspan="11" style="text-align: center ;">PRINCIPAL</th>
+                    <th></th>
+                    <th colspan="12" style="text-align: center ;">COMMISSION</th>
+                    <th colspan="15" style="text-align: center ;">ORANGE</th>
                 </tr>
                 <tr>
-                    <th>Code_Agence</th>
-                    <th>Date_Oper</th>
-                    <th>princ_date_val</th>
-                    <th>comm_date_val</th>
-                    <th>princ_montant</th>
-                    <th>comm_montant</th>
-                    <th>Devise</th>
-                    <th>Oper</th>
-                    <th>Expl</th>
-                    <th>ReferenceIgor</th>
-                    <th>Numero</th>
+                    <th>DATE_OPER</th>
+                    <th>DATE_VAL</th>
+                    <th>DEVISE</th>
+                    <th>MONTANT</th>
+                    <th>LIBELLE</th>
+                    <th>CODE_OPER</th>
+                    <th>EXPL</th>
+                    <th>REF_IGOR</th>
+                    <th>REF_REL</th>
+                    <th>PHONE</th>
+                    <th>SOLDE</th>
+                    <th style="background: white;"></th>
+                    <th>DATE_OPER</th>
+                    <th>DATE_VAL</th>
+                    <th>DEVISE</th>
+                    <th>MONTANT</th>
+                    <th>LIBELLE</th>
+                    <th>CODE_OPER</th>
+                    <th>EXPL</th>
+                    <th>REF_IGOR</th>
+                    <th>OPER_ID</th>
+                    <th>CODE_AGENCE</th>
+                    <th>SOLDE</th>
                     <th></th>
+
+
+                    <th>DATE</th>
+                    <th>HEURE</th>
+                    <th>REFERENCE</th>
+                    <th>SERVICE</th>
+                    <th>NUM_COMPTE</th>
+                    <th>DEBIT</th>
+                    <th>CREDIT</th>
+                    <th>MONTANT</th>
+                    <th>SOLDE</th>
+                    <th>DEBIT</th>
+                    <th>CREDIT</th>
+                    <th>MONTANT</th>
+                    <th>SOLDE</th>
+                    <th>PRINCIPAL</th>
+                    <th>COMM</th>
                     
-                    <th>Date</th>
-                    <th>Heure</th>
-                    <th>Réference</th>
-                    <th>Service</th>
-                    <th>Num_Compte</th>
-                    <th>Débit</th>
-                    <th>Crédit</th>
-                    <th>solde</th>
-                    <th>solde</th>
+
                 </tr>
             </thead>
             <tbody>
                 
                 <?php foreach($historique as $item) { ?>
                 <tr>
-                <td><?php echo $item->comm_code_agence ?></td>
-                <td><?php echo $item->princ_date_oper ?></td>
-                <td><?php echo $item->princ_date_val ?></td>
-                <td><?php echo $item->comm_date_val ?></td>
-                <td><?php echo $item->princ_montant ?></td>
-                <td><?php echo $item->comm_montant ?></td>
-                <td><?php echo $item->princ_devise?></td>
-                <td><?php echo $item->princ_oper ?></td>
-                <td><?php echo $item->princ_expl ?></td>
-                <td><?php echo $item->princ_ref_igor ?></td>
-                <td><?php echo substr($item->cle, 0, 10)  ?></td>
-                <td><?php echo ""?></td>
-                <td><?php echo $item->orange_date ?></td>
-                <td><?php echo $item->orange_heure ?></td>
-                <td><?php echo $item->orange_ref ?></td>
-                <td><?php echo $item->orange_service ?></td>
-                <td><?php echo $item->orange_num_compte ?></td>
-                <td><?php echo $item->orange_debit ?></td>
-                <td><?php echo $item->orange_credit ?></td>
-                <td><?php echo $item->orange_credit ?></td>
-                <td><?php echo $item->orange_credit ?></td>
+                <td><?= $item->princ_date_oper ?></td>
+                <td><?= $item->princ_date_val ?></td>
+                <td><?= $item->princ_devise ?></td>
+                <td><?= $item->princ_montant ?></td>
+                <td><?= $item->princ_libelle ?></td>
+                <td><?= $item->princ_oper ?></td>
+                <td><?= $item->princ_expl ?></td>
+                <td><?= $item->princ_ref_igor ?></td>
+                <td><?= $item->princ_ref_rel ?></td>
+                <td><?= substr($item->cle, 0, 10)?></td>
+                <td><?= $item->princ_solde ?></td>
+
+                <td style="background: white;"></td>
+
+                <td><?= $item->comm_date_oper ?></td>
+                <td><?= $item->comm_date_val ?></td>
+                <td><?= $item->comm_devise ?></td>
+                <td><?= $item->comm_montant ?></td>
+                <td><?= $item->comm_libelle ?></td>
+                <td><?= $item->comm_oper ?></td>
+                <td><?= $item->comm_expl ?></td>
+                <td><?= $item->comm_ref_igor ?></td>
+                <td><?= $item->comm_ref_rel ?></td>
+                <td><?= $item->comm_code_agence ?></td>
+                <td><?= $item->comm_solde ?></td>
+
+                <td style="background: white;"></td>
+                
+                <td><?= $item->orange_date ?></td>
+                <td><?= $item->orange_heure ?></td>
+                <td><?= $item->orange_ref ?></td>
+                <td><?= $item->orange_service ?></td>
+                <td><?= $item->orange_num_compte ?></td>
+                <td><?= $item->orange_debit ?></td>
+                <td><?= $item->orange_credit ?></td>
+                <td><?= $item->orange_montant ?></td>
+                <td><?= $item->orange_solde ?></td>
+                <td><?= $item->orange_sous_distri ?></td>
+                <td><?= $item->orange_super_distri ?></td>
+                <td><?= $item->orange_super_distri ?></td>
+                <td><?= $item->solde ?></td>
+                <td><?= $item->princ_montant + $item->orange_montant  ?></td>
+                <td><?= $item->comm_montant + $item->orange_super_distri ?></td>
                 </tr>
 
                 <?php  } ;?>
@@ -147,10 +195,10 @@
     document.getElementById('exportExcel').addEventListener('click', function() {
 
     $.ajax({
-        url: '<?php echo site_url("historique_airtel/exporterVersExcel") ?>',
+        url: '<?php echo site_url("Historique_Orange/exporterVersExcel") ?>',
         success: function(response) {
             console.log(response);
-            window.location.href = '<?php echo site_url("historique_orange/exporterVersExcel") ?>';
+            window.location.href = '<?php echo site_url("Historique_Orange/exporterVersExcel") ?>';
         },
         error: function(xhr, status, error) {
         console.error(error);

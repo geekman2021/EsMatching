@@ -21,8 +21,6 @@
         }
 
         public function insert_or_update_co($data) {
-
-        
                 $this->db->where("TRANSFER_ID", $data["TRANSFER_ID"]);
                 $exist= $this->db->get("airtel_igor_normale_co");
                 if($exist->num_rows() == 0) {
@@ -30,9 +28,7 @@
                 } else {
                     $this->db->where("TRANSFER_ID", $data["TRANSFER_ID"]);
                     return $this->db->update("airtel_igor_normale_co", $data);
-                }
-
-            
+                }            
         }
 
 

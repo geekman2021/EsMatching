@@ -38,7 +38,7 @@
 
             if($exist->num_rows() == 0 ){
                 return $this->db->insert("orange_ind", $data);
-            } else {
+            } else {  
                 $this->db->where("orange_ref", $data["orange_ref"]);
                 return $this->db->update("orange_ind", $data);
             }

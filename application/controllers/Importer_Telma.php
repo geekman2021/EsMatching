@@ -11,28 +11,28 @@
 
         public function __construct() {
             parent::__construct();
-            $this->load->model("telma_normal_model");
-            $this->load->model("telma_anomalie_model");
-            $this->load->model("boa_telma_anomalie_model");
-            $this->load->model("historique_telma_model");
+            $this->load->model("Telma_Normal_Model");
+            $this->load->model("Telma_Anomalie_Model");
+            $this->load->model("Boa_Telma_Anomalie_Model");
+            $this->load->model("Historique_Telma_Model");
+            ini_set('memory_limit', '1024M');
+            set_time_limit(300);
+            session_start();
         }
 
 
         public function index () {
-            
+
             $this->load->view("templates/sidebar");
             $this->load->view("pages/importer/importer");
             $this->load->view("pages/operateur/telma-form");
+            $_SESSION["dat"] = $this->Boa_Telma_Anomalie_Model->get_ci();
 
-            $_SESSION["dat"] = $this->boa_telma_anomalie_model->get_ci();
-            session_start();
-            
-            
+
         }
 
         public function importer() {
-            
-            
+        
             if ($_FILES && $_FILES['telma']['name'] && $_FILES["igor"]["name"]) {
                 $file_path = $_FILES['telma']['tmp_name'];
                 $telma= array();
@@ -41,8 +41,14 @@
                 if (($handle = fopen($file_path, 'r')) !== FALSE) {
                     while (($row = fgetcsv($handle, 1000, ',')) !== FALSE) {
                         if (count($row) == 20) {
+                            $date_str = substr($row[0], 0, 10);
+                            $date = date_create_from_format('d/m/Y', $date_str);
+                            if ($date !== false) {
+                                $nouveau_format = $date->format('Y-m-d');
+                            }
                             $telma[] = array(
                                 'date_d' => $row[0],
+                                'date' => $nouveau_format,
                                 'trans_id' => $row[1],
                                 'initiator' => $row[2],
                                 'TYPE' => $row[3],
@@ -72,7 +78,7 @@
 
                     if (count($igor_read) > 1 ) {
                 
-                        for($i=1; $i < count($igor_read); $i++) {
+                        for($i=0; $i < count($igor_read); $i++) {
                             $montant= str_replace(".00", "", $igor_read[$i][4]);
                             $date_val= $igor_read[$i][2];
                             $date_val = date_create_from_format('d.m.Y', $date_val);
@@ -80,10 +86,18 @@
                             $date_oper= $igor_read[$i][1];
                             $date_oper = date_create_from_format('d.m.Y', $date_oper);
 
+                            if ($date_oper !== false) {
+                                $date_oper = $date_oper->format('Y-m-d');
+                            }
+                            if ($date_val !== false) {
+                                $date_val = $date_val->format('Y-m-d');
+                            }
+
+
                             $igor[]= array(
                                "COMPTE" => $igor_read[$i][0],
-                               "DATE_OPER" =>  $igor_read[$i][1],
-                               "DATE_VAL" => $igor_read[$i][2],
+                               "DATE_OPER" =>  $date_oper,
+                               "DATE_VAL" => $date_val,
                                "DEVISE" => $igor_read[$i][3],
                                "MONTANT" => $montant,
                                "LIBELLE" => $igor_read[$i][5],
@@ -124,6 +138,8 @@
                     $telmaCO= $this->filtrerCO($reste);
                     $telmaCO= $this->trierParCleEtHeure($telmaCO);
 
+                   
+
 
 // -------------------------------------------------------------------------------------IGOR ---------------------------------------------------------------------------
 
@@ -159,6 +175,9 @@
                     $telmaAnomalieCO= $resultatCO[2];
                     $this->comparerTelmaEtIgor($igorCI, $telmaCI);
 
+                    // unset($igor);
+                    // unset($telma);
+
 // ------------------------------------------------------------------------------REGULARISATION ----------------------------------------------------------------------
                     // $dat2= array();
                     // foreach($_SESSION["dat"] as $sessionItem) {
@@ -168,7 +187,7 @@
                     //     foreach($dat2 as $itemDat) {
                     //         foreach($nonAu as $itemNonAu) {
                     //             if($itemDat["REF_IGOR"] === $itemNonAu["ref_igor"]) {
-                    //                 $this->boa_telma_anomalie_model->update_dat($itemDat["REF_IGOR"], "Oui", $itemNonAu["date_oper"]);
+                    //                 $this->Boa_Telma_Anomalie_Model->update_dat($itemDat["REF_IGOR"], "Oui", $itemNonAu["date_oper"]);
                     //             }
                     //         }
                     //     }
@@ -179,7 +198,7 @@
                     //     print_r($reverseEtAnnule);
                     // echo "</pre>";
 
-                    $_SESSION["last_solde"] = $this->historique_telma_model->get_last_solde();
+                    $_SESSION["last_solde"] = $this->Historique_Telma_Model->get_last_solde();
                     if(count($_SESSION["last_solde"]) > 0 ) {
                         $solde_telma= $_SESSION["last_solde"][0]->solde_telma;
                         $solde_boa= $_SESSION["last_solde"][0]->solde_boa;
@@ -194,51 +213,93 @@
                         $solde_boa += isset($item["MONTANT"]) ? $item["MONTANT"] : 0;
                         $item["solde_telma"] = $solde_telma;
                         $item["solde_boa"] = $solde_boa;
-                        $this->historique_telma_model->insert($item);
+                        $this->Historique_Telma_Model->insert($item);
                     }
 
                     foreach ($normalCI[0] as $item) {
                         // $solde_telma += isset($item["solde"]) ? $item["solde"] : 0;
                         // $solde_boa += isset($item["MONTANT"]) ? $item["MONTANT"] : 0;
-                        $this->telma_normal_model->insert_or_update_ci($item);
+                        $this->Telma_Normal_Model->insert_or_update_ci($item);
                         
                     }
                     foreach ($normalCO[0] as $item) {
-                        $this->telma_normal_model->insert_or_update_co($item);
+                        $this->Telma_Normal_Model->insert_or_update_co($item);
                     }
 
                     foreach($admin as $item) {
-                        $this->telma_anomalie_model->insert_or_update_admin($item);
+                        $this->Telma_Anomalie_Model->insert_or_update_admin($item);
                             
                     }
                     foreach($reverseEtAnnule as $item) {
-                        $this->telma_anomalie_model->insert_or_update_reverse($item);
+                        $this->Telma_Anomalie_Model->insert_or_update_reverse($item);
                             
                     }
                     foreach($rollback as $item) {
-                        $this->telma_anomalie_model->insert_or_update_rollback($item);
+                        $this->Telma_Anomalie_Model->insert_or_update_rollback($item);
                     
                     }
                     foreach($dat[0] as $item) {
                         $item["etat"] = "Non";
-                        $this->boa_telma_anomalie_model->insert_or_update_dat($item);
+                        $this->Boa_Telma_Anomalie_Model->insert_or_update_dat($item);
                     
                     }
                   
                     foreach($cat[0] as $item) {
                         $item["etat"] = "Non";
-                        $this->boa_telma_anomalie_model->insert_or_update_cat($item);
+                        $this->Boa_Telma_Anomalie_Model->insert_or_update_cat($item);
                     
                     }
                      $newNonAu = $this->changerCle($nonAu);
                     foreach($newNonAu as $item) {
-                        $this->boa_telma_anomalie_model->insert_or_update_nonAu($item);
+                        $this->Boa_Telma_Anomalie_Model->insert_or_update_nonAu($item);
                     
                     }
                     foreach($vi as $item) {
-                        $this->boa_telma_anomalie_model->insert_or_update_vi($item);
+                        $this->Boa_Telma_Anomalie_Model->insert_or_update_vi($item);
                     
                     }
+
+                    // echo "<pre>" ."Normale CI";   
+                    //     print_r($normalCI[0]);
+                    // echo "</pre>";
+                    
+
+                    // echo "<pre>" ."Normale CO";
+                    //     print_r($normalCO[0]);
+                    // echo "</pre>";
+
+                    // echo "<pre>" ."reverseEtAnnule";
+                    //     print_r($reverseEtAnnule);
+                    // echo "</pre>";
+
+                    // echo "<pre>" ."admin";
+                    //     print_r($admin);
+                    // echo "</pre>";
+
+                    // echo "<pre>" ."rollback";
+                    //     print_r($telmaCI);
+                    // echo "</pre>";
+                    // echo "<pre>" ."rollback";
+                    //     print_r($igorCI);
+                    // echo "</pre>";
+
+                    // echo "<pre>" ."dat[0]";
+                    //     print_r($dat[0]);
+                    // echo "</pre>";
+
+
+                    // echo "<pre>" ."cat[0]";
+                    //     print_r($cat[0]);
+                    // echo "</pre>";
+
+                    // echo "<pre>" ."vi";
+                    //     print_r($vi);
+                    // echo "</pre>";
+
+                    // echo "<pre>" ."nonAu";
+                    //     print_r($nonAu);
+                    // echo "</pre>";
+            
 
                     $this->exporter($normalCI[0], $normalCO[0], $reverseEtAnnule,$admin, $rollback, $dat[0], $cat[0], $vi, $nonAu);
                 }
@@ -283,7 +344,7 @@
         public function filtrerVI($data) {
             $resultat= array();
             foreach($data as $item) {
-                if($item["ref_rel"] ==="APPROUME" && $item["OPER"] ==="VI") {
+                if($item["OPER"] ==="VI") {
                     $item["etat"] = "Non";
                     $resultat[]= $item;
                 }
@@ -345,6 +406,7 @@
             $resultat= array();
             foreach($data as $item) {
                 if($item["ACTION"] ==="bank_to_wallet") {
+
                     $item["cle"] = $item["receiver"] .$item["Amount_MGA"];
                     $item["solde"] = $item["Amount_MGA"] * -1;
                     $item["telma_heure"] = substr($item["date_d"], 10);
@@ -639,10 +701,6 @@
 
                 $lastRow++;
             }
-
-            $lastRow = $sheet->getHighestRow() + 2; // La première ligne du tableau Excel
-
-
 
 
             $lastRow = $sheet->getHighestRow() + 2;
@@ -1001,9 +1059,13 @@
                     $heureTelma = substr($telmaTab[$j]['date_d'], -8);
                     $timeDiff = strtotime($heureIgor) - strtotime($heureTelma);
 
+                    // $telmaNormale[] = $telmaTab[$j];
+                    // $igorNormale[] = $igorTab[$i];
+                    // $i++;
+                    // $j++;
 
                     // echo $timeDiff ."\n";
-                    if($timeDiff < -180) {
+                    if($timeDiff < -360) {
                         $telmaNormale[] = $telmaTab[$j];
                         $igorAnomalie[] = $igorTab[$i];
                         $i++;
@@ -1013,6 +1075,7 @@
                         $i++;
                         $j++;
                     }
+
                    
                 } elseif ($difference < 0) {
                     

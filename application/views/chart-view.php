@@ -1,10 +1,13 @@
+<?php if($_SESSION["isLogin"] !==true) {
+  redirect("auth");
+}?>
+
 <div class="container-fluid">
     <div class="row" >
         <div class=" mt-3 col-lg-6" >
             <div class="p-3 border bg-light">
-				<button class="btn btn-info " id="save" style="position: absolute; top: 2px; right: 15px"><i class="fa fa-download"></i></button>
-                <canvas id="myChart" style="background-color:rgba(185, 240, 231, 0.5);"></canvas>
-				
+				      <button class="btn btn-info " id="save" style="position: absolute; top: 2px; right: 15px"><i class="fa fa-download"></i></button>
+              <canvas id="myChart" style="background-color:rgba(185, 240, 231, 0.5);"></canvas>
             </div>
         </div>
         <div class="col-lg-6 mt-3">
@@ -26,6 +29,7 @@
 <script>
 
 var chartDataAirtel = <?= json_encode($chart_data) ?>;
+
 const dataAirtel = {
   labels: [
     'Airtel',
@@ -47,6 +51,8 @@ const configAirtel = {
 };
 
 var chartDataTelma = <?= json_encode($chart_data) ?>;
+
+console.log(chartDataTelma);
 const dataTelma = {
   labels: [
     'Telma',
@@ -75,7 +81,7 @@ const dataOrange = {
     'BOA',
   ],
   datasets: [{
-    data: [2100000000 , 2100005500],
+    data: [1 , 1],
     backgroundColor: [
       'rgb(255, 165, 0)',
       'rgb(54, 162, 235)',

@@ -1,29 +1,18 @@
-<?php // if ($_SESSION["finished"] === "true") { ?>
-    <!-- <script>
-        swal({
-            title: "Succès",
-            text: "Données importées avec succès",
-            icon: "success",
-            button: "OK",
-        });
-        $('.spinner').hide();
-    </script> -->
+<?php if($_SESSION["isLogin"] !==true) {
+  redirect("auth");
+}?>
 
-<?php //} ?>
-
-<?php //echo $_SESSION["finished"]; ?>
-
-<form id="addform" method="post"  action="<?php echo site_url("importer_airtel/importer"); ?>" enctype="multipart/form-data" >
+<form id="addform" method="post"  action="<?php echo site_url("Importer_Airtel/importer"); ?>" enctype="multipart/form-data" >
     <div class="container mt-5">
         <div class="row">
             <div class="form-group col-lg-6">
                 <label for="airtel">Airtel</label>
-                <input type="file" class="form-control" id="input1" name="airtel" onchange="checkFileExtension('input1')" required >
+                <input type="file" class="form-control" id="input1" name="airtel" accept=".csv, .xls, .xlsx" onchange="checkFileExtension('input1')" required >
                 <p id="warning1" class="warning-message"></p>
             </div>
             <div class="form-group col-lg-6">
                 <label for="igor">IGOR</label>
-                <input type="file" class="form-control" id="input2" name="igor" onchange="checkFileExtension('input2')" required>
+                <input type="file" class="form-control" id="input2" name="igor" onchange="checkFileExtension('input2')" accept=".csv, .xls, .xlsx" required>
                 <p id="warning2" class="warning-message"></p>
             </div>
         </div>

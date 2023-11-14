@@ -7,9 +7,9 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 
         public function __construct(){
             parent::__construct();
-            $this->load->model("historique_airtel_model");
-
-
+            $this->load->model("Historique_Airtel_Model");
+            ini_set('memory_limit', '1024M'); // Set the memory limit to 256 megabytes
+            session_start();
         }
 
         public function index() {
@@ -111,7 +111,7 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 
         
         private function getData() {
-            $data["historique"] = $this->historique_airtel_model->get_historique();
+            $data["historique"] = $this->Historique_Airtel_Model->get_historique();
             return $data;
         }
 

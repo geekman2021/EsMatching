@@ -3,7 +3,8 @@
 
         public function __construct() {
             parent::__construct();
-            $this->load->model("regul_airtel_model");
+            $this->load->model("Regul_Airtel_Model");
+            session_start();
             
             
         }
@@ -16,9 +17,11 @@
 
         public function get_data() {
 
-            $data["ci"] = $this->regul_airtel_model->get_regul_ci();
-            $data["ambi"] = $this->regul_airtel_model->get_ambi();
-            $data["deallo_vi"] = $this->regul_airtel_model->get_deallo_vi();
+            $data["ci"] = $this->Regul_Airtel_Model->get_regul_ci();
+            $data["ambi"] = $this->Regul_Airtel_Model->get_ambi();
+            $data["ambi_co"] = $this->Regul_Airtel_Model->get_ambi_co();
+            $data["deallo_vi"] = $this->Regul_Airtel_Model->get_deallo_vi();
+            $data["vi_deallo"] = $this->Regul_Airtel_Model->get_vi_deallo();
             return $data;
         }
         

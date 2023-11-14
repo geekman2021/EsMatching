@@ -1,16 +1,14 @@
 <?php
 
     defined('BASEPATH') OR exit('No direct script access allowed');
-    // require "vendor/autoload.php";
-    
 
     class Telma extends CI_Controller {
         public function __construct(){
             parent::__construct();
-            $this->load->model("telma_normal_model");
-            $this->load->model("telma_anomalie_model");
-            $this->load->model("boa_telma_anomalie_model");
-
+            $this->load->model("Telma_Normal_Model");
+            $this->load->model("Telma_Anomalie_Model");
+            $this->load->model("Boa_Telma_Anomalie_Model");
+            session_start();
         }
         public function index() {
             $this->load->view("templates/sidebar");
@@ -19,12 +17,13 @@
 
         public function get_data() {
 
-            $data["normal_ci"] = $this->load->telma_normal_model->get_ci();
-            $data["normal_co"] = $this->load->telma_normal_model->get_co();
-            $data["vi"] = $this->load->boa_telma_anomalie_model->get_vi();
-            $data["admin"] = $this->telma_anomalie_model->get_admin();
-            $data["dat"] = $this->boa_telma_anomalie_model->get_ci();
-            $data["cat"] = $this->boa_telma_anomalie_model->get_co();
+            $data["normal_ci"] = $this->load->Telma_Normal_Model->get_ci();
+            $data["normal_co"] = $this->load->Telma_Normal_Model->get_co();
+            $data["vi"] = $this->load->Boa_Telma_Anomalie_Model->get_vi();
+            $data["admin"] = $this->Telma_Anomalie_Model->get_admin();
+            $data["dat"] = $this->Boa_Telma_Anomalie_Model->get_ci();
+            $data["cat"] = $this->Boa_Telma_Anomalie_Model->get_co();
+
 
             return $data;
 

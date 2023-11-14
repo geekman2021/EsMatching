@@ -1,3 +1,6 @@
+<?php if($_SESSION["isLogin"] !==true) {
+  redirect("auth");
+}?>
 <form action="" method="post">
     <div class="container mt-5">
         <div class="row">

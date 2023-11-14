@@ -1,7 +1,7 @@
 
 
 
-<div class=" container mt-5">
+<div class="container-fluid mt-5">
   <!-- Nav tabs -->
   
     <ul class="nav nav-tabs">
@@ -16,7 +16,7 @@
 
   <!-- Tab panes -->
 <div class="tab-content">
-    <div id="normale" class="container tab-pane "><br>
+    <div id="normale" class="container-fluid tab-pane "><br>
       <ul class="nav nav-tabs">
         <li class="nav-item col-sm-6">
           <a class="nav-link" href="#tabNormaleCashIn">Normale Cash in</a>
@@ -26,7 +26,7 @@
         </li>
       </ul>
     </div>
-    <div id="anormale" class="container tab-pane fade"><br>
+    <div id="anormale" class="container-fluid tab-pane fade"><br>
       <ul class="nav nav-tabs">
         <li class="nav-item col-sm-2">
           <a class="nav-link" href="#tabDat">Débit à Tort</a>
@@ -34,10 +34,13 @@
         <li class="nav-item col-sm-2">
           <a class="nav-link" href="#tabCat">Crédit à Tort</a>
         </li>
+        <li class="nav-item col-sm-1">
+          <a class="nav-link" href="#tabMvts">MVTS</a>
+        </li>
         <li class="nav-item col-sm-2">
           <a class="nav-link" href="#tabAmbi">Ambigu</a>
         </li>
-        <li class="nav-item col-sm-3">
+        <li class="nav-item col-sm-2">
           <a class="nav-link" href="#tabSucces">Succès Sans Réf</a>
         </li>
         <li class="nav-item col-sm-2">
@@ -50,7 +53,7 @@
     </div>
 
   </div>
-  <div class="container tab-content">
+  <div class="container-fluid tab-content">
     <div id="tabNormaleCashIn" class="tab-pane"><br>
         <div class="table-responsive">
             <table class="table table-bordered" id="tableNormaleCashIn">
@@ -110,7 +113,7 @@
             </table>
         </div>
     </div>
-    <div id="tabNormaleCashOut" class="container tab-pane "><br>
+    <div id="tabNormaleCashOut" class="container-fluid tab-pane "><br>
         <div class="table-responsive">
             <table class="table table-bordered" id="tableNormaleCashOut">
                 <thead>
@@ -172,8 +175,8 @@
          
   </div>
 
-<div class="container tab-content">
-  <div id="tabDat" class="container tab-pane "><br>   
+<div class="container-fluid tab-content">
+  <div id="tabDat" class="container-fluid tab-pane "><br>   
     <div class="table-responsive">
       <table class="table table-bordered" id="tableDat">
         <thead style="text-align: center ;">
@@ -243,8 +246,7 @@
                     data-montant="<?php echo $item->MONTANT ?>"
                     data-libelle="<?php echo $item->LIBELLE ?>"
                     data-oper="<?php echo $item->OPER ?>"
-                    data-ref-igor="<?php echo $item->REF_IGOR ?>" data-toggle="modal">
-                  <!-- <box-icon name="printer"></box-icon>Imprimer --><i class="bx bx-printer" style="font-size: 25px;"></i>
+                    data-ref-igor="<?php echo $item->REF_IGOR ?>" data-toggle="modal"><i class="bx bx-printer" style="font-size: 25px;"></i>
                 </a>
               </td>
             </tr>
@@ -294,7 +296,7 @@
       </table>
     </div>
   </div>
-  <div id="tabCat" class="container tab-pane "><br>    
+  <div id="tabCat" class="container-fluid tab-pane "><br>    
     <div class="table-responsive">
       <table class="table table-bordered" id="tableCat">
       <thead style="text-align: center ;">
@@ -313,16 +315,6 @@
               <th>Operation</th>
               <th>Expl</th>
               <th>ReferenceIgor</th>
-              <!-- <th>ExternalId</th>
-              <th>TransferId</th>
-              <th>TransferDate</th>
-              <th>AccountNo</th>
-              <th>SenderMsiSDN</th>
-              <th>DestMsiSDN</th>
-              <th>Amount</th>
-              <th>Description</th>
-              <th>ServiceName</th>
-              <th>ReferenceNumber</th> -->
               <th>Etat</th>
               <th>Date</th>
               <th>Action</th>
@@ -341,46 +333,17 @@
                 <td><?php echo $item->OPER ?></td>
                 <td><?php echo $item->EXPL ?></td>
                 <td><?php echo $item->REF_IGOR ?></td>
-                <!-- <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td> -->
                 <td><?php echo $item->etat ?></td>
                 <td><?php echo $item->date_regul ?></td>
                 <td>
                 <a href="javascript:void(0);" class="text-warning" data-toggle="modal" data-target="#myModal2" onClick="modifier2('<?php echo $item->REF_IGOR ?>', '<?php echo $item->etat ?>', '<?php echo $item->date_regul ?>')">
                 <i class="bx bx-edit" style="font-size: 25px;"></i>
                 </a> 
-                <!-- <a href="javascript:void(0);" class="text-primary" data-target="#myModalFr10"
-                    data-compte="<?php echo $item->COMPTE ?>"
-                    data-date-oper="<?php echo $item->DATE_OPER ?>"
-                    data-montant="<?php echo $item->MONTANT ?>"
-                    data-libelle="<?php echo $item->LIBELLE ?>"
-                    data-oper="<?php echo $item->OPER ?>"
-                    data-ref-igor="<?php echo $item->REF_IGOR ?>" data-toggle="modal">
-                  <box-icon name="printer"></box-icon>Imprimer
-                </a> -->
               </td>
               </tr>
           <?php } ?>
           <?php //foreach($anomalie_co as $item) { ?>
             <!-- <tr> -->
-              <!-- <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td> -->
               <!-- <td><?php //echo  $item->external_id ?></td>
               <td><?php// echo $item->TRANSFER_ID ?></td>
               <td><?php// echo $item->transfer_date ?></td>
@@ -401,7 +364,7 @@
     </div>     
   </div>
 
-  <div id="tabAmbi" class="container tab-pane "><br>    
+  <div id="tabAmbi" class="container-fluid tab-pane "><br>    
     <div class="table-responsive">
     <div class="card">
       <div class="card-header">
@@ -496,8 +459,126 @@
       
     </div>     
   </div>
+  <div id="tabMvts" class="container-fluid tab-pane "><br>    
+    <div class="table-responsive">
+    <div class="card">
+      <div class="card-header">
+          <div class="row">
+            <div class="col-lg-6">
+              <b>Liste MVTS CASH IN</b>
+            </div>
+          </div>
+      </div>
+      <div class="card-body">
+      <table class="table table-bordered" id="tableMvtsCI">
+        <thead>
+          <tr>
+              <th>TransferId</th>
+              <th>TransferDate</th>
+              <th>ExternalId</th>
+              <th>AccountNo</th>
+              <th>SenderMsiSDN</th>
+              <th>DestMsiSDN</th>
+              <th>Amount</th>
+              <th>Description</th>
+              <th>ServiceName</th>
+              <th>ReferenceNumber</th>
+              <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <?php foreach ($anomalie_ci as $item) { ?>
+          <tr>
+            <td><?php echo $item->TRANSFER_ID ?></td>
+            <td><?php echo $item->transfer_date ?></td>
+            <td><?php echo $item->external_id ?></td>
+            <td><?php echo $item->account_no ?></td>
+            <td><?php echo $item->sender_msisdn ?></td>
+            <td><?php echo $item->dest_msisdn ?></td>
+            <td><?php echo number_format($item->amount, 0, ',', " ") ?></td>
+            <td><?php echo $item->description ?></td>
+            <td><?php echo $item->service_name ?></td>
+            <td><?php echo $item->reference_number ?></td>
+            <td>
+                <a href="javascript:void(0);" class="text-warning" data-toggle="modal" data-target="#myModal2" onClick="modifier2('<?php echo $item->external_id ?>', '<?php echo $item->etat ?>', '<?php echo $item->date_regul ?>')">
+                  <box-icon name='printer'  ></box-icon>Modifier
+                </a> 
+              </td>
+          </tr>   
+          <?php } ?>
 
-<div id="tabSucces" class="container tab-pane "><br>    
+        </tbody>
+      </table>
+    </div>
+    </div>
+  </div>
+    <div class="table-responsive mt-5">
+      <div class="card">
+        <div class="card-header">
+          <div class="row">
+            <div class="col-lg-6">
+              <b>Liste MVTS Cash Out</b>
+            </div>
+          </div>
+        </div>
+        <div class="card-body">
+        <table class="table table-bordered" id="tableMvtsCO">
+          <thead>
+          <tr>
+              <th style="display: none;">Id</th>
+              <th>TransferId</th>
+              <th>TransferDate</th>
+              <th>ExternalId</th>
+              <th>AccountNo</th>
+              <th>SenderMsiSDN</th>
+              <th>DestMsiSDN</th>
+              <th>Amount</th>
+              <th>Description</th>
+              <th>ServiceName</th>
+              <th>ReferenceNumber</th>
+              <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <?php foreach($anomalie_co as $item) { ?>
+            <tr>
+              <td style="display: none;"><?php echo $item->id ?></td>
+              <td><?=  $item->external_id ?></td>
+              <td><?=  $item->TRANSFER_ID ?></td>
+              <td><?=  $item->transfer_date ?></td>
+              <td><?=  $item->account_no ?></td>
+              <td><?=  $item->sender_msisdn ?></td>
+              <td><?=  $item->dest_msisdn ?></td>
+              <td><?=  $item->amount ?></td>
+              <td><?=  $item->description ?></td>
+              <td><?=  $item->service_name ?></td>
+              <td><?=  $item->reference_number ?></td>
+              <td>
+                <a href="javascript:void(0);" class="text-warning" data-toggle="modal" data-target="#myModal2" onClick="modifier2('<?php echo $item->external_id ?>', '<?php echo $item->etat ?>', '<?php echo $item->date_regul ?>')">
+                  <box-icon name='printer'  ></box-icon>Modifier
+                </a>
+                <!-- <a href="javascript:void(0);" class="text-primary" data-target="#myModalFr10"
+                    data-compte="<?php //echo $item->COMPTE ?>"
+                    data-date-oper="<?php //echo $item->DATE_OPER ?>"
+                    data-montant="<?php //echo $item->MONTANT ?>"
+                    data-libelle="<?php //echo $item->LIBELLE ?>"
+                    data-oper="<?php //echo $item->OPER ?>"
+                    data-ref-igor="<?php //echo $item->REF_IGOR ?>" data-toggle="modal">
+                  <box-icon name="printer"></box-icon>Imprimer
+                </a> -->
+              </td>
+            </tr>
+            <?php } ?>
+
+        </tbody>
+      </table> 
+        </div>
+      </div>
+      
+    </div>     
+  </div>
+
+<div id="tabSucces" class="container-fluid tab-pane "><br>    
     <div class="table-responsive">
     <div class="card">
       <div class="card-header">
@@ -594,7 +675,7 @@
   </div>
  
 
-  <div id="tabDeallo" class="container tab-pane "><br>    
+  <div id="tabDeallo" class="container-fluid tab-pane "><br>    
     <div class="table-responsive">
       <table class="table table-bordered" id="tableDeallo">
       <thead>
@@ -631,7 +712,7 @@
       </table>
     </div>     
   </div>
-  <div id="tabVI" class="container tab-pane "><br>   
+  <div id="tabVI" class="container-fluid tab-pane "><br>   
     <div class="table-responsive">
       <table class="table table-bordered" id="tableVI">
         <thead style="text-align: center ;">
@@ -811,11 +892,11 @@
                 </div>
                 <div class="col-sm-12">
                   <label for="compte">Compte client</label>
-                  <input type="text" id="compte" name="compte" class="form-control" required>
+                  <input type="text" id="compte" name="compte" class="form-control" maxlength="11" pattern=".{11,}" title="Le compte doit avoir au moins 11 caractères" required>
                 </div>
                 <div class="col-sm-12">
                   <label for="comm">Compte commission</label>
-                  <input type="text" id="comm" name="comm" class="form-control" required>
+                  <input type="text" id="comm" name="comm" class="form-control" maxlength="11" pattern=".{11,}" title="Le compte doit avoir au moins 11 caractères" required>
                 </div>
               </div>
                 <div class="text-center">
@@ -861,6 +942,33 @@ function ouvrirEtImprimer(date_oper, ref_igor, montant, oper, compte) {
 
 
 $(document).ready(function(){
+  var compteInput = $('#compte');
+  var commInput = $('#comm');
+
+        // Fonction pour afficher le message d'erreur
+        function afficherMessageErreur(input) {
+            var messageErreur = input.attr('title');
+            input.next('span').remove(); // Supprimez tout message d'erreur précédent
+            input.after('<span class="text-danger">' + messageErreur + '</span>');
+        }
+
+        // Écoutez l'événement de changement d'entrée
+        compteInput.on('input', function () {
+            if (compteInput.val().length < 11) {
+                afficherMessageErreur(compteInput);
+            } else {
+                compteInput.next('span').remove();
+            }
+        });
+
+        commInput.on('input', function () {
+            if (commInput.val().length < 11) {
+                afficherMessageErreur(commInput);
+            } else {
+                commInput.next('span').remove();
+            }
+        });
+
 
   $("#modifForm").submit(function(e) {
     e.preventDefault();
@@ -939,9 +1047,10 @@ $("#modifFormfr10").submit(function(e) {
       '&place=' +  encodeURIComponent(place)
 
     var nouvelleFenetre = window.open(url, '_blank'); 
-
-    
-
+      $('#myModalFr10').modal('hide');
+      $("#compte").val("");
+      $("#comm").val("");
+      $("#nom").val("");
 });
 
 
@@ -1036,6 +1145,32 @@ $("#tableNormaleCashOut").DataTable({
 
   });
 
+  $("#tableMvtsCO").DataTable({
+    responsive: true,
+    scrollX: true,
+
+    dom: 'Bfrtip',
+    buttons: [
+      'copy', 'csv', 'excel', 'pdf', 'print'
+    ],
+    language: {
+      url: '<?php echo base_url(); ?>assets/fr-FR.json',
+    }
+
+  });
+  $("#tableMvtsCI").DataTable({
+    responsive: true,
+    scrollX: true,
+
+    dom: 'Bfrtip',
+    buttons: [
+      'copy', 'csv', 'excel', 'pdf', 'print'
+    ],
+    language: {
+      url: '<?php echo base_url(); ?>assets/fr-FR.json',
+    }
+
+  });
   $("#tableAmbi").DataTable({
     responsive: true,
     scrollX: true,
@@ -1092,12 +1227,8 @@ $("#tableNormaleCashOut").DataTable({
   });
 
   $("#tableVI").DataTable({
-    scrollX: true,
     language: {
       url: '<?php echo base_url(); ?>assets/fr-FR.json',
-    },
-    autoFill: {
-        columns: 'every'
     }
   });
 
@@ -1116,25 +1247,6 @@ $("#tableNormaleCashOut").DataTable({
   });
 });
 </script>
-
-
-
-
-
-
-
-
-
-
-<!-- <script>
-
-  $(document).ready(function () {
-    $('#myTab a').click(function (e) {
-      e.preventDefault();
-      $(this).tab('show');
-    });
-  }); -->
-
 
 
 </script>

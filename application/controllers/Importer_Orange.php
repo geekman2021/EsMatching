@@ -4,16 +4,19 @@
 
     use PhpOffice\PhpSpreadsheet\Spreadsheet;
     use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+    // use PhpOffice\PhpSpreadsheet\Writer\Xls;
+    // use PhpOffice\PhpSpreadsheet\Writer\Csv;
 
     class Importer_Orange extends CI_Controller {
        
         public function __construct(){
             parent::__construct();
-            $this->load->model("boa_orange_anomalie_model");
-            $this->load->model("orange_normal_model");
-            $this->load->model("orange_anomalie_model");
-            $this->load->model("historique_orange_model");
-            
+            $this->load->model("Boa_Orange_Anomalie_Model");
+            $this->load->model("Orange_Normal_Model");
+            $this->load->model("orange_Anomalie_Model");
+            $this->load->model("Historique_Orange_Model");
+            ini_set('memory_limit', '1024M');
+            session_start();
         }
 
         public function index() {
@@ -25,7 +28,6 @@
         }
 
         public function importer() {
-            
             $orange_read = $this->readData($_FILES["orange"]["name"], $_FILES["orange"]["tmp_name"]);
             $princ_read = $this->readData($_FILES["princ"]["name"], $_FILES["princ"]["tmp_name"]);
             $com_read= $this->readData($_FILES["com"]["name"], $_FILES["com"]["tmp_name"]);
@@ -44,7 +46,6 @@
                     if ($date !== false) {
                         $date = $date->format('Y-m-d');
                     }
-                    // $date= $date->format('Y-m-d');
                     $orange[]= array(
                        "orange_num" => $orange_read[$i][0],
                        "orange_date" =>  $date,
@@ -73,10 +74,16 @@
                     $date_oper = $princ_read[$i][1];
                     $date_oper = date_create_from_format('d.m.Y', $date_oper);
 
+                    if ($date_oper !== false) {
+                        $date_oper = $date_oper->format('Y-m-d');
+                    }
+                    if ($date_val !== false) {
+                        $date_val = $date_val->format('Y-m-d');
+                    }
                     $princ[]= array(
                        "princ_compte" => $princ_read[$i][0],
-                       "princ_date_oper" =>  $date_oper->format('Y-m-d'),
-                       "princ_date_val" => $date_val->format('Y-m-d'),
+                       "princ_date_oper" =>  $date_oper,
+                       "princ_date_val" => $date_val,
                        "princ_devise" => $princ_read[$i][3],
                        "princ_montant" => $montant,
                        "princ_libelle" => $princ_read[$i][5],
@@ -91,7 +98,7 @@
                 
                 for($i=0; $i < count($com_read); $i++) {
 
-                    $codeAgence= $com_read[$i][9];
+                    $codeAgence= $com_read[$i][10];
                     $codeAgence= explode("-", $codeAgence);
 
                     $date_val= $com_read[$i][2];
@@ -99,35 +106,46 @@
                     
                     $date_oper= $com_read[$i][1];
                     $date_oper = date_create_from_format('d.m.Y', $date_oper);
+
+                    if ($date_oper !== false) {
+                        $date_oper = $date_oper->format('Y-m-d');
+                    }
+                    if ($date_val !== false) {
+                        $date_val = $date_val->format('Y-m-d');
+                    }
+
+
                     $comm[]= array(
                        "comm_compte" => $com_read[$i][0],
-                       "comm_date_oper" =>  $date_oper->format('Y-m-d'),
-                       "comm_date_val" => $date_val->format('Y-m-d'),
+                       "comm_date_oper" =>  $date_oper,
+                       "comm_date_val" => $date_val,
                        "comm_devise" => $com_read[$i][3],
                        "comm_montant" => $com_read[$i][4],
                        "comm_libelle" => $com_read[$i][5],
                        "comm_oper" => $com_read[$i][6],
                        "comm_expl" => $com_read[$i][7],
                        "comm_ref_igor" => $com_read[$i][8],
-                       "comm_ref_rel" => $com_read[$i][9],
+                       "comm_ref_rel" => $com_read[$i][10],
                        "comm_code_agence" => $codeAgence[0]
                     );
                 }
             }
 
-            
+
 
 // --------------------------------------------------------------------------- PRINCIPALE -----------------------------------------------------------------
 
             $princ= $this->supprimerEspace($princ);
-            $principalCI= $this->filtrePrincCI($princ);
-            $principalCO= $this->filtrePrincCO($princ);
+            $principalCI= $this->filtrerPrincCI($princ);
+            $principalCO= $this->filtrerPrincCO($princ);
             $nonAuCI= $this->filtrerNonAuCI($princ);
             $nonAuCO= $this->filtrerNonAuCO($princ);
             $vi= $this->filtrerVi($princ);
 
             $principalCI= $this->trierPrincParRefIgor($principalCI);
             $principalCO= $this->trierParCleCroissante($principalCO);
+
+            unset($princ);
 
 
 // // --------------------------------------------------------------------------- COMMISSION -----------------------------------------------------------------
@@ -138,6 +156,8 @@
             $mergedComEtPrinc = $this->mergePrincEtCommi($principalCI, $commCI);
             $mergedComEtPrinc = $this->trierParCleCroissante($mergedComEtPrinc);
 
+            unset($comm);
+
 
 // // ---------------------------------------------------------------------------- ORANGE -------------------------------------------------------------------------------
             $orange= $this->supprimerEspace($orange);
@@ -147,6 +167,8 @@
             $orangeCI= $this->trierParCleCroissante($orangeCI);
             $orangeCO= $this->filtrerOrangeCO($orange);
             $orangeCO = $this->trierParCleCroissante($orangeCO);
+
+            unset($orange);
 
 
 // //  ---------------------------------------------------------------------------- COMAPARAISON -------------------------------------------------------------------------------
@@ -161,85 +183,154 @@
             $normalCO= $resultatOrangeCO[0];
             $dat= $resultatOrangeCI[1];
             $cat= $resultatOrangeCO[1];
+            $cleCI = $resultatOrangeCI[3];
+            $cleCO = $resultatOrangeCO[3];
             $anomalieOrangeCI= $resultatOrangeCI[2];
             $anomalieOrangeCO= $resultatOrangeCO[2];
+
+            // echo "<pre>";
+            //     print_r($anomalieOrangeCO);
+            // echo "</pre>";
+
+            // echo "<pre>";
+            //     print_r($anomalieOrangeCI);
+            // echo "</pre>";
+
+            // echo "<pre>";
+            //     print_r($dat);
+            // echo "</pre>";
+
+            // echo "<pre>";
+            //     print_r($cat);
+            // echo "</pre>";
+
+            // echo "<pre>";
+            //     print_r($normalCI);
+            // echo "</pre>";
+
+            // echo "<pre>";
+            //     print_r($orange);
+            // echo "</pre>";
+
 // ------------------------------------------------------------------------------- HISTORIQUE -----------------------------------------------------------
 
+            $historique= array_merge($normalCI[0], $normalCO[0], $dat[0], $cat[0], $anomalieOrangeCI[0], $anomalieOrangeCO[0], $ind, $nonAuCO, $nonAuCI, $vi);
+            $_SESSION["last_solde"] = $this->Historique_Orange_Model->get_last_solde();
+
+            if(count($_SESSION["last_solde"]) > 0 ) {
+                $princ_solde= $_SESSION["last_solde"][0]->princ_solde;
+                $comm_solde= $_SESSION["last_solde"][0]->comm_solde;
+                $orange_solde= $_SESSION["last_solde"][0]->orange_solde;
+                $solde= $_SESSION["last_solde"][0]->solde;
+            } else if(count($_SESSION["last_solde"]) === 0 ) {
+                $princ_solde= 0;
+                $comm_solde= 0;
+                $orange_solde= 0;
+                $solde= 0;
+            }
+
+
+
+            // foreach($historique as $item ) {
+            //     $princ_solde += isset($item["princ_montant"])  ? $item["princ_montant"] : 0;
+            //     $comm_solde += isset($item["comm_montant"])  ? $item["comm_montant"] : 0;
+            //     $orange_solde += isset($item["orange_montant"])  ? $item["orange_montant"] : 0;
+            //     $solde += isset($item["orange_super_distri"])  ? $item["orange_super_distri"] : 0;
+
+            //     $item["princ_solde"] = $princ_solde;
+            //     $item["comm_solde"] = $comm_solde;
+            //     $item["orange_solde"] = $orange_solde;
+            //     $item["solde"] = $solde;
+
+            //     $this->Historique_Orange_Model->insert($item);
+            // }
+
+            
+
+
+
+// // --------------------------------------------------------------------------------- REGULARISATION ------------------------------------------------------------------------------
+
+
+
+// // ---------------------------------------------------------------------------------- INSERTION ----------------------------------------------------------------------------------
+            
+         
+            // foreach($normalCI[0] as $item) {
+            //     $this->Orange_Normal_Model->insert_or_update_ci($item);
+            // }
+
+
+            // foreach($normalCO[0] as $item) {
+            //     $this->Orange_Normal_Model->insert_or_update_co($item);
+            // }
+
+            // foreach ($dat[0] as $item ) {
+            //     $this->Boa_Orange_Anomalie_Model->insert_or_update_dat($item);
+            // }
+
+
+            // foreach ($cat[0] as $item ) {
+            //     $this->Boa_Orange_Anomalie_Model->insert_or_update_cat($item);
+            // }
+
+            // foreach($ind as $item) {
+            //     $this->Orange_Anomalie_Model->insert_or_update_ind($item);
+            // }
+
+            // foreach($nonAuCI as $item) {
+            //     $this->Boa_Orange_Anomalie_Model->insert_or_update_nonAuCI($item);
+            // }
+
+            // foreach($anomalieOrangeCI[0] as $item) {
+            //     $this->Orange_Anomalie_Model->insert_or_update_ci($item);
+            // }
+
+            // foreach($anomalieOrangeCO[0] as $item) {
+            //     $this->Orange_Anomalie_Model->insert_or_update_co($item);
+            // }
+
+            // echo "<pre>";
+            //     print_r($normalCI[0]);
+            // echo "</pre>";
+            // echo "<pre>";
+            //     print_r($dat[0]);
+            // echo "</pre>";
+            // echo "<pre>";
+            //     print_r($cat[0]);
+            // echo "</pre>";
+            // echo "<pre>";
+            //     print_r($ind);
+            // echo "</pre>";
+            // echo "<pre>";
+            //     print_r($vi);
+            // echo "</pre>";
+            // echo "<pre>";
+            //     print_r($nonAuCI);
+            // echo "</pre>";
+            // echo "<pre>";
+            //     print_r($nonAuCO);
+            // echo "</pre>";
             // echo "<pre>";
             //     print_r($anomalieOrangeCI[0]);
             // echo "</pre>";
-            $historique= array_merge($normalCI[0], $normalCO[0], $dat[0], $cat[0], $anomalieOrangeCI[0], $anomalieOrangeCO[0], $ind, $nonAuCO, $nonAuCI, $vi);
-            $_SESSION["last_solde"] = $this->historique_orange_model->get_last_solde();
+            // echo "<pre>";
+            //     print_r($anomalieOrangeCO[0]);
+            // echo "</pre>";
 
-            if(count($_SESSION["last_solde"]) > 0 ) {
-                $solde_orange= $_SESSION["last_solde"][0]->solde_orange;
-                $solde_boa= $_SESSION["last_solde"][0]->solde_boa;
-            } else if(count($_SESSION["last_solde"]) === 0 ) {
-                $solde_orange= 0;
-                $solde_boa= 0;
-            }
-
-
-            foreach($historique as $item ) {
-                $solde_orange += isset($item["solde"]) ? $item["solde"] : 0;
-                $solde_boa += isset($item["MONTANT"]) ? $item["MONTANT"] : 0;
-                $item["solde_orange"] = $solde_orange;
-                $item["solde_boa"] = $solde_boa;
-                $this->historique_orange_model->insert($item);
-            }
-
-// --------------------------------------------------------------------------------- REGULARISATION ------------------------------------------------------------------------------
-
-
-
-// ---------------------------------------------------------------------------------- INSERTION ----------------------------------------------------------------------------------
             
-         
-            foreach($normalCI[0] as $item) {
-                $this->orange_normal_model->insert_or_update_ci($item);
-            }
-
-
-            foreach($normalCO[0] as $item) {
-                $this->orange_normal_model->insert_or_update_co($item);
-            }
-
-            foreach ($dat[0] as $item ) {
-                $this->boa_orange_anomalie_model->insert_or_update_dat($item);
-            }
-
-
-            foreach ($cat[0] as $item ) {
-                $this->boa_orange_anomalie_model->insert_or_update_cat($item);
-            }
-
-            foreach($ind as $item) {
-                $this->orange_anomalie_model->insert_or_update_ind($item);
-            }
-
-            foreach($nonAuCI as $item) {
-                $this->boa_orange_anomalie_model->insert_or_update_nonAuCI($item);
-            }
-
-            foreach($anomalieOrangeCI[0] as $item) {
-                $this->orange_anomalie_model->insert_or_update_ci($item);
-            }
-
-            foreach($anomalieOrangeCO[0] as $item) {
-                $this->orange_anomalie_model->insert_or_update_co($item);
-            }
-
-
             $this->exporter($normalCI[0], $normalCO[0], $dat[0], $cat[0], $ind, $vi, $nonAuCI, $nonAuCO, $anomalieOrangeCI[0], $anomalieOrangeCO[0]);
-            
-            // redirect("importer_orange");
+            $_SESSION["importer"] ="OUI";
+            redirect("importer_orange");
         }
 
         public function filtrerOrangeCI($data) {
             $resultat= array();
             foreach ($data as $item) {
                 if(!empty($item["orange_debit"]) && empty($item["orange_credit"]) && $item["orange_num_compte"] !=="IND01") {
+                    $item["orange_montant"]= $item["orange_debit"] * -1;
                     $resultat[]= $item;
+
                 }
             }
             return $resultat;
@@ -249,6 +340,7 @@
             $resultat= array();
             foreach ($data as $item) {
                 if(empty($item["orange_debit"]) && !empty($item["orange_credit"]) && $item["orange_num_compte"] !=="IND01") {
+                    $item["orange_montant"]= $item["orange_credit"] * 1;
                     $resultat[]= $item;
                 }
             }
@@ -281,6 +373,7 @@
 
             foreach($data as $item) {
                 if ($item["orange_num_compte"] ==="IND01") {
+                    $item["orange_montant"] = $item["orange_debit"] * -1;
                     $resultat[] = $item;
                 }
             }
@@ -467,6 +560,7 @@
             $boaNormal = array();
             $boaAnomalie = array();
             $orangeAnomalie = array();
+            $cle= array();
 
             $orangeCount = count($orangeTab);
             $boaCount = count($igorTab);
@@ -478,7 +572,6 @@
                 $cleIgor = $igorTab[$i]["cle"];
                 $cleOrange = $orangeTab[$j]["cle"];
                 $difference = $cleIgor - $cleOrange;
-
                 if ($difference === 0) {
                     $orangeNormal[] = $orangeTab[$j];
                     $boaNormal[] = $igorTab[$i];
@@ -486,7 +579,9 @@
                     $j++;
                 } elseif ($difference < 0) {
                     $boaAnomalie[] = $igorTab[$i];
+                    $cle[]= $cleIgor;
                     $i++;
+                    
                 } else {
                     $orangeAnomalie[] = $orangeTab[$j];
                     $j++;
@@ -511,9 +606,64 @@
             } 
 
             // echo "<pre>";
-            //     print_r($mergeBoaOrange);
+            //     print_r($cle);
             // echo "</pre>";
-            return [[$mergeBoaOrange], [$boaAnomalie], [$orangeAnomalie]];
+            return [[$mergeBoaOrange], [$boaAnomalie], [$orangeAnomalie], [$cle]];
+        }
+
+        public function rechercheCle($cle, $boa, $orange) {
+                $boaResultat= array();
+                $orangeResultat = array();
+                foreach($cle as $itemCle) {
+                    foreach($boa as $item) {
+                        if($item["cle"] === $itemCle) {
+                            $boaResultat[]= $item;
+                        }
+                    }
+                }
+                foreach($cle as $itemCle) {
+                    foreach($orange as $item) {
+                        if($item["cle"] === $itemCle) {
+                            $orangeResultat[]= $item;
+                        }
+                    }
+                }
+
+                // echo "<pre>" . "orange";
+                //     print_r($boaResultat);
+                // echo "</pre>";
+
+                // $occurrences = array();
+                // $resultats = array();
+                // $nbreOccurenceUn= array();
+
+                // foreach ($boaResultat as $element) {
+                //     $cle = $element['cle'];
+                //     if (isset($occurrences[$cle])) {
+                //         $occurrences[$cle]++;
+                //     } else {
+                //         $occurrences[$cle] = 1;
+                //     }
+                // }
+            
+                // foreach ($boaResultat as $index => $element) {
+                //     $cle = $element['cle'];
+                //     if ($occurrences[$cle] === 1) {
+                //         $nbreOccurenceUn[]= $boaResultat[$index];
+                //         unset($boaResultat[$index]);
+                //     } else {
+                //         $resultats[] = $element;
+                //     }
+                // }
+            
+                // $boaResultat = array_values($boaResultat);
+
+                // echo "<pre>" . "boa";
+                //     print_r($boaResultat);
+                // echo "</pre>";
+                // echo "<pre>" . "orange";
+                //     print_r($orangeResultat);
+                // echo "</pre>";
         }
 
         public function exporter($normalCI, $normalCO, $dat, $cat, $ind, $vi, $nonAuCI, $nonAuCO, $anomalieOrangeCI, $anomalieOrangeCO) {
@@ -526,41 +676,37 @@
             $spreadsheet = new PhpOffice\PhpSpreadsheet\Spreadsheet();
             $sheet = $spreadsheet->getActiveSheet();
 
-            $cell_array = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "AA", "AB", "AC", "AD", "AE", "AF"];
-            $header = ["DATE OPE", "DATE VAL", "DEVISE", "MONTANT", "LIBELLE", "CODE OPER", "EXPL", "REF IGOR", "REF_REL", "PHONE", "", "DATE_OPER", "DATE_VAL", "DEVISE", "MONTANT", "LIBELLE", "CODE", "EXPL", "REF_IGOR", "OPER_ID", "CODE AGENCE","", "", "DATE", "HEURE", "REFERENCE", "SERVICE", "NUM_COMPTE", "DEBIT", "CREDIT", "SOUS-RESEAU", "COMPTE"];
+            $cell_array = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "AA", "AB", "AC", "AD", "AE", "AF", "AG", "AH", "AI", "AJ", "AK", "AL", "AM"];
+            $header = ["DATE OPE", "DATE VAL", "DEVISE", "MONTANT", "LIBELLE", "CODE OPER", "EXPL", "REF IGOR", "REF_REL", "PHONE","SOLDE", "", "DATE_OPER", "DATE_VAL", "DEVISE", "MONTANT", "LIBELLE", "CODE", "EXPL", "REF_IGOR", "OPER_ID", "CODE AGENCE","SOLDE", "", "DATE", "HEURE", "REFERENCE", "SERVICE", "NUM_COMPTE", "DEBIT", "CREDIT", "MONTANT", "SOLDE", "DEBIT", "CREDIT", "MONTANT", "SOLDE", "PRINCIPALE", "COMM", "PRINCIPAL", "COMM"];
 
-            $sheet->mergeCells('A1:U1');
-            $sheet->getStyle('A1:U1')->getBorders()->getAllBorders()->setBorderStyle('thin');
+
+
+            $sheet->mergeCells('A1:W1');
+            $sheet->getStyle('A1:W1')->getBorders()->getAllBorders()->setBorderStyle('thin');
             $sheet->setCellValue('A1', 'BOA');
             $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
             $sheet->getStyle('A1')->getFont()->setBold(true);
 
-            $sheet->mergeCells('X1:AI1');
-            $sheet->getStyle('X1:AI1')->getBorders()->getAllBorders()->setBorderStyle('thin');
-            $sheet->setCellValue('X1', 'ORANGE');
-            $sheet->getStyle('X1')->getFont()->setBold(true);
-            $sheet->getStyle('X1')->getAlignment()->setHorizontal('center');
-
-            $sheet->mergeCells('A2:J2');
+            $sheet->mergeCells('A2:K2');
             $sheet->getStyle('A2:J2')->getBorders()->getAllBorders()->setBorderStyle('thin');
             $sheet->setCellValue('A2', 'PRINCIPALE');
             $sheet->getStyle('A2')->getFont()->setBold(true);
             $sheet->getStyle('A2')->getAlignment()->setHorizontal('center');
             
-            $sheet->mergeCells('L2:U2');
-            $sheet->getStyle('L2:U2')->getBorders()->getAllBorders()->setBorderStyle('thin');
+            $sheet->mergeCells('L2:W2');
+            $sheet->getStyle('L2:W2')->getBorders()->getAllBorders()->setBorderStyle('thin');
             $sheet->setCellValue('L2', 'COMMISSION');
             $sheet->getStyle('L2')->getFont()->setBold(true);
             $sheet->getStyle('L2')->getAlignment()->setHorizontal('center');
 
-            $sheet->mergeCells('X2:AI2');
-            $sheet->getStyle('X2:AI2')->getBorders()->getAllBorders()->setBorderStyle('thin');
-            $sheet->setCellValue('X2', 'ORANGE');
-            $sheet->getStyle('X2')->getFont()->setBold(true);
-            $sheet->getStyle('X2')->getAlignment()->setHorizontal('center');
+            $sheet->mergeCells('Y1:AK2');
+            $sheet->getStyle('Y1:AK2')->getBorders()->getAllBorders()->setBorderStyle('thin');
+            $sheet->setCellValue('Y1', 'ORANGE');
+            $sheet->getStyle('Y1')->getFont()->setBold(true);
+            $sheet->getStyle('Y1')->getAlignment()->setHorizontal('center');
 
             $sheet->getStyle('A2')->getAlignment()->setHorizontal('center');
-            $sheet->getStyle('M2:U2')->getBorders()->getAllBorders()->setBorderStyle('thin');
+            $sheet->getStyle('M2:W2')->getBorders()->getAllBorders()->setBorderStyle('thin');
             $sheet->getStyle('M2:AH2')->getBorders()->getAllBorders()->setBorderStyle('thin');
             $sheet->getStyle('A1')->getFont()->setBold(true);
             $sheet->getStyle('M1')->getFont()->setBold(true);
@@ -568,10 +714,10 @@
             $sheet->getStyle('M2')->getFont()->setBold(true);
 
             
-            //  BORDURE 
-            // for($i=0; $i < count($cell_array) -3 ; $i++) {
-            //     $sheet->getStyle($cell_array[$i] . "3")->getBorders()->getAllBorders()->setBorderStyle('thin');
-            // }
+            //  BORDURE :
+            for($i=0; $i < count($cell_array) -3 ; $i++) {
+                $sheet->getStyle($cell_array[$i] . "3")->getBorders()->getAllBorders()->setBorderStyle('thin');
+            }
 
             // EN TETE 
 
@@ -583,25 +729,24 @@
                 $sheet->getColumnDimension($cell_array[$i])->setAutoSize(true);
             }
 
-            // for($i=0; $i< )
-            $lastRow = $sheet->getHighestRow() + 1;
+            $lastRow = $sheet->getHighestRow() + 2;
             foreach ($normalCI as $dataRow) {
                 $i=0;
                 $sheet->setCellValue($cell_array[$i++].$lastRow, $dataRow["princ_date_oper"]);
                 $sheet->setCellValue($cell_array[$i++].$lastRow, $dataRow["princ_date_val"]);
                 $sheet->setCellValue($cell_array[$i++].$lastRow, $dataRow["princ_devise"]);
-                $sheet->setCellValue($cell_array[$i++].$lastRow, number_format($dataRow["princ_montant"], 0, ',', ' ')); 
+                $sheet->setCellValue($cell_array[$i++].$lastRow, $dataRow["princ_montant"]); 
                 $sheet->setCellValue($cell_array[$i++].$lastRow, $dataRow["princ_libelle"]);
                 $sheet->setCellValue($cell_array[$i++].$lastRow, $dataRow["princ_oper"]);
                 $sheet->setCellValue($cell_array[$i++].$lastRow, $dataRow["princ_expl"]);
                 $sheet->setCellValue($cell_array[$i++].$lastRow, $dataRow["princ_ref_igor"]);
                 $sheet->setCellValue($cell_array[$i++].$lastRow, $dataRow["princ_ref_rel"]);
                 $sheet->setCellValue($cell_array[$i++].$lastRow, substr($dataRow["cle"], 0, 10));
-                $i++;
+                $i+=2;
                 $sheet->setCellValue($cell_array[$i++].$lastRow, $dataRow["comm_date_oper"]);
                 $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["comm_date_val"]);
                 $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["comm_devise"]);
-                $sheet->setCellValue($cell_array[$i++] .$lastRow, number_format($dataRow["comm_montant"], 0, ', ', ' '));
+                $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["comm_montant"]);
                 $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["comm_libelle"]);
                 $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["comm_oper"]);
                 $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["comm_expl"]);
@@ -614,8 +759,11 @@
                 $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["orange_ref"]);
                 $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["orange_service"]);
                 $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["orange_num_compte"]);
-                $sheet->setCellValue($cell_array[$i++] .$lastRow, number_format($dataRow["orange_debit"]), 0, ', ', ' ');
+                $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["orange_debit"]);
                 $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["orange_credit"]);
+                // $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["orange_debit"] * -1);
+
+                $i+=1;
                 $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["orange_sous_distri"]);
                 $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["orange_super_distri"]);
                 $lastRow++;
@@ -627,7 +775,7 @@
                 $sheet->setCellValue($cell_array[$i++].$lastRow, $dataRow["princ_date_oper"]);
                 $sheet->setCellValue($cell_array[$i++].$lastRow, $dataRow["princ_date_val"]);
                 $sheet->setCellValue($cell_array[$i++].$lastRow, $dataRow["princ_devise"]);
-                $sheet->setCellValue($cell_array[$i++].$lastRow, number_format($dataRow["princ_montant"], 0, ',', ' ')); 
+                $sheet->setCellValue($cell_array[$i++].$lastRow, $dataRow["princ_montant"]); 
                 $sheet->setCellValue($cell_array[$i++].$lastRow, $dataRow["princ_libelle"]);
                 $sheet->setCellValue($cell_array[$i++].$lastRow, $dataRow["princ_oper"]);
                 $sheet->setCellValue($cell_array[$i++].$lastRow, $dataRow["princ_expl"]);
@@ -641,37 +789,13 @@
                 $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["orange_service"]);
                 $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["orange_num_compte"]);
                 $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["orange_debit"]);
-                $sheet->setCellValue($cell_array[$i++] .$lastRow, number_format($dataRow["orange_credit"], 0, ',', ' '));
+                $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["orange_credit"]);
+                $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["orange_credit"] * 1 );
                 $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["orange_sous_distri"]);
                 $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["orange_super_distri"]);
                 $lastRow++;
             }
 
-            $lastRow = $sheet->getHighestRow() + 1;
-            foreach ($normalCO as $dataRow) {
-                $i=0;
-                $sheet->setCellValue($cell_array[$i++].$lastRow, $dataRow["princ_date_oper"]);
-                $sheet->setCellValue($cell_array[$i++].$lastRow, $dataRow["princ_date_val"]);
-                $sheet->setCellValue($cell_array[$i++].$lastRow, $dataRow["princ_devise"]);
-                $sheet->setCellValue($cell_array[$i++].$lastRow, number_format($dataRow["princ_montant"], 0, ',', ' ')); 
-                $sheet->setCellValue($cell_array[$i++].$lastRow, $dataRow["princ_libelle"]);
-                $sheet->setCellValue($cell_array[$i++].$lastRow, $dataRow["princ_oper"]);
-                $sheet->setCellValue($cell_array[$i++].$lastRow, $dataRow["princ_expl"]);
-                $sheet->setCellValue($cell_array[$i++].$lastRow, $dataRow["princ_ref_igor"]);
-                $sheet->setCellValue($cell_array[$i++].$lastRow, $dataRow["princ_ref_rel"]);
-                $sheet->setCellValue($cell_array[$i++].$lastRow, substr($dataRow["cle"], 0, 10));
-                $i+=13;
-                $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["orange_date"]);
-                $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["orange_heure"]);
-                $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["orange_ref"]);
-                $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["orange_service"]);
-                $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["orange_num_compte"]);
-                $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["orange_debit"]);
-                $sheet->setCellValue($cell_array[$i++] .$lastRow, number_format($dataRow["orange_credit"], 0, ',', ' '));
-                $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["orange_sous_distri"]);
-                $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["orange_super_distri"]);
-                $lastRow++;
-            }
 
             $lastRow = $sheet->getHighestRow() + 2;
             foreach ($dat as $dataRow) {
@@ -700,21 +824,22 @@
                 $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FF0000');
                 
                 $i=0;
+
                 $sheet->setCellValue($cell_array[$i++].$lastRow, $dataRow["princ_date_oper"]);
                 $sheet->setCellValue($cell_array[$i++].$lastRow, $dataRow["princ_date_val"]);
                 $sheet->setCellValue($cell_array[$i++].$lastRow, $dataRow["princ_devise"]);
-                $sheet->setCellValue($cell_array[$i++].$lastRow, number_format($dataRow["princ_montant"], 0, ',', ' ')); 
+                $sheet->setCellValue($cell_array[$i++].$lastRow, $dataRow["princ_montant"]); 
                 $sheet->setCellValue($cell_array[$i++].$lastRow, $dataRow["princ_libelle"]);
                 $sheet->setCellValue($cell_array[$i++].$lastRow, $dataRow["princ_oper"]);
                 $sheet->setCellValue($cell_array[$i++].$lastRow, $dataRow["princ_expl"]);
                 $sheet->setCellValue($cell_array[$i++].$lastRow, $dataRow["princ_ref_igor"]);
                 $sheet->setCellValue($cell_array[$i++].$lastRow, $dataRow["princ_ref_rel"]);
                 $sheet->setCellValue($cell_array[$i++].$lastRow, substr($dataRow["cle"], 0, 10));
-                $i++;
+                $i+=2;
                 $sheet->setCellValue($cell_array[$i++].$lastRow, $dataRow["comm_date_oper"]);
                 $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["comm_date_val"]);
                 $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["comm_devise"]);
-                $sheet->setCellValue($cell_array[$i++] .$lastRow, number_format($dataRow["comm_montant"], 0, ', ', ' '));
+                $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["comm_montant"]);
                 $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["comm_libelle"]);
                 $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["comm_oper"]);
                 $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["comm_expl"]);
@@ -743,7 +868,7 @@
                 $sheet->setCellValue($cell_array[$i++].$lastRow, $dataRow["princ_date_oper"]);
                 $sheet->setCellValue($cell_array[$i++].$lastRow, $dataRow["princ_date_val"]);
                 $sheet->setCellValue($cell_array[$i++].$lastRow, $dataRow["princ_devise"]);
-                $sheet->setCellValue($cell_array[$i++].$lastRow, number_format($dataRow["princ_montant"], 0, ',', ' ')); 
+                $sheet->setCellValue($cell_array[$i++].$lastRow, $dataRow["princ_montant"]); 
                 $sheet->setCellValue($cell_array[$i++].$lastRow, $dataRow["princ_libelle"]);
                 $sheet->setCellValue($cell_array[$i++].$lastRow, $dataRow["princ_oper"]);
                 $sheet->setCellValue($cell_array[$i++].$lastRow, $dataRow["princ_expl"]);
@@ -764,11 +889,12 @@
                 $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('66CCFF');
                 $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('66CCFF');
                 $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('66CCFF');
+                $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('66CCFF');
                 $i=0;
                 $sheet->setCellValue($cell_array[$i++].$lastRow, $dataRow["princ_date_oper"]);
                 $sheet->setCellValue($cell_array[$i++].$lastRow, $dataRow["princ_date_val"]);
                 $sheet->setCellValue($cell_array[$i++].$lastRow, $dataRow["princ_devise"]);
-                $sheet->setCellValue($cell_array[$i++].$lastRow, number_format($dataRow["princ_montant"], 0, ',', ' ')); 
+                $sheet->setCellValue($cell_array[$i++].$lastRow, $dataRow["princ_montant"]); 
                 $sheet->setCellValue($cell_array[$i++].$lastRow, $dataRow["princ_libelle"]);
                 $sheet->setCellValue($cell_array[$i++].$lastRow, $dataRow["princ_oper"]);
                 $sheet->setCellValue($cell_array[$i++].$lastRow, $dataRow["princ_expl"]);
@@ -779,7 +905,7 @@
 
             $lastRow = $sheet->getHighestRow() + 2;
             foreach($ind as $dataRow) {
-                $i=23;
+                $i=24;
                 $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FFA500');
                 $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FFA500');
                 $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FFA500');
@@ -790,13 +916,13 @@
                 $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FFA500');
                 $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FFA500');
                 
-                $i=23;
+                $i=24;
                 $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["orange_date"]);
                 $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["orange_heure"]);
                 $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["orange_ref"]);
                 $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["orange_service"]);
                 $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["orange_num_compte"]);
-                $sheet->setCellValue($cell_array[$i++] .$lastRow, number_format($dataRow["orange_debit"]), 0, ', ', ' ');
+                $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["orange_debit"]);
                 $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["orange_credit"]);
                 $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["orange_sous_distri"]);
                 $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["orange_super_distri"]);
@@ -805,7 +931,7 @@
 
             $lastRow = $sheet->getHighestRow() + 2;
             foreach($anomalieOrangeCI as $dataRow) {
-                $i=23;
+                $i=24;
                 $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('AAFF00');
                 $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('AAFF00');
                 $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('AAFF00');
@@ -816,18 +942,82 @@
                 $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('AAFF00');
                 $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('AAFF00');
 
-                $i=23;
+                $i=24;
                 $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["orange_date"]);
                 $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["orange_heure"]);
                 $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["orange_ref"]);
                 $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["orange_service"]);
                 $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["orange_num_compte"]);
-                // $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["orange_debit"]);
+                $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["orange_debit"]);
                 $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["orange_credit"]);
                 $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["orange_sous_distri"]);
                 $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["orange_super_distri"]);
-                $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["cle"]);
+                // $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["cle"]);
                 $lastRow++;
+            }
+            $lastRow = $sheet->getHighestRow() + 2;
+            foreach($anomalieOrangeCO as $dataRow) {
+                $i=24;
+                $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('AAFF00');
+                $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('AAFF00');
+                $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('AAFF00');
+                $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('AAFF00');
+                $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('AAFF00');
+                $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('AAFF00');
+                $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('AAFF00');
+                $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('AAFF00');
+                $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('AAFF00');
+
+                $i=24;
+                $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["orange_date"]);
+                $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["orange_heure"]);
+                $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["orange_ref"]);
+                $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["orange_service"]);
+                $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["orange_num_compte"]);
+                $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["orange_debit"]);
+                $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["orange_credit"]);
+                $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["orange_sous_distri"]);
+                $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["orange_super_distri"]);
+                // $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["cle"]);
+                $lastRow++;
+            }
+
+            $lastRow = $sheet->getHighestRow() + 1;
+            $range= 'K4:K' .$lastRow;
+            
+            for ($row = 5; $row <= $lastRow; $row++) {
+                $formula = "=D$row + K" . ($row - 1);
+                $sheet->setCellValue("K$row", $formula);
+            }
+
+            for ($row = 5; $row <= $lastRow; $row++) {
+                $formula = "=P$row + W" . ($row - 1);
+                $sheet->setCellValue("W$row", $formula);
+            }
+            for ($row = 5; $row <= $lastRow; $row++) {
+                $formula = "=AF$row + AG" . ($row - 1);
+                $sheet->setCellValue("AG$row", $formula);
+            }
+            for ($row = 5; $row <= $lastRow; $row++) {
+                $formula = "=AF$row + AG" . ($row - 1);
+                $sheet->setCellValue("AG$row", $formula);
+            }
+            for ($row = 5; $row <= $lastRow; $row++) {
+                $formula = "=AH$row + AI$row";
+                $sheet->setCellValue("AJ$row", $formula);
+            }
+            for ($row = 5; $row <= $lastRow; $row++) {
+                $formula = "=AJ$row + AK" .($row - 1);
+                $sheet->setCellValue("AK$row", $formula);
+            }
+
+            for ($row = 5; $row <= $lastRow; $row++) {
+                $formula = "=D$row + AF$row" ;
+                $sheet->setCellValue("AL$row", $formula);
+            }
+            for ($row = 5; $row <= $lastRow; $row++) {
+                $formula = "=P$row + AJ$row" ;
+                $sheet->setCellValue("AM$row", $formula);
             }
 
             $writer = new PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);

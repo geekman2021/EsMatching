@@ -11,25 +11,28 @@
         }
 
         public function get_users() {
-
-            $this->db->select("*");
-            $this->db->from("utilisateurs");
-            $this->db->order_by("code_profil", "ASC");
-
-            $query= $this->db->get();
-            return $query->result();
+            $this->db->select('utilisateurs.*, profils.*');
+            $this->db->from('utilisateurs');
+            $this->db->join('profils', 'utilisateurs.code_profil = profils.code_profile');
+            $query = $this->db->get();
+            return $query->result();  
         }
-        public function delete_profil($id) {
+
+        public function get_userBynumMat($matricule) {
+            return $this->db->get_where("utilisateurs", array("matricule" =>$matricule))->row();
+        }
+        
+        public function delete_user($id) {
             $this->db->where("id", $id);
             $this->db->delete("utilisateurs");
         }
 
-        public function update_profil($id, $data) {
-            $this->db->where("id", $id);
+        public function update_user($id, $data) {
+            $this->db->where("id_utilisateur", $id);
             return $this->db->update("utilisateurs", $data);
         }
 
-        public function find_profile($id) {
+        public function find_user($id) {
             return $this->db->get_where("utilisateurs", array("id" =>$id))->row();
         }
     }

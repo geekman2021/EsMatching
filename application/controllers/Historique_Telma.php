@@ -6,7 +6,9 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 
         public function __construct(){
             parent::__construct();
-            $this->load->model("historique_telma_model");
+            $this->load->model("Historique_Telma_Model");
+            ini_set('memory_limit', '1024M'); // Set the memory limit to 256 megabytes
+            session_start();
 
         }
 
@@ -17,7 +19,7 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
         }
 
         public function get_data() {
-            $data["historique"] = $this->historique_telma_model->get_historique();
+            $data["historique"] = $this->Historique_Telma_Model->get_historique();
 
             return $data;
             
@@ -25,7 +27,7 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 
         public function exporterVersExcel(){
             $dateAujourdhui = date("Y-m-d");
-            $nomFichier = "RapproTelma-" .$dateAujourdhui .".xlsx";
+            $nomFichier = "Historique-Rappro" .$dateAujourdhui .".xlsx";
 
             header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
             header("Content-Disposition: attachment; filename=\"" . $nomFichier . "\"");
@@ -78,45 +80,52 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
                 $sheet->getColumnDimension($cell_array[$i])->setAutoSize(true);
             }
 
-            $historique = $this->getData();
+            $historique = $this->get_data();
+
             $lastRow = $sheet->getHighestRow() + 2;
-            // foreach ($historique["historique"] as $dataRow) {
-                // $sheet->setCellValue($cell_array[0] .$lastRow, $dataRow["DATE_OPER"]);
-                // $sheet->setCellValue($cell_array[1] .$lastRow, $dataRow["DATE_VAL"]);
-                // $sheet->setCellValue($cell_array[2] .$lastRow, $dataRow["DEVISE"]);
-                // $sheet->setCellValue($cell_array[3] .$lastRow, $dataRow["MONTANT"]);
-                // $sheet->setCellValue($cell_array[4] .$lastRow, $dataRow["LIBELLE"]);
-                // $sheet->setCellValue($cell_array[5] .$lastRow, $dataRow["OPER"]);
-                // $sheet->setCellValue($cell_array[6] .$lastRow, $dataRow["EXPL"]);
-                // $sheet->setCellValue($cell_array[7] .$lastRow, $dataRow["REF_IGOR"]);
-                // $sheet->setCellValue($cell_array[9] .$lastRow, $dataRow["cle"]);
-                // $sheet->setCellValue($cell_array[12] .$lastRow, $dataRow["date_d"]);
-                // $sheet->setCellValue($cell_array[13] .$lastRow, $dataRow["trans_id"]);
-                // $sheet->setCellValue($cell_array[14] .$lastRow, $dataRow["initiator"]);
-                // $sheet->setCellValue($cell_array[15] .$lastRow, $dataRow["TYPE"]);
-                // $sheet->setCellValue($cell_array[16] .$lastRow, $dataRow["Channel"]);
-                // $sheet->setCellValue($cell_array[17] .$lastRow, $dataRow["State"]);
-                // $sheet->setCellValue($cell_array[18] .$lastRow, $dataRow["Wallet"]);
-                // $sheet->setCellValue($cell_array[19] .$lastRow, $dataRow["Amount_MGA"]);
-                // $sheet->setCellValue($cell_array[20] .$lastRow, $dataRow["Sender"]);
-                // $sheet->setCellValue($cell_array[21] .$lastRow, $dataRow["Sender_name"]);
-                // $sheet->setCellValue($cell_array[22] .$lastRow, $dataRow["receiver"]);
-                // $sheet->setCellValue($cell_array[23] .$lastRow, $dataRow["receiver_name"]);
-                // $sheet->setCellValue($cell_array[24] .$lastRow, $dataRow["details1"]);
-                // $sheet->setCellValue($cell_array[25] .$lastRow, $dataRow["Confirming_agent"]);
-                // $sheet->setCellValue($cell_array[26] .$lastRow, $dataRow["origine"]);
-                // $sheet->setCellValue($cell_array[27] .$lastRow, $dataRow["TVA"]);
-                // $sheet->setCellValue($cell_array[29] .$lastRow, $dataRow["ACTION"]);
-                // $sheet->setCellValue($cell_array[30] .$lastRow, $dataRow["AA1_GROUP"]);
-                // $sheet->setCellValue($cell_array[31] .$lastRow, $dataRow["PAR"]);
-                // $sheet->setCellValue($cell_array[32] .$lastRow, $dataRow["solde"]);
-                // $lastRow++;
-            // }
+            foreach ($historique["historique"] as $dataRow) {
+                
+                $sheet->setCellValue($cell_array[0] .$lastRow, $dataRow->DATE_OPER);
+                $sheet->setCellValue($cell_array[1] .$lastRow, $dataRow->DATE_VAL);
+                $sheet->setCellValue($cell_array[2] .$lastRow, $dataRow->DEVISE);
+                $sheet->setCellValue($cell_array[3] .$lastRow, $dataRow->MONTANT);
+                $sheet->setCellValue($cell_array[4] .$lastRow, $dataRow->LIBELLE);
+                $sheet->setCellValue($cell_array[5] .$lastRow, $dataRow->OPER);
+                $sheet->setCellValue($cell_array[6] .$lastRow, $dataRow->EXPL);
+                $sheet->setCellValue($cell_array[7] .$lastRow, $dataRow->REF_IGOR);
+                $sheet->setCellValue($cell_array[9] .$lastRow, $dataRow->cle);
+                $sheet->setCellValue($cell_array[9] .$lastRow, $dataRow->solde_boa);
+                $sheet->setCellValue($cell_array[12] .$lastRow, $dataRow->date_d);
+                $sheet->setCellValue($cell_array[13] .$lastRow, $dataRow->trans_id);
+                $sheet->setCellValue($cell_array[14] .$lastRow, $dataRow->initiator);
+                $sheet->setCellValue($cell_array[15] .$lastRow, $dataRow->TYPE);
+                $sheet->setCellValue($cell_array[16] .$lastRow, $dataRow->channel);
+                $sheet->setCellValue($cell_array[17] .$lastRow, $dataRow->state);
+                $sheet->setCellValue($cell_array[18] .$lastRow, $dataRow->wallet);
+                $sheet->setCellValue($cell_array[19] .$lastRow, $dataRow->Amount_MGA);
+                $sheet->setCellValue($cell_array[20] .$lastRow, $dataRow->sender);
+                $sheet->setCellValue($cell_array[21] .$lastRow, $dataRow->sender_name);
+                $sheet->setCellValue($cell_array[22] .$lastRow, $dataRow->receiver);
+                $sheet->setCellValue($cell_array[23] .$lastRow, $dataRow->receiver_name);
+                $sheet->setCellValue($cell_array[24] .$lastRow, $dataRow->details1);
+                $sheet->setCellValue($cell_array[25] .$lastRow, $dataRow->confirming_agent);
+                $sheet->setCellValue($cell_array[25] .$lastRow, $dataRow->notify_alternate);
+                $sheet->setCellValue($cell_array[26] .$lastRow, $dataRow->origine);
+                $sheet->setCellValue($cell_array[27] .$lastRow, $dataRow->TVA);
+                $sheet->setCellValue($cell_array[29] .$lastRow, $dataRow->ACTION);
+                $sheet->setCellValue($cell_array[30] .$lastRow, $dataRow->AA1_GROUP);
+                $sheet->setCellValue($cell_array[31] .$lastRow, $dataRow->PAR);
+                $sheet->setCellValue($cell_array[32] .$lastRow, $dataRow->solde);
+                $sheet->setCellValue($cell_array[33] .$lastRow, $dataRow->solde_telma);
+                $sheet->setCellValue($cell_array[34] .$lastRow, $dataRow->MONTANT - $dataRow->Amount_MGA);
+                
+                
+                $lastRow++;
+            }
             
-            // NORMALE CI 
             $writer = new PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
             $writer->save('php://output');
-            // $historique = $this->getData();
+            $historique = $this->getData();
             // echo "<pre>";
             //     print_r($historique["historique"][0]->TRANSFER_ID);
             // echo "</pre>";

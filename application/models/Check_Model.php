@@ -21,11 +21,11 @@
             return true;
         }
 
+        
         public function checkMatriculeIfExist($num_matricule) {
-            $user= $this->db->get_where("utilisateurs", array("num_mat" => $num_matricule));
+            $user= $this->db->get_where("utilisateurs", array("matricule" => $num_matricule));
             return !($user->row_array()==null);
-        }
-    
+        } 
     
 }
 

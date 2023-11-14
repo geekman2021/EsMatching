@@ -12,22 +12,6 @@
     <script src="<?php echo base_url(); ?>assets/bootstrap/js/bootstrap.min.js"></script>
 </head>
 <body>
-    <!-- <div class="container" style="margin-top: 10% ;">
-        <div class="card" style="width: 50% ;">
-            <div class="card-body">
-                <div class="form-group">
-                    <label for="num_mat">Numero Matricule</label>
-                    <input type="text" class="form-control" id="num_mat" placeholder="Numero Matricule">
-                </div>
-                <div class="form-group">
-                    <label for="motdepass">Mot de Passe</label>
-                    <input type="text" class="form-control" id="password" placeholder="Mot de Pass">
-                </div>
-            </div>
-
-        </div>
-    </div> -->
-
     <div class="container" style="margin-top: 15%">
         <div class="row">
             <?php echo validation_errors(); ?>
@@ -38,7 +22,8 @@
                         <form method="post" action="<?php echo site_url("Auth/login") ?>">
                             <div class="form-group">
                                 <label for="num_mat">Numero Matricule</label>
-                                <input type="text" class="form-control" id="num_mat" name="num_mat" placeholder="Numero Matricule" required>
+                                <input type="text" class="form-control" id="num_mat" name="num_mat" placeholder="Numero Matricule" required maxlength="6">
+                                <span id="num_mat_error" class="text-danger d-none">Le numéro de matricule ne peut pas contenir plus de 6 caractères.</span>
                             </div>
                             <div class="form-group">
                                 <label for="motdepass">Mot de Passe</label>
@@ -53,9 +38,21 @@
             </div>
         </div>
     </div>
-
-
-    
-    
 </body>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const numMatInput = document.getElementById('num_mat');
+        const numMatError = document.getElementById('num_mat_error');
+
+        numMatInput.addEventListener('input', function () {
+            if (numMatInput.value.length > 6) {
+                numMatError.classList.remove('d-none');
+            } else {
+                numMatError.classList.add('d-none');
+            }
+        });
+    });
+</script>
+
+
 </html>

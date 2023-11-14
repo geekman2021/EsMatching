@@ -65,9 +65,10 @@
         }
 
         public function get_ci() {
-            $this->db->select("*");
-            $this->db->from("boa_telma_anomalie_ci");
-            $this->db->where_in("etat", array("Non", "En cours"));
+            $this->db->select('boa_telma_anomalie_ci.*');
+            $this->db->from('boa_telma_anomalie_ci');
+            $this->db->join('boa_telma_nonau', 'boa_telma_anomalie_ci.REF_IGOR = boa_telma_nonau.ref_igor', 'left');
+            $this->db->where('boa_telma_nonau.ref_igor IS NULL');
             $query= $this->db->get();
             return $query->result();
         }

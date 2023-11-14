@@ -54,7 +54,7 @@
               DEMANDE ETABLIE PAR : 09944 DDM <br>
             </div>
             <div class="header-right" style="padding-left: 20%; font-size: 0.7rem;">
-                Référence N° :<?php echo $reference ?>/09044/<?php echo $operateur; ?>/<?php echo $nom; ?>/<?php echo $annee; ?> <br>
+                Référence N° :<?= $reference ?>/09044/<?php echo $operateur; ?>/<?php echo $nom; ?>/<?php echo $annee; ?> <br>
                 DATE :<?php echo $date; ?> <br>
                 DESTINATAIRE : DDC <br>
                 REGULARISATION A FAIRE PAR : DDC <br>
@@ -65,7 +65,7 @@
            </section> -->
               
             <table border="1" cellpadding="8" cellspacing="0" style="width: 100%">
-            <caption style="font-size: 0.8rem; padding-top: 20px;"><b> <u> FICHE DE REGULATION ( Fr 10) </u> </b><br> <br> DATE D'ENVOI: __/__/____ </caption>
+            <caption style="font-size: 0.8rem; padding-top: 20px;"><b> <u> FICHE DE REGULARISATION ( Fr 10) </u> </b><br> <br> DATE D'ENVOI: __/__/____ </caption>
               <thead style="padding-top: 12px;">
                 
                 <tr style="text-align: center;">

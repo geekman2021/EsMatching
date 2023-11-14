@@ -3,36 +3,33 @@
 
     use PhpOffice\PhpSpreadsheet\Spreadsheet;
     use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+    use PhpOffice\PhpSpreadsheet\Writer\Xls;
+    use PhpOffice\PhpSpreadsheet\Writer\Csv;
  class Importer_Airtel extends CI_Controller {
 
         public function __construct(){
             parent::__construct();
-            $this->load->model("igor_airtel_model");
-            $this->load->model("igor_airtel_anomalie_model");
-            $this->load->model("airtel_anomalie_model");
-            $this->load->model("historique_airtel_model");
-            $this->load->model("regul_igor_airtel_model");
-            $this->load->model("non_au_model");
-
+            $this->load->model("Igor_Airtel_Model");
+            $this->load->model("Igor_Airtel_Anomalie_Model");
+            $this->load->model("Airtel_Anomalie_Model");
+            $this->load->model("Historique_Airtel_Model");
+            $this->load->model("Regul_Igor_Airtel_Model");
+            $this->load->model("Non_Au_Model");
+            ini_set('memory_limit', '1024M');
             session_start();
-            
         }
 
         public function index() {
             $this->load->view("templates/sidebar");
             $this->load->view("pages/importer/importer");
             $this->load->view("pages/operateur/airtel-form");
-
-            $_SESSION["last_solde"] = $this->historique_airtel_model->get_last_solde();
-            $_SESSION["igor_anomalie_ci"] = $this->igor_airtel_anomalie_model->get_anomalie_ci();
-            $_SESSION["igor_anomalie_co"] = $this->igor_airtel_anomalie_model->get_anomalie_co();
-            $_SESSION["anomalie_vi"]= $this->igor_airtel_anomalie_model->get_vi();
-            $_SESSION["deallocation"] = $this->airtel_anomalie_model->get_deallocation();
-            $_SESSION["ambigu"]= $this->airtel_anomalie_model->get_ambiguous();
-            $_SESSION["deallo"]= $this->airtel_anomalie_model->get_deallocation();
-
-        
-            
+            $_SESSION["last_solde"] = $this->Historique_Airtel_Model->get_last_solde();
+            $_SESSION["igor_anomalie_ci"] = $this->Igor_Airtel_Anomalie_Model->get_anomalie_ci();
+            $_SESSION["igor_anomalie_co"] = $this->Igor_Airtel_Anomalie_Model->get_anomalie_co();
+            $_SESSION["anomalie_vi"]= $this->Igor_Airtel_Anomalie_Model->get_vi();
+            $_SESSION["deallocation"] = $this->Airtel_Anomalie_Model->get_deallocation();
+            $_SESSION["ambigu"]= $this->Airtel_Anomalie_Model->get_ambiguous();
+            $_SESSION["deallo"]= $this->Airtel_Anomalie_Model->get_deallocation();
         }
 
         public function importer() {
@@ -65,7 +62,6 @@
                     );
                 }
             }
-
             if (count($igor_read) > 1 ) {
                 
                 for($i=0; $i < count($igor_read); $i++) {
@@ -75,11 +71,18 @@
                     
                     $date_oper= $igor_read[$i][1];
                     $date_oper = date_create_from_format('d.m.Y', $date_oper);
+
+                    if ($date_oper !== false) {
+                        $date_oper = $date_oper->format('Y-m-d');
+                    }
+                    if ($date_val !== false) {
+                        $date_val = $date_val->format('Y-m-d');
+                    }
                     
                     $igor[]= array(
                        "COMPTE" => $igor_read[$i][0],
-                       "DATE_OPER" =>  date_format($date_oper, 'Y-m-d'),
-                       "DATE_VAL" => date_format($date_val, 'Y-m-d'),
+                       "DATE_OPER" =>  $date_oper,
+                       "DATE_VAL" => $date_val,
                        "DEVISE" => $igor_read[$i][3],
                        "MONTANT" => $igor_read[$i][4],
                        "LIBELLE" => $igor_read[$i][5],
@@ -90,8 +93,8 @@
                 }
             }
 
-// --------------------------------------------------------------------------------AIRTEL ---------------------------------------------------------------------
 
+// --------------------------------------------------------------------------------AIRTEL ---------------------------------------------------------------------
 
             $airtel = $this->supprimerEspace($airtel);
             $deallocation = $this->filtrerDeallocation($airtel);
@@ -103,7 +106,6 @@
 
             $airtelCO= $this->filtrerAirtelCashOut($airtel);
             $airtelCO= $this->trierParExternalId($airtelCO);
-
             $mergedAmbigousEtRollback = $this->mergedAmbigousEtRollback($rollback, $ambiguous);
 
 // -------------------------------------------------------------------------------IGOR------------------------------------------------------------
@@ -131,14 +133,29 @@
             $dernierAmbiguous = $res[1];
 
 
-
 // ------------------------------------------------------------------------------ COMPARAISON CO ---------------------------------------------------------
 
             $airtelIgorNormaleCO = $this->comparerAirtelEtIgorCI($airtelCO, $igorCO);
             $resultatAnomalieCO= $this->filtrerAnomalieCI($airtelCO, $igorCO);
 
             $anomalieAirtelCO= $resultatAnomalieCO[0];
-            $anomalieIgorCO = $resultatAnomalieCO[1];     
+            $anomalieIgorCO = $resultatAnomalieCO[1];   
+            
+
+            // echo "<pre>";
+            //     print_r($nonAu);
+            // echo "</pre>";
+
+
+            // echo "<pre>";
+            //     print_r($anomalieAirtelCO);
+            // echo "</pre>";
+
+            // echo "<pre>";
+            //     print_r($airtelIgorNormaleCI);
+            // echo "</pre>";
+
+
             $rollback= $this->changerCleRollBack($rollback);
             $ambiguRegul =array();
             if(!empty($_SESSION["ambigu"])) {
@@ -146,43 +163,30 @@
                     $ambiguRegul[]= get_object_vars($sessionItem);
                 }
             }
-            
-           
-// // ------------------------------------------------------------------REGULARISATION-------------------------------------------------------------------------------------
-            // $dat= array();
-            // foreach($_SESSION["igor_anomalie_ci"] as $sessionItem) {
-            //     $dat[] = get_object_vars($sessionItem);
-            // }
 
-            // if(!empty($dat) && !empty($nonAu)) {
-            //     foreach($dat as $itemDat) {
-            //         foreach($nonAu as $itemNonAu) {
-            //             if($itemDat["REF_IGOR"] === $itemNonAu["ref_igor"]) {
-            //                 $this->igor_airtel_anomalie_model->update_anomalie_ci($itemDat["REF_IGOR"], "Oui", $itemNonAu["date_oper"]);
-            //             }
-            //         }
-            //     }
-            // }
+// // ------------------------------------------------------------------REGULARISATION-------------------------------------------------------------------------------------
+
 
 //----------------------------------------------------------- VI ET DEALLOCATION--------------------------------------------------------
 
             // if(empty($_SESSION["deallo"]) && empty($_SESSION["anomalie_vi"]) && empty($igorVI) && !empty($deallocation)) {
             //     foreach($deallocation as $item) {
-            //         $this->airtel_anomalie_model->insert_or_update_deallocation($item);
+            //         $this->Airtel_Anomalie_Model->insert_or_update_deallocation($item);
             //     }
             // } else if (empty($_SESSION["deallo"]) && empty($_SESSION["anomalie_vi"]) && !empty($igorVI) && empty($deallocation)) {
             //     foreach($igorVI as $item) {
-            //         $this->igor_airtel_anomalie_model->insert_or_update_vi($item);
+            //         $this->Igor_Airtel_Anomalie_Model->insert_or_update_vi($item);
             //     }
             // }
-            
+
+
             // if(!empty($_SESSION["deallo"]) && !empty($igorVI)) {
             //     $d= array();
             //     foreach ($_SESSION["deallo"] as $item) {
             //         $d= get_object_vars($item);
             //     }
             //     $dealloEtVI= $this->RegulViDeallocation($igorVI, $d);
-            //     $this->airtel_anomalie_model->delete_deallocation($dealloEtVI[0]);
+            //     $this->Airtel_Anomalie_Model->delete_deallocation($dealloEtVI[0]);
 
             // } else if (!empty($_SESSION["anomalie_vi"] && !empty($deallocation))) {
             //     $v= array();
@@ -190,96 +194,81 @@
             //         $v[]= get_object_vars($item);
             //     }
             //     $dealloEtVI = $this->RegulViDeallocation($v, $deallocation);
-            //     $this->igor_airtel_anomalie_model->delete_vi($dealloEtVI[1]);
+            //     $this->Igor_Airtel_Anomalie_Model->delete_vi($dealloEtVI[1]);
             // } else if(!empty($deallocation) && !empty($igorVI)) {
             //     $this->RegulViDeallocation($igorVI, $deallocation);
             // }
 
-            // $this->igor_airtel_model->insert_or_update_co($airtelIgorNormaleCO);
-            // echo "<pre>";
-            //     print_r($resultat[]);
-            // echo "</pre>";
+            // $this->Igor_Airtel_Model->insert_or_update_co($airtelIgorNormaleCO);
 
             // $this->RegulViDeallocation($_SESSION["anomalie_vi"], $_SESSION["deallocation"]);
             
 
             // $this->RegulViDeallocation($vi, $deallo);
        
-            // $this->Regul$nonAu($$nonAu, $_SESSION["igor_anomalie_ci"]);
+            // $this->RegulnonAu($nonAu, $_SESSION["igor_anomalie_ci"]);
 
 // ------------------------------------------------------------- INSERTION ------------------------------------------------------------------------------------
 
             foreach($airtelIgorNormaleCO as $item) {
-                $this->igor_airtel_model->insert_or_update_co($item);
+                $this->Igor_Airtel_Model->insert_or_update_co($item);
                 // $solde_airtel+=$item["solde"];
                 // $solde_boa+= $item["MONTANT"];
                 // $item["solde_airtel"]=  $solde_airtel;
                 // $item["solde_boa"]= $solde_boa;
-                // $this->historique_airtel_model->insert($item);
+                // $this->Historique_Airtel_Model->insert($item);
             }
 
 
             foreach($airtelIgorNormaleCI as $item) {
-                $this->igor_airtel_model->insert_or_update_ci($item);
+                $this->Igor_Airtel_Model->insert_or_update_ci($item);
                 // $solde_airtel+=$item["solde"];
                 // $solde_boa+= $item["MONTANT"];
                 // $item["solde_airtel"]=  $solde_airtel;
                 // $item["solde_boa"]= $solde_boa;
-                // $this->historique_airtel_model->insert($item);
+                // $this->Historique_Airtel_Model->insert($item);
             }
 
             foreach($anomalieIgorCO as $item) {
                 $item["etat"]= "Non";
-                $this->igor_airtel_anomalie_model->insert_or_update_co($item);
+                $this->Igor_Airtel_Anomalie_Model->insert_or_update_co($item);
             }
 
             foreach($anomalieIgorCI as $item) {
                 $item["etat"]= "Non";
-                $this->igor_airtel_anomalie_model->insert_or_update_ci($item);
+                $this->Igor_Airtel_Anomalie_Model->insert_or_update_ci($item);
             }
 
             foreach ($anomalieAirtelCI as $item ) {
                 $item["etat"] = "Non";
-                $this->airtel_anomalie_model->insert_or_update_ci($item);
-                // $solde_airtel+=$item["solde"];
-                // $solde_boa+= $item["MONTANT"];
-                // $item["solde_airtel"]=  $solde_airtel;
-                // $item["solde_boa"]= $solde_boa;
-                // $this->historique_airtel_model->insert($item);
+                $this->Airtel_Anomalie_Model->insert_or_update_ci($item);
             }
 
             foreach($anomalieAirtelCO as $item) {
                 $item["etat"]= "Non";
-                $this->airtel_anomalie_model->insert_or_update_co($item);
-                // $solde_airtel+=$item["solde"];
-                // $solde_boa+= $item["MONTANT"];
-                // $item["solde_airtel"]=  $solde_airtel;
-                // $item["solde_boa"]= $solde_boa;
-                // $this->historique_airtel_model->insert($item);
+                $this->Airtel_Anomalie_Model->insert_or_update_co($item);
             }
 
             foreach($deallocation as $item) {
                 // $item["etat"]= "Non";
-                $this->airtel_anomalie_model->insert_or_update_deallocation($item);
+                $this->Airtel_Anomalie_Model->insert_or_update_deallocation($item);
             }
 
 
             foreach($ambiguous as $item) {
-                $this->airtel_anomalie_model->insert_or_update_ambiguous($item);
+                $this->Airtel_Anomalie_Model->insert_or_update_ambiguous($item);
             }
 
             foreach($rollback as $item) {
-                $this->airtel_anomalie_model->insert_or_update_rb($item);
+                $this->Airtel_Anomalie_Model->insert_or_update_rb($item);
             }
 
             foreach($igorVI as $item) {
                 // $item["etat"] = "Non";
-                $this->igor_airtel_anomalie_model->insert_or_update_vi($item);
+                $this->Igor_Airtel_Anomalie_Model->insert_or_update_vi($item);
             }
 
-
-
-            $historique = array_merge($airtelIgorNormaleCI, $airtelIgorNormaleCO, $igorVI, $dernierAmbiguous, $dernierRollBack);
+            $historique = array_merge($airtelIgorNormaleCI, $airtelIgorNormaleCO, $anomalieIgorCI, $anomalieIgorCO, $anomalieAirtelCI, $anomalieAirtelCO, $igorVI, $dernierAmbiguous, $dernierRollBack, $nonAu);
             
             if(count($_SESSION["last_solde"]) > 0 ) {
                 $solde_airtel= $_SESSION["last_solde"][0]->solde_airtel;
@@ -294,22 +283,40 @@
                 $solde_boa += isset($item["MONTANT"]) ? $item["MONTANT"] : 0;
                 $item["solde_airtel"] = $solde_airtel;
                 $item["solde_boa"] = $solde_boa;
-                $this->historique_airtel_model->insert($item);
+
+                $this->Historique_Airtel_Model->insert($item);
             }
 
-            // foreach($nonAu as $item) {
-            //     $this->igor_airtel_model->insert_or_update_nonAu($item);
-            // }
+            foreach($nonAu as $item) {
+                $this->Igor_Airtel_Model->insert_or_update_nonAu($item);
+            }
 
-            // echo "<pre>";
-            //     print_r($airtelIgorNormaleCO);
+            // echo "<pre>" ."anomalie Airtel CI";
+            //     print_r($anomalieAirtelCI);
             // echo "</pre>";
 
-            
+            // echo "<pre>" ."dernierAmbiguous";
+            //     print_r($dernierAmbiguous);
+            // echo "</pre>";
+            // echo "<pre>" ."dernierRollBack";
+            //     print_r($dernierRollBack);
+            // echo "</pre>";
+            // echo "<pre>" ."anomalieAirtelCI";
+            //     print_r($anomalieAirtelCI);
+            // echo "</pre>";
+            // echo "<pre>" ."anomalieAirtelCO";
+            //     print_r($anomalieAirtelCO);
+            // echo "</pre>";
+            // echo "<pre>" ."anomalieAirtelCI";
+            //     print_r($anomalieAirtelCI);
+            // echo "</pre>";
+            // echo "<pre>" ."anomalieAirtelCO";
+            //     print_r($anomalieIgorCO);
+            // echo "</pre>";
+
 
             // $_SESSION["finished"] = "true";
-            $this->exporter($airtelIgorNormaleCI, $airtelIgorNormaleCO, $dernierAmbiguous, $dernierRollBack, $anomalieAirtelCI, $anomalieAirtelCO, $anomalieIgorCI, $anomalieIgorCO, $igorVI, $deallocation, $resultat[2], $mergedAmbigousEtRollback, $ambiguRegul);
-            session_destroy();
+            $this->exporter($airtelIgorNormaleCI, $airtelIgorNormaleCO, $dernierAmbiguous, $dernierRollBack, $anomalieAirtelCI, $anomalieAirtelCO, $anomalieIgorCI, $anomalieIgorCO, $igorVI, $deallocation, $resultat[2], $ambiguRegul);
 
             // redirect("importer_airtel");
           
@@ -379,7 +386,7 @@
             $resultat= array();
             foreach($data as $item) {
                 if(!empty($item["external_id"]) && ($item["service_name"]==="ChannelWalletToBankTransfer" || $item["service_name"] === "WalletToBankTransfer" || $item["service_name"] === "AutoSweepMoneyTransfer" )) {
-                    $item["solde"] = $item["amount"] * 1;
+                    $item["solde"] = intval($item["amount"]) * 1;
                     $resultat[]= $item;
                 }
             }
@@ -594,12 +601,11 @@
                     unset($item["total"]);
                 }
             }
-
             foreach($mergeDeallocationVI as $item) {
-                $this->igor_airtel_model->insert_or_update_deallo_vi($item);
+                $this->Igor_Airtel_Model->insert_or_update_deallo_vi($item);
             }
             return [$reference_number, $mergeDeallocationVI[0]["REF_IGOR"]];
-            session_destroy();
+            // session_destroy();
         }
 
         public function RegulnonAu($nonAu, $anomalieIgor) {
@@ -614,8 +620,8 @@
                         $regul[]= $sessionItem;
                         $regul[]= $igorItem;
 
-                        $this->regul_igor_airtel_model->update_anomalie_ci($sessionItem);
-                        $this->non_au_model->insert_or_update($igorItem);
+                        $this->Regul_Igor_Airtel_Model->update_anomalie_ci($sessionItem);
+                        $this->Non_Au_Model->insert_or_update($igorItem);
                     }
                 }
             }
@@ -633,9 +639,7 @@
                     $item
                 );
 
-            $resultat[]= $item;
-
-
+                $resultat[]= $item;
             }
 
             return $resultat;
@@ -651,15 +655,15 @@
         //             if($itemAmbi["TRANSFER_ID"]===$itemRoll["reference_number"]) {
         //                 $itemAmbi["reference_number"]= $itemRoll["reference_number"];
         //                 $item["date_regul"]= $itemRoll["date_oper"];
-        //                 $this->airtel_anomalie_model->update_ambigu($itemAmbi);
-        //                 $this->airtel_anomalie_model->insert_or_update_rb($itemRoll);
+        //                 $this->Airtel_Anomalie_Model->update_ambigu($itemAmbi);
+        //                 $this->Airtel_Anomalie_Model->insert_or_update_rb($itemRoll);
         //             }
         //         }
         //     }
         // }
 
 
-    public function exporter($airtelIgorNormaleCI, $airtelIgorNormaleCO, $dernierAmbiguous, $dernierRollBack, $anomalieAirtelCI, $anomalieAirtelCO, $anomalieIgorCI, $anomalieIgorCO, $igorVI, $deallocation, $nonAu, $mergedAmbigousEtRollback, $ambiguRegul) {
+    public function exporter($airtelIgorNormaleCI, $airtelIgorNormaleCO, $dernierAmbiguous, $dernierRollBack, $anomalieAirtelCI, $anomalieAirtelCO, $anomalieIgorCI, $anomalieIgorCO, $igorVI, $deallocation, $nonAu, $ambiguRegul) {
 
             $dateAujourdhui = date("Y-m-d");
             $nomFichier = "RapproAirtel-" .$dateAujourdhui .".xlsx";
@@ -712,7 +716,6 @@
                 $sheet->getColumnDimension($cell_array[$i])->setAutoSize(true);
             }
 
-        
             $lastRow = $sheet->getHighestRow() + 2;
             foreach ($airtelIgorNormaleCI as $dataRow) {
                 $i=0;
@@ -724,17 +727,18 @@
                 $sheet->setCellValue($cell_array[$i++].$lastRow, $dataRow["OPER"]);
                 $sheet->setCellValue($cell_array[$i++].$lastRow, $dataRow["EXPL"]);
                 $sheet->setCellValue($cell_array[$i++].$lastRow, $dataRow["REF_IGOR"]);
-                $sheet->setCellValue($cell_array[$i+2] .$lastRow, $dataRow["TRANSFER_ID"]);
-                $sheet->setCellValue($cell_array[$i+3] .$lastRow, $dataRow["transfer_date"]);
-                $sheet->setCellValue($cell_array[$i+4] .$lastRow, $dataRow["external_id"]);
-                $sheet->setCellValue($cell_array[$i+5] .$lastRow, $dataRow["account_no"]);
-                $sheet->setCellValue($cell_array[$i+6] .$lastRow, $dataRow["sender_msisdn"]);
-                $sheet->setCellValue($cell_array[$i+7] .$lastRow, $dataRow["dest_msisdn"]);
-                $sheet->setCellValue($cell_array[$i+8] .$lastRow, $dataRow["amount"]);
-                $sheet->setCellValue($cell_array[$i+9] .$lastRow, $dataRow["description"]);
-                $sheet->setCellValue($cell_array[$i+10] .$lastRow, $dataRow["service_name"]);
-                $sheet->setCellValue($cell_array[$i+11] .$lastRow, $dataRow["reference_number"]);
-                $sheet->setCellValue($cell_array[$i+12] .$lastRow, $dataRow["solde"]);
+                $i+=2;
+                $sheet->setCellValue($cell_array[$i++].$lastRow, $dataRow["TRANSFER_ID"]);
+                $sheet->setCellValue($cell_array[$i++].$lastRow, $dataRow["transfer_date"]);
+                $sheet->setCellValue($cell_array[$i++].$lastRow, $dataRow["external_id"]);
+                $sheet->setCellValue($cell_array[$i++].$lastRow, $dataRow["account_no"]);
+                $sheet->setCellValue($cell_array[$i++].$lastRow, $dataRow["sender_msisdn"]);
+                $sheet->setCellValue($cell_array[$i++].$lastRow, $dataRow["dest_msisdn"]);
+                $sheet->setCellValue($cell_array[$i++].$lastRow, $dataRow["amount"]);
+                $sheet->setCellValue($cell_array[$i++].$lastRow, $dataRow["description"]);
+                $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["service_name"]);
+                $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["reference_number"]);
+                $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["solde"]);
                 $lastRow++;
             }
 
@@ -762,6 +766,38 @@
                 
                 $lastRow++;
             }
+
+            $lastRow = $sheet->getHighestRow() + 2;
+            foreach($dernierAmbiguous as $dataRow) {
+                $i=10;
+                $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["TRANSFER_ID"]);
+                $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["transfer_date"]);
+                $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["external_id"]);
+                $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["account_no"]);
+                $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["sender_msisdn"]);
+                $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["dest_msisdn"]);
+                $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["amount"]);
+                $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["description"]);
+                $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["service_name"]);
+                $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["reference_number"]);
+                $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["solde"]);
+                
+                $i=10;
+                $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('DDDDDD');
+                $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('DDDDDD');
+                $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('DDDDDD');
+                $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('DDDDDD');
+                $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('DDDDDD');
+                $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('DDDDDD');
+                $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('DDDDDD');
+                $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('DDDDDD');
+                $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('DDDDDD');
+                $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('DDDDDD');
+                $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('DDDDDD');
+
+                $lastRow ++;
+            }
+
             // $lastRow = $sheet->getHighestRow() + 2;
             // foreach($ambiguRegul as $dataRow) {
             //     $i=10;
@@ -793,249 +829,228 @@
             //     $lastRow ++;
             // }
 
-            // $lastRow = $sheet->getHighestRow() + 2;
-            // foreach($dernierRollBack as $dataRow) {
-            //     $i=10;
-            //     $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["TRANSFER_ID"]);
-            //     $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["transfer_date"]);
-            //     $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["external_id"]);
-            //     $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["account_no"]);
-            //     $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["sender_msisdn"]);
-            //     $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["dest_msisdn"]);
-            //     $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["amount"]);
-            //     $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["description"]);
-            //     $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["service_name"]);
-            //     $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["reference_number"]);
-            //     $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["solde"]);
+            $lastRow = $sheet->getHighestRow() + 2;
+            foreach($dernierRollBack as $dataRow) {
+                $i=10;
+                $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["TRANSFER_ID"]);
+                $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["transfer_date"]);
+                $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["external_id"]);
+                $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["account_no"]);
+                $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["sender_msisdn"]);
+                $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["dest_msisdn"]);
+                $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["amount"]);
+                $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["description"]);
+                $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["service_name"]);
+                $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["reference_number"]);
+                $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["solde"]);
                 
-            //     $i=10;
-            //     $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('DDDDDD');
-            //     $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('DDDDDD');
-            //     $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('DDDDDD');
-            //     $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('DDDDDD');
-            //     $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('DDDDDD');
-            //     $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('DDDDDD');
-            //     $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('DDDDDD');
-            //     $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('DDDDDD');
-            //     $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('DDDDDD');
-            //     $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('DDDDDD');
-            //     $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('DDDDDD');
+                $i=10;
+                $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('DDDDDD');
+                $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('DDDDDD');
+                $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('DDDDDD');
+                $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('DDDDDD');
+                $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('DDDDDD');
+                $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('DDDDDD');
+                $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('DDDDDD');
+                $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('DDDDDD');
+                $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('DDDDDD');
+                $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('DDDDDD');
+                $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('DDDDDD');
 
-            //     $lastRow ++;
-            // }
+                $lastRow ++;
+            }
 
-            // $lastRow = $sheet->getHighestRow() + 2;
-            // foreach($dernierAmbiguous as $dataRow) {
-            //     $i=10;
-            //     $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["TRANSFER_ID"]);
-            //     $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["transfer_date"]);
-            //     $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["external_id"]);
-            //     $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["account_no"]);
-            //     $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["sender_msisdn"]);
-            //     $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["dest_msisdn"]);
-            //     $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["amount"]);
-            //     $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["description"]);
-            //     $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["service_name"]);
-            //     $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["reference_number"]);
-            //     $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["solde"]);
+            
+
+            $lastRow = $sheet->getHighestRow() + 2;
+            foreach($deallocation as $dataRow) {
+                $i=10;
+                $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["TRANSFER_ID"]);
+                $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["transfer_date"]);
+                $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["external_id"]);
+                $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["account_no"]);
+                $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["sender_msisdn"]);
+                $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["dest_msisdn"]);
+                $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["amount"]);
+                $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["description"]);
+                $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["service_name"]);
+                $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["reference_number"]);
+                $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["solde"]);
                 
-            //     $i=10;
-            //     $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('DDDDDD');
-            //     $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('DDDDDD');
-            //     $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('DDDDDD');
-            //     $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('DDDDDD');
-            //     $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('DDDDDD');
-            //     $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('DDDDDD');
-            //     $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('DDDDDD');
-            //     $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('DDDDDD');
-            //     $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('DDDDDD');
-            //     $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('DDDDDD');
-            //     $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('DDDDDD');
+                $i=10;
+                $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('DDDDDD');
+                $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('DDDDDD');
+                $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('DDDDDD');
+                $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('DDDDDD');
+                $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('DDDDDD');
+                $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('DDDDDD');
+                $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('DDDDDD');
+                $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('DDDDDD');
+                $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('DDDDDD');
+                $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('DDDDDD');
+                $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('DDDDDD');
 
-            //     $lastRow ++;
-            // }
+                $lastRow ++;
+            }
 
-            // $lastRow = $sheet->getHighestRow() + 2;
-            // foreach($deallocation as $dataRow) {
-            //     $i=10;
-            //     $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["TRANSFER_ID"]);
-            //     $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["transfer_date"]);
-            //     $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["external_id"]);
-            //     $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["account_no"]);
-            //     $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["sender_msisdn"]);
-            //     $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["dest_msisdn"]);
-            //     $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["amount"]);
-            //     $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["description"]);
-            //     $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["service_name"]);
-            //     $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["reference_number"]);
-            //     $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["solde"]);
-                
-            //     $i=10;
-            //     $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('DDDDDD');
-            //     $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('DDDDDD');
-            //     $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('DDDDDD');
-            //     $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('DDDDDD');
-            //     $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('DDDDDD');
-            //     $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('DDDDDD');
-            //     $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('DDDDDD');
-            //     $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('DDDDDD');
-            //     $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('DDDDDD');
-            //     $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('DDDDDD');
-            //     $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('DDDDDD');
+            $lastRow = $sheet->getHighestRow() + 2;
+            foreach($igorVI as $dataRow) {
+                $i=0;
+                $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["DATE_OPER"]);
+                $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["DATE_VAL"]);
+                $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["DEVISE"]);
+                $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["MONTANT"]);
+                $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["LIBELLE"]);
+                $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["OPER"]);
+                $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["EXPL"]);
+                $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["REF_IGOR"]);
+                $i=0;
+                $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('0000FF');
+                $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('0000FF');
+                $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('0000FF');
+                $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('0000FF');
+                $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('0000FF');
+                $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('0000FF');
+                $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('0000FF');
+                $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('0000FF');
 
-            //     $lastRow ++;
-            // }
+                $lastRow ++;
 
-            // $lastRow = $sheet->getHighestRow() + 2;
-            // foreach($igorVI as $dataRow) {
-            //     $i=0;
-            //     $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["DATE_OPER"]);
-            //     $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["DATE_VAL"]);
-            //     $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["DEVISE"]);
-            //     $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["MONTANT"]);
-            //     $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["LIBELLE"]);
-            //     $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["OPER"]);
-            //     $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["EXPL"]);
-            //     $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["REF_IGOR"]);
-            //     $i=0;
-            //     $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('0000FF');
-            //     $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('0000FF');
-            //     $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('0000FF');
-            //     $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('0000FF');
-            //     $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('0000FF');
-            //     $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('0000FF');
-            //     $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('0000FF');
-            //     $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('0000FF');
+            }
 
-            //     $lastRow ++;
+            $lastRow = $sheet->getHighestRow() + 2;
+            foreach($anomalieIgorCI as $dataRow) {
+                $i=0;
+                $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["DATE_OPER"]);
+                $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["DATE_VAL"]);
+                $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["DEVISE"]);
+                $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["MONTANT"]);
+                $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["LIBELLE"]);
+                $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["OPER"]);
+                $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["EXPL"]);
+                $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["REF_IGOR"]);
+                $i=0;
 
-            // }
+                $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FFA500');
+                $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FFA500');
+                $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FFA500');
+                $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FFA500');
+                $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FFA500');
+                $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FFA500');
+                $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FFA500');
+                $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FFA500');
+                $lastRow ++;
+            }
 
-            // $lastRow = $sheet->getHighestRow() + 2;
-            // foreach($anomalieIgorCI as $dataRow) {
-            //     $i=0;
-            //     $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["DATE_OPER"]);
-            //     $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["DATE_VAL"]);
-            //     $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["DEVISE"]);
-            //     $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["MONTANT"]);
-            //     $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["LIBELLE"]);
-            //     $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["OPER"]);
-            //     $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["EXPL"]);
-            //     $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["REF_IGOR"]);
-            //     $i=0;
+            $lastRow = $sheet->getHighestRow() + 2;
+            foreach($nonAu as $dataRow) {
+                $i=0;
+                $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["date_oper"]);
+                $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["date_val"]);
+                $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["devise"]);
+                $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["montant"]);
+                $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["libelle"]);
+                $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["oper"]);
+                $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["expl"]);
+                $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["ref_igor"]);
+                $i=0;
 
-            //     $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FFA500');
-            //     $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FFA500');
-            //     $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FFA500');
-            //     $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FFA500');
-            //     $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FFA500');
-            //     $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FFA500');
-            //     $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FFA500');
-            //     $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FFA500');
-            //     $lastRow ++;
-            // }
+                $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('90EE90');
+                $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('90EE90');
+                $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('90EE90');
+                $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('90EE90');
+                $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('90EE90');
+                $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('90EE90');
+                $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('90EE90');
+                $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('90EE90');
+                $lastRow ++;
+            }
 
-            // $lastRow = $sheet->getHighestRow() + 2;
-            // foreach($nonAu as $dataRow) {
-            //     $i=0;
-            //     $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["DATE_OPER"]);
-            //     $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["DATE_VAL"]);
-            //     $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["DEVISE"]);
-            //     $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["MONTANT"]);
-            //     $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["LIBELLE"]);
-            //     $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["OPER"]);
-            //     $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["EXPL"]);
-            //     $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["REF_IGOR"]);
-            //     $i=0;
+            $lastRow = $sheet->getHighestRow() + 2;
+            foreach($anomalieIgorCO as $dataRow) {
+                $i=0;
+                $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["DATE_OPER"]);
+                $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["DATE_VAL"]);
+                $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["DEVISE"]);
+                $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["MONTANT"]);
+                $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["LIBELLE"]);
+                $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["OPER"]);
+                $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["EXPL"]);
+                $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["REF_IGOR"]);
+                $i=0;
 
-            //     $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('90EE90');
-            //     $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('90EE90');
-            //     $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('90EE90');
-            //     $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('90EE90');
-            //     $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('90EE90');
-            //     $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('90EE90');
-            //     $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('90EE90');
-            //     $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('90EE90');
-            //     $lastRow ++;
-            // }
+                $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FF0000');
+                $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FF0000');
+                $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FF0000');
+                $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FF0000');
+                $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FF0000');
+                $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FF0000');
+                $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FF0000');
+                $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FF0000');
 
-            // $lastRow = $sheet->getHighestRow() + 2;
-            // foreach($anomalieIgorCO as $dataRow) {
-            //     $i=0;
-            //     $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["DATE_OPER"]);
-            //     $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["DATE_VAL"]);
-            //     $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["DEVISE"]);
-            //     $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["MONTANT"]);
-            //     $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["LIBELLE"]);
-            //     $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["OPER"]);
-            //     $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["EXPL"]);
-            //     $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["REF_IGOR"]);
-            //     $i=0;
+                $lastRow ++;
 
+            }
 
-            //     $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FF0000');
-            //     $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FF0000');
-            //     $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FF0000');
-            //     $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FF0000');
-            //     $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FF0000');
-            //     $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FF0000');
-            //     $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FF0000');
-            //     $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FF0000');
+            $lastRow = $sheet->getHighestRow() + 2;
 
-            //     $lastRow ++;
+            foreach($anomalieAirtelCI as $dataRow) {
+                $i=10;
+                $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["TRANSFER_ID"]);
+                $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["transfer_date"]);
+                $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["external_id"]);
+                $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["account_no"]);
+                $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["sender_msisdn"]);
+                $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["dest_msisdn"]);
+                $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["amount"]);
+                $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["description"]);
+                $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["service_name"]);
+                $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["reference_number"]);
+                $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["solde"]);
+                $i=10;
+                $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FF0000');
+                $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FF0000');
+                $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FF0000');
+                $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FF0000');
+                $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FF0000');
+                $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FF0000');
+                $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FF0000');
+                $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FF0000');
+                $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FF0000');
+                $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FF0000');
+                $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FF0000');
+            }
 
-            // }
+            $lastRow = $sheet->getHighestRow() + 2;
 
-            // $lastRow = $sheet->getHighestRow() + 2;
+            foreach($anomalieAirtelCO as $dataRow) {
 
-            // foreach($anomalieAirtelCI as $item) {
-            //     $sheet->setCellValue($cell_array[11] .$lastRow, $dataRow["TRANSFER_ID"]);
-            //     $sheet->setCellValue($cell_array[12] .$lastRow, $dataRow["transfer_date"]);
-            //     $sheet->setCellValue($cell_array[13] .$lastRow, $dataRow["external_id"]);
-            //     $sheet->setCellValue($cell_array[14] .$lastRow, $dataRow["account_no"]);
-            //     $sheet->setCellValue($cell_array[15] .$lastRow, $dataRow["sender_msisdn"]);
-            //     $sheet->setCellValue($cell_array[16] .$lastRow, $dataRow["dest_msisdn"]);
-            //     $sheet->setCellValue($cell_array[17] .$lastRow, $dataRow["amount"]);
-            //     $sheet->setCellValue($cell_array[18] .$lastRow, $dataRow["description"]);
-            //     $sheet->setCellValue($cell_array[19] .$lastRow, $dataRow["service_name"]);
-            //     $sheet->setCellValue($cell_array[20] .$lastRow, $dataRow["reference_number"]);
-            //     $sheet->setCellValue($cell_array[21] .$lastRow, $dataRow["solde"]);
-            // }
+                $i=10;
+                $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["TRANSFER_ID"]);
+                $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["transfer_date"]);
+                $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["external_id"]);
+                $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["account_no"]);
+                $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["sender_msisdn"]);
+                $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["dest_msisdn"]);
+                $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["amount"]);
+                $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["description"]);
+                $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["service_name"]);
+                $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["reference_number"]);
+                $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["solde"]);
 
-            // $lastRow = $sheet->getHighestRow() + 2;
-
-            // foreach($anomalieAirtelCO as $dataRow) {
-            //     $sheet->setCellValue($cell_array[11] .$lastRow, $dataRow["TRANSFER_ID"]);
-            //     $sheet->setCellValue($cell_array[12] .$lastRow, $dataRow["transfer_date"]);
-            //     $sheet->setCellValue($cell_array[13] .$lastRow, $dataRow["external_id"]);
-            //     $sheet->setCellValue($cell_array[14] .$lastRow, $dataRow["account_no"]);
-            //     $sheet->setCellValue($cell_array[15] .$lastRow, $dataRow["sender_msisdn"]);
-            //     $sheet->setCellValue($cell_array[16] .$lastRow, $dataRow["dest_msisdn"]);
-            //     $sheet->setCellValue($cell_array[17] .$lastRow, $dataRow["amount"]);
-            //     $sheet->setCellValue($cell_array[18] .$lastRow, $dataRow["description"]);
-            //     $sheet->setCellValue($cell_array[19] .$lastRow, $dataRow["service_name"]);
-            //     $sheet->setCellValue($cell_array[20] .$lastRow, $dataRow["reference_number"]);
-            //     $sheet->setCellValue($cell_array[21] .$lastRow, $dataRow["solde"]);
-            // }
- 
-            // $lastRow = $sheet->getHighestRow() + 1;
-            // foreach($dernierRollBack as $dataRow) {
-            //     $i=10;
-            //     $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["TRANSFER_ID"]);
-            //     $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["transfer_date"]);
-            //     $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["external_id"]);
-            //     $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["account_no"]);
-            //     $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["sender_msisdn"]);
-            //     $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["dest_msisdn"]);
-            //     $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["amount"]);
-            //     $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["description"]);
-            //     $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["service_name"]);
-            //     $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["reference_number"]);
-            //     $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["solde"]);
-
-            //     $lastRow ++;
-
-            // }
+                $i=10;
+                $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FF0000');
+                $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FF0000');
+                $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FF0000');
+                $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FF0000');
+                $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FF0000');
+                $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FF0000');
+                $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FF0000');
+                $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FF0000');
+                $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FF0000');
+                $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FF0000');
+                $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FF0000');
+            }
 
             $lastRow=  $sheet->getHighestRow() + 2;
 
@@ -1071,7 +1086,6 @@
                 $sheet->setCellValue("W$row", $formula);
             }
 
-
             $cell = "W1";
             $style = $sheet->getStyle($cell);
             $style->getFont()->getColor()->setARGB('FFFF0000');
@@ -1081,8 +1095,6 @@
 
             $writer = new PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
             $writer->save('php://output');
-
-
     }    
 }
 

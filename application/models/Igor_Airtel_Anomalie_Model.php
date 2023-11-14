@@ -45,21 +45,24 @@
         }
 
         public function get_anomalie_ci() {
-            $this->db->select("*");
-            $this->db->from("igor_airtel_anomalie_ci");
-            $this->db->where_in("etat", array("Non", "En cours"));
-            $query= $this->db->get();
-
+            $this->db->select('igor_airtel_anomalie_ci.*');
+            $this->db->from('igor_airtel_anomalie_ci');
+            $this->db->join('boa_airtel_nonau', 'igor_airtel_anomalie_ci.REF_IGOR = boa_airtel_nonau.ref_igor', 'left');
+            $this->db->where('boa_airtel_nonau.ref_igor IS NULL');
+            $query = $this->db->get();
             return $query->result();
         }
 
         public function get_anomalie_co() {
-            $this->db->select("*");
-            $this->db->from("igor_airtel_anomalie_co");
-            $this->db->where_in("etat", array("Non", "En cours"));
-            $query= $this->db->get();
+            $this->db->select('*');
+            $this->db->from('igor_airtel_anomalie_co');
+            $this->db->where_not_in('REF_IGOR', "SELECT REF_IGOR FROM airtel_anomalie_co", false);
+            $query = $this->db->get();
             return $query->result();
         }
+
+
+        
 
         public function delete_ci($igor) {
             $this->db->where("REF_IGOR", $igor);
@@ -70,8 +73,9 @@
             $this->db->select('*');
             $this->db->select_sum('MONTANT', 'total');
             $this->db->from('igor_airtel_anomalie_vi');
-            // $this->db->where("etat", "Non");
+            $this->db->where("reference_number IS NULL");
             $this->db->group_by('REF_IGOR');
+
             $query = $this->db->get();
             return $query->result();
         }

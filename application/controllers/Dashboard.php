@@ -4,31 +4,33 @@ class Dashboard extends CI_Controller {
     public function __construct() {
         parent::__construct();
 
-        $this->load->model("historique_airtel_model");
-        $this->load->model("historique_telma_model");
-        $this->load->model("historique_orange_model");
+        $this->load->model("Historique_Airtel_Model");
+        $this->load->model("Historique_Telma_Model");
+        $this->load->model("Historique_Orange_Model");
+        session_start();
     }
 
     public function index() {
         $data['chart_data'] = $this->getDataForDonutChart();
         $this->load->view("templates/sidebar");
         $this->load->view('chart-view', $data);
+        
     }
 
     private function getDataForDonutChart() {
-        $airtel = $this->historique_airtel_model->get_last_solde();
-        // $orange = $this->historique_orange_model->get_last_solde();
-        $telma = $this->historique_telma_model->get_last_solde();
+
+        
+        $airtel = $this->Historique_Airtel_Model->get_last_solde();
+        // $orange = $this->Historique_Orange_Model->get_last_solde();
+        $telma = $this->Historique_Telma_Model->get_last_solde();
 
         $data["telma"] = [
-            "solde" =>$telma[0]
+            "solde" =>!empty($telma[0]) ? $telma[0] : null
         ];
 
         $data["airtel"] = [
-            "solde" => $airtel[0]
+            "solde" => !empty($airtel[0]) ? $airtel[0] : null
         ];
-
-
 
         // $data = [
         //     'labels' => ['Solde BOA', 'Solde Telma', 'Vert'],
@@ -41,7 +43,6 @@ class Dashboard extends CI_Controller {
         //     "airtel" => $airtel,
         //     // "orange" => [$orange],
         //     'telma' => $telma
-            
         // ];
         return $data;
     }

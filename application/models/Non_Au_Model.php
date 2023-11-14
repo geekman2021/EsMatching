@@ -17,11 +17,7 @@
                 $this->db->where("REF_IGOR", $data["REF_IGOR"]);
                 return $this->db->update("nonau", $data);
             }
-        }
-
-      
-        
-        
+        }  
     }
 
 ?>

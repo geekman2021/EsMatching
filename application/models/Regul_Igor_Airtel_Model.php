@@ -12,7 +12,6 @@
             $this->db->delete("igor_airtel_anomalie_vi");
         }
 
-
         public function insert_igor_airtel($data) {
             return $this->db->insert("regul_deallo", $data);
         }

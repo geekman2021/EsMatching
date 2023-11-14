@@ -5,7 +5,7 @@
         public function __construct(){
             parent::__construct();
             session_start();
-            $this->load->model("igor_airtel_anomalie_model");
+            $this->load->model("Igor_Airtel_Anomalie_Model");
 
 
         }
@@ -14,7 +14,7 @@
             $ref_igor= $this->input->post("id");
             $etat= $this->input->post("etat");
             $date_regul= $this->input->post("date_regul");
-            $this->igor_airtel_anomalie_model->update_anomalie_CO($ref_igor, $etat, $date_regul);
+            $this->Igor_Airtel_Anomalie_Model->update_anomalie_CO($ref_igor, $etat, $date_regul);
         }
 
         public function edit_anomalie_CI() {
@@ -22,7 +22,7 @@
             $etat= $this->input->post("etat");
             $date_regul= $this->input->post("date_regul");
 
-            $this->igor_airtel_anomalie_model->update_anomalie_CI($id, $etat, $date_regul);
+            $this->Igor_Airtel_Anomalie_Model->update_anomalie_CI($id, $etat, $date_regul);
         }
 
         public function edit_anomalie_Vi() {

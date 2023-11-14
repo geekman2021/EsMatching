@@ -89,14 +89,12 @@
 
         public function get_deallocation() {
             $this->db->select('*');
-            // $this->db->select_sum('amount', 'total');
             $this->db->from('airtel_deallocation');
-            // $this->db->group_by('reference_number');
+            $this->db->where('REF_IGOR IS NULL');
             $query = $this->db->get();
+
             return $query->result();
         }
-
-
 
         public function get_ambiguous() {
             $this->db->select('airtel_ambiguous.*');
@@ -179,8 +177,5 @@
             $this->db->where("reference_number", $data["reference_number"]);
             return $this->db->update("airtel_deallocation", $data);
         }
-
-        
-
     }
 ?>

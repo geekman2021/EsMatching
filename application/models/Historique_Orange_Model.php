@@ -21,7 +21,7 @@
         }
 
         public function get_last_solde() {
-            $sql= "SELECT solde_orange, solde_boa FROM historique_orange ORDER BY id DESC LIMIT 1";
+            $sql= "SELECT princ_solde, comm_solde, solde, orange_solde FROM historique_orange ORDER BY id DESC LIMIT 1";
 
             $query= $this->db->query($sql);
 

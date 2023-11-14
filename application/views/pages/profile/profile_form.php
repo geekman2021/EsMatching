@@ -1,3 +1,6 @@
+<?php if($_SESSION["isLogin"] !==true) {
+  redirect("auth");
+}?>
 <form id="addForm">
     <div class="container mt-5 container-parent-form">
         <div class="row">

@@ -3,8 +3,7 @@
     class Imprimer extends CI_Controller {
         public function __construct() {
             parent::__construct();
-            $this->load->model("check_model");
-            $this->load->model("user_model");
+            $this->load->model("Reference_Model");
             session_start();
         }
 
@@ -14,6 +13,15 @@
 
         public function imprimerDocument() {
             $i=0;
+            
+
+            if($this->input->get("operateur") ==="AIRTEL") {
+                $reference= $this->Reference_Model->incrementerReferenceAirtel();
+            } else if($this->input->get("operateur") ==="MVL") {
+                $reference= $this->Reference_Model->incrementerReferenceTelma();
+            } else {
+                $reference= $this->Reference_Model->incrementerReferenceOrange(); 
+            }
 
             $ref_igor = $this->input->get('ref');
             $compte_client= $this->input->get("compte_client");
@@ -34,7 +42,6 @@
 
             $date= date("d/m/y");
             $annee= date("y");
-            $reference= $i++;
 
             $template = $this->load->view('templates/frDix', array(
                 'ref_igor' => $ref_igor,

@@ -1,13 +1,13 @@
-<div class=" container mt-5">
+<div class=" container-regul mt-5">
     <ul class="nav nav-tabs">
             <li class="nav-item col-sm-4">
-                <a class="nav-link" href="<?php echo site_url("regul_airtel") ?>">Airtel</a>
+                <a class="nav-link" href="<?php echo site_url("Regul_Airtel") ?>">Airtel</a>
             </li>
             <li class="nav-item col-sm-4">
-                <a class="nav-link" href="<?php echo site_url("regul_orange") ?>">Orange</a>
+                <a class="nav-link" href="<?php echo site_url("Regul_Orange") ?>">Orange</a>
             </li>
             <li class="nav-item col-sm-4">
-                <a class="nav-link" href="<?php echo site_url("regul_telma") ?>">Telma</a>
+                <a class="nav-link" href="<?php echo site_url("Regul_Telma") ?>">Telma</a>
             </li>
     </ul>
 </div>

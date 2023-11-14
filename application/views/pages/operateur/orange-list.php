@@ -1,7 +1,7 @@
 
 
 
-<div class=" container mt-5">
+<div class=" container-fluid mt-5">
   <!-- Nav tabs -->
   
     <ul class="nav nav-tabs">
@@ -16,7 +16,7 @@
 
   <!-- Tab panes -->
   <div class="tab-content">
-    <div id="normale" class="container tab-pane "><br>
+    <div id="normale" class="container-fluid tab-pane "><br>
       <ul class="nav nav-tabs">
         <li class="nav-item col-sm-6">
           <a class="nav-link" href="#tabNormaleCashIn">Normale Cash in</a>
@@ -26,7 +26,7 @@
         </li>
       </ul>
     </div>
-    <div id="anormale" class="container tab-pane fade"><br>
+    <div id="anormale" class="container-fluid tab-pane fade"><br>
       <ul class="nav nav-tabs">
         <li class="nav-item col-sm-3">
           <a class="nav-link" href="#tabDat">Débit à Tort</a>
@@ -34,20 +34,32 @@
         <li class="nav-item col-sm-3">
           <a class="nav-link" href="#tabCat">Crédit à Tort</a>
         </li>
-        <li class="nav-item col-sm-3">
+        <li class="nav-item col-sm-2">
+          <a class="nav-link" href="#tabMvts">Mvts</a>
+        </li>
+        <li class="nav-item col-sm-2">
           <a class="nav-link" href="#tabInd">IND01</a>
         </li>
-        <li class="nav-item col-sm-3">
+        <li class="nav-item col-sm-2">
           <a class="nav-link" href="#tabVI">VI</a>
         </li>
       </ul>
     </div>
   </div>
 
-  <div class="container tab-content">
+  <div class="container-fluid tab-content">
     <div id="tabNormaleCashIn" class="tab-pane"><br>
         <div class="table-responsive">
-            <table class="table table-bordered" id="tableNormaleCashIn">
+          <div class="card"> 
+          <div class="card-header">
+            <div class="row">
+              <div class="col-lg-6">
+                <b>Liste Normale CashIn</b>
+              </div>
+            </div>
+          </div>
+          <div class="card-body">
+          <table class="table table-bordered" id="tableNormaleCashIn">
                 <thead style="text-align: center ;">
                     <tr>
                         <th colspan="12" style="text-align: center ;">BOA</th>
@@ -107,18 +119,32 @@
                   <?php  } ;?>
                 </tbody>
             </table>
+          </div>
         </div>
+            
+      </div>
     </div>
-    <div id="tabNormaleCashOut" class="container tab-pane "><br>
-        <div class="table-responsive">
+    <div id="tabNormaleCashOut" class="container-fluid tab-pane "><br>
+        <div class="container table-responsive ">
+
+        <div class="card"> 
+          <div class="card-header">
+            <div class="row">
+              <div class="col-lg-6">
+                <b>Liste Normale CashIn</b>
+              </div>
+            </div>
+          </div>
+          <div class="card-body">
+
             <table class="table table-bordered" id="tableNormaleCashOut">
-            <thead style="text-align: center ;">
-              <tr>
-                  <th colspan="8" style="text-align: center ;">BOA</th>
-                  <th style="text-align: center ;"></th>
-                  <th colspan="8" style="text-align: center ;">ORANGE</th>
-              </tr>
-              <tr>
+              <thead style="text-align: center ;">
+                  <tr>
+                    <th colspan="8" style="text-align: center ;">BOA</th>
+                    <th style="text-align: center ;"></th>
+                    <th colspan="8" style="text-align: center ;">ORANGE</th>
+                  </tr>
+                  <tr>
                 <th>Date_Oper</th>
                 <th>date_val</th>
                 <th>montant</th>
@@ -163,13 +189,24 @@
                 <?php } ?>
               </tbody>
             </table>
+          </div>
         </div>
+      </div>
          
   </div>
 
-  <div class="container tab-content">
-  <div id="tabDat" class="container tab-pane "><br>   
+  <div class="container-fluid tab-content">
+  <div id="tabDat" class="container-fluid tab-pane "><br>   
     <div class="table-responsive">
+    <div class="card"> 
+          <div class="card-header">
+            <div class="row">
+              <div class="col-lg-6">
+                <b>Liste Debit a Tort</b>
+              </div>
+            </div>
+          </div>
+          <div class="card-body">
       <table class="table table-bordered" id="tableDat">
         <thead style="text-align: center ;">
           <tr>
@@ -179,7 +216,7 @@
               <th colspan="3">Régularisation</th> 
           </tr>
           <tr>
-            <!-- <th></th> -->
+            <th><input type="checkbox" id="select-all"></th> 
             <th>Code_Agence</th>
             <th>Date_Oper</th>
             <th>princ_date_val</th>
@@ -200,6 +237,7 @@
         <tbody>  
           <?php foreach($dat as $item) { ?> 
             <tr>
+                    <td><input type="checkbox" name="selected_items[]" value="<?php echo $item->princ_ref_igor; ?>"></td>
                     <td><?php echo $item->comm_code_agence ?></td>
                     <td><?php echo $item->princ_date_oper ?></td>
                     <td><?php echo $item->princ_date_val ?></td>
@@ -229,14 +267,26 @@
                       </a>
                     </td>
               </tr>
-          
           <?php } ?>  
+          <input type="submit" class="btn btn-danger" name="delete_selected" value="Supprimer sélection" disabled>
+          
         </tbody>
       </table>
     </div>
   </div>
-  <div id="tabCat" class="container tab-pane "><br>    
+    </div>
+  </div>
+  <div id="tabCat" class="container-fluid tab-pane "><br>    
     <div class="table-responsive">
+    <div class="card"> 
+          <div class="card-header">
+            <div class="row">
+              <div class="col-lg-6">
+                <b>Liste Credit à tort</b>
+              </div>
+            </div>
+          </div>
+          <div class="card-body">
       <table class="table table-bordered" id="tableCat">
         <thead style="text-align: center ;">
         <tr>
@@ -273,7 +323,7 @@
               <td style="text-align:center;">
                 <a href="javascript:void(0);" class="text-warning" data-toggle="modal" data-target="#myModal" onClick="modifier('<?php echo $item->princ_ref_igor ?>', 'Non', '')">
                   <i class="bx bx-edit"></i>
-                </a> 
+                </a>
                 <a href="javascript:void(0);" class="text-primary" data-target="#myModalFr10"
                               data-compte="<?php echo $item->princ_compte ?>"
                               data-date-oper="<?php echo $item->princ_date_oper ?>"
@@ -285,14 +335,103 @@
                 </a>
               </td>
             </tr>
+            <input type="submit" class="btn btn-danger" name="delete_selected" value="Supprimer sélection">
         <?php } ?> 
         </tbody>
       </table>
+        </div>
+        </div>
     </div>     
   </div>
 
-  <div id="tabInd" class="container tab-pane "><br>    
+  <div id="tabMvts" class="container-fluid tab-pane "><br>    
     <div class="table-responsive">
+    <div class="card"> 
+          <div class="card-header">
+            <div class="row">
+              <div class="col-lg-6">
+                <b>Liste MVTS</b>
+              </div>
+            </div>
+          </div>
+          <div class="card-body">
+      <table class="table table-bordered" id="tableMvts">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Heure</th>
+            <th>Réference</th>
+            <th>Service</th>
+            <th>Num_Compte</th>
+            <th>Débit</th>
+          </tr>
+        </thead>
+        <tbody>
+        <?php foreach($ind as $item) { ?>
+            <tr>
+              <td><?php echo $item->orange_date ?></td>
+              <td><?php echo $item->orange_heure ?></td>
+              <td><?php echo $item->orange_ref ?></td>
+              <td><?php echo $item->orange_service ?></td>
+              <td><?php echo $item->orange_num_compte ?></td>
+              <td><?php echo $item->orange_debit ?></td>
+            </tr>
+          <?php } ?> 
+        </tbody>
+      </table>
+        </div>
+        </div>
+    </div> 
+    
+    <div class="table-responsive">
+    <div class="card"> 
+          <div class="card-header">
+            <div class="row">
+              <div class="col-lg-6">
+                <b>Liste MVTS</b>
+              </div>
+            </div>
+          </div>
+          <div class="card-body">
+      <table class="table table-bordered" id="tableMvts">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Heure</th>
+            <th>Réference</th>
+            <th>Service</th>
+            <th>Num_Compte</th>
+            <th>Débit</th>
+          </tr>
+        </thead>
+        <tbody>
+        <?php foreach($ind as $item) { ?>
+            <tr>
+              <td><?php echo $item->orange_date ?></td>
+              <td><?php echo $item->orange_heure ?></td>
+              <td><?php echo $item->orange_ref ?></td>
+              <td><?php echo $item->orange_service ?></td>
+              <td><?php echo $item->orange_num_compte ?></td>
+              <td><?php echo $item->orange_debit ?></td>
+            </tr>
+          <?php } ?> 
+        </tbody>
+      </table>
+        </div>
+        </div>
+    </div>
+  </div>
+  <div id="tabInd" class="container-fluid tab-pane "><br>    
+    <div class="table-responsive">
+    <div class="card"> 
+          <div class="card-header">
+            <div class="row">
+              <div class="col-lg-6">
+                <b>Liste IND</b>
+              </div>
+            </div>
+          </div>
+          <div class="card-body">
       <table class="table table-bordered" id="tableInd">
         <thead>
           <tr>
@@ -317,12 +456,23 @@
           <?php } ?> 
         </tbody>
       </table>
+        </div>
+        </div>
     </div>     
   </div>
 
 
-  <div id="tabVI" class="container tab-pane"><br>
+  <div id="tabVI" class="container-fluid tab-pane"><br>
       <div class="table-responsive">
+      <div class="card"> 
+          <div class="card-header">
+            <div class="row">
+              <div class="col-lg-6">
+                <b>Liste VI</b>
+              </div>
+            </div>
+          </div>
+          <div class="card-body">
           <table class="table table-bordered" id="tableVI">
               <thead style="text-align: center ;">
                 <tr>
@@ -355,6 +505,8 @@
           <?php } ?> 
               </tbody>
           </table>
+              </div>
+              </div>
       </div>
   </div>
 
@@ -449,6 +601,18 @@
     refIgor = link.data('ref-igor');
 });
 
+document.addEventListener("DOMContentLoaded", function() {
+      const selectAllCheckbox = document.getElementById("select-all");
+      const dataCheckboxes = document.querySelectorAll("tbody input[type='checkbox']");
+
+      selectAllCheckbox.addEventListener("change", function() {
+        
+        dataCheckboxes.forEach(function(checkbox) {
+          checkbox.checked = selectAllCheckbox.checked;
+        });
+      });
+});
+
 $("#modifFormfr10").submit(function(e) {
     e.preventDefault();
     var responsable = $("#responsable").val();
@@ -531,6 +695,11 @@ $(document).ready(function(){
     }
   });
 
+  $("#tableMvts").DataTable({
+    language: {
+      url: '<?php echo base_url(); ?>assets/fr-FR.json',
+    }
+  });
   $("#tableCat").DataTable({
     responsive: true,
     scrollX: true,
@@ -570,13 +739,16 @@ $(document).ready(function(){
       url: '<?php echo base_url(); ?>assets/fr-FR.json',
     }
   });
+
+    
+
+
   
 
 
     // $("#tableAnormaleCashOut").DataTable();
   $(".nav-tabs a").click(function(){
     $(this).tab('show');
-    // Ajoutez le code pour masquer la tab "Table Normale Cash In" ici
     if($(this).attr('href') === '#anormale') {
       $("#tabNormaleCashIn").removeClass("show active");
       $("#tabNormaleCashOut").removeClass("show active");

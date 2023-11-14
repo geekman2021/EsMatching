@@ -10,13 +10,12 @@
 
         public function __construct() {
             parent::__construct();
-            // $this->load->library("form_validation");
-            // $this->load->session("session");
-            $this->load->model("profil_model");
+            $this->load->model("Profil_Model");
+            session_start();
         }
 
         public function index() {
-            $data["data"] = $this->profil_model->get_profils(); 
+            $data["data"] = $this->Profil_Model->get_profils(); 
             $this->load->view("templates/sidebar");
             $this->load->view("pages/profile/profile_form", $data);
             $this->load->view("pages/profile/profile_list", $data);
@@ -28,7 +27,7 @@
             $code_profile= $this->input->post("code_profile");
             $libelle= $this->input->post("libelle");
 
-            $this->profil_model->insert_profil(array(
+            $this->Profil_Model->insert_profil(array(
                 "code_profile" => $code_profile,
                 "libelle" => $libelle
             ));
@@ -42,7 +41,7 @@
             $code_profile= $request->code_profile;
             $libelle = $request->libelle;
             
-            $this->profil_model->update_profil($id, array(
+            $this->Profil_Model->update_profil($id, array(
                 "code_profile" => $code_profile,
                 "libelle" => $libelle,
             ));
@@ -52,7 +51,7 @@
             $this->header();
             $id= $this->input->post("id");
 
-            $this->profil_model->delete_profil($id); 
+            $this->Profil_Model->delete_profil($id); 
         }
 
 
