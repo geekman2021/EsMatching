@@ -20,6 +20,7 @@
         }
 
         public function index() {
+
             $this->load->view("templates/sidebar");
             $this->load->view("pages/importer/importer");
             $this->load->view("pages/operateur/airtel-form");
@@ -30,10 +31,10 @@
             $_SESSION["deallocation"] = $this->Airtel_Anomalie_Model->get_deallocation();
             $_SESSION["ambigu"]= $this->Airtel_Anomalie_Model->get_ambiguous();
             $_SESSION["deallo"]= $this->Airtel_Anomalie_Model->get_deallocation();
+
         }
 
         public function importer() {
-            
             $airtel_read = $this->readData($_FILES["airtel"]["name"], $_FILES["airtel"]["tmp_name"]);
             $igor_read= $this->readData($_FILES["igor"]["name"], $_FILES["igor"]["tmp_name"]);
 
@@ -545,7 +546,7 @@
                     $igorCI[] = $item;
                 } else if ($item["EXPL"] !=="AU" && $item["OPER"] ==="VI") {
                     $igorVI[] = $item;
-                } else if ($item["EXPL"] != "AU" && $item["OPER"] ==="CASHI") {
+                } else if ($item["EXPL"] !== "AU" && $item["OPER"] !=="VI") {
                     $data = array_change_key_case($item, CASE_LOWER);
                     $nonAu[]= $data;
                 }
@@ -647,7 +648,6 @@
 
 
         // public function regulRollBackAmbiguous($rollback, $ambiguous) {
-
         //     $regulRoll= array();
         //     $regulAmbi= array();
         //     foreach($rollback as $itemRoll) {
@@ -859,7 +859,6 @@
 
                 $lastRow ++;
             }
-
             
 
             $lastRow = $sheet->getHighestRow() + 2;

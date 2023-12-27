@@ -48,6 +48,27 @@
         $("#nom").val(nom);
         $("#code_profile").val(code_profile);
     }
+
+    function supprimer(id) {
+        var confirm= window.confirm("Voulez-vous vraiment supprimer");
+        if (confirm) {
+            $.ajax({
+                url: "<?php echo site_url("Users/remove_user") ?>",
+                type: "POST",
+                data: {
+                    "id": id
+                },
+                success: function (response) {
+                    window.location.reload();
+                },
+                error: function (error) {
+                    alert(error);
+                }
+            });
+        }
+       
+    }
+
     $("#addformUser").submit(function(e) {
         e.preventDefault();
         const id= $("#id").val();
@@ -57,7 +78,7 @@
 
         if(id) {
             $.ajax({
-                url: "<?php echo site_url("users/edit_user") ?>",
+                url: "<?php echo site_url("Users/edit_user") ?>",
                 type: "POST",
                 data: {
                     "id": id,
@@ -91,10 +112,6 @@
                 }
             });
         }
-            
-
-      
-
     });
 
     $(document).ready(function() {

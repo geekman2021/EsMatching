@@ -209,14 +209,14 @@
           <div class="card-body">
       <table class="table table-bordered" id="tableDat">
         <thead style="text-align: center ;">
-          <tr>
-              <th colspan="12" style="text-align: center ;">BOA</th>
+          <!-- <tr> -->
+              <!-- <th colspan="12" style="text-align: center ;">BOA</th> -->
               <!-- <th style="text-align: center ;"></th>
               <th colspan="9" style="text-align: center ;">ORANGE</th>-->
-              <th colspan="3">Régularisation</th> 
-          </tr>
+              <!-- <th colspan="3">Régularisation</th>  -->
+          <!-- </tr> -->
           <tr>
-            <th><input type="checkbox" id="select-all"></th> 
+            <!-- <th><input type="checkbox" id="select-all"></th>  -->
             <th>Code_Agence</th>
             <th>Date_Oper</th>
             <th>princ_date_val</th>
@@ -229,15 +229,15 @@
             <th>Expl</th>
             <th>ReferenceIgor</th>
             <th>Numéro</th>
-            <th>Etat</th>
-            <th>Date_regul</th>
+            <!-- <th>Etat</th>
+            <th>Date_regul</th> -->
             <th>Action</th>
           </tr>
         </thead>
         <tbody>  
           <?php foreach($dat as $item) { ?> 
             <tr>
-                    <td><input type="checkbox" name="selected_items[]" value="<?php echo $item->princ_ref_igor; ?>"></td>
+                    <!-- <td><input type="checkbox" name="selected_items[]" value="<?php echo $item->princ_ref_igor; ?>"></td> -->
                     <td><?php echo $item->comm_code_agence ?></td>
                     <td><?php echo $item->princ_date_oper ?></td>
                     <td><?php echo $item->princ_date_val ?></td>
@@ -250,12 +250,12 @@
                     <td><?php echo $item->princ_expl ?></td>
                     <td><?php echo $item->princ_ref_igor ?></td>
                     <td><?php echo substr($item->cle, 0, 10) ?></td>
-                    <td>Non</td>
-                    <td></td>
+                    <!-- <td>Non</td>
+                    <td></td> -->
                     <td style="text-align: center;">
-                      <a href="javascript:void(0);" class="text-warning" data-toggle="modal" data-target="#myModal" onClick="modifier('<?php echo $item->princ_ref_igor ?>', 'Non', '')">
+                      <!-- <a href="javascript:void(0);" class="text-warning" data-toggle="modal" data-target="#myModal" onClick="modifier('<?php echo $item->princ_ref_igor ?>', 'Non', '')">
                         <i class="bx bx-edit" style="font-size: 20px;"></i>
-                      </a> 
+                      </a>  -->
                       <a href="javascript:void(0);" class="text-primary" data-target="#myModalFr10"
                               data-compte="<?php echo $item->princ_compte ?>"
                               data-date-oper="<?php echo $item->princ_date_oper ?>"
@@ -268,7 +268,7 @@
                     </td>
               </tr>
           <?php } ?>  
-          <input type="submit" class="btn btn-danger" name="delete_selected" value="Supprimer sélection" disabled>
+          <!-- <input type="submit" class="btn btn-danger" name="delete_selected" value="Supprimer sélection" disabled> -->
           
         </tbody>
       </table>
@@ -289,10 +289,10 @@
           <div class="card-body">
       <table class="table table-bordered" id="tableCat">
         <thead style="text-align: center ;">
-        <tr>
+        <!-- <tr>
           <th colspan="9"> BOA</th>
           <th colspan="3"> Regularisation</th>
-        </tr>
+        </tr> -->
           <tr>
             <th>Date_Oper</th>
             <th>date_val</th>
@@ -302,8 +302,8 @@
             <th>Expl</th>
             <th>ReferenceIgor</th>
             <th>Numero</th>
-            <th>Etat</th>
-            <th>Date_regul</th>
+            <!-- <th>Etat</th>
+            <th>Date_regul</th> -->
             <th>Action</th>
           </tr>
         </thead>
@@ -318,12 +318,12 @@
               <td><?php echo $item->princ_expl ?></td>
               <td><?php echo $item->princ_ref_igor ?></td>
               <td><?php echo substr($item->cle, 0, 10) ?></td>
-              <td>Non</td>
-              <td></td>
+              <!-- <td>Non</td>
+              <td></td> -->
               <td style="text-align:center;">
-                <a href="javascript:void(0);" class="text-warning" data-toggle="modal" data-target="#myModal" onClick="modifier('<?php echo $item->princ_ref_igor ?>', 'Non', '')">
+                <!-- <a href="javascript:void(0);" class="text-warning" data-toggle="modal" data-target="#myModal" onClick="modifier('<?php echo $item->princ_ref_igor ?>', 'Non', '')">
                   <i class="bx bx-edit"></i>
-                </a>
+                </a> -->
                 <a href="javascript:void(0);" class="text-primary" data-target="#myModalFr10"
                               data-compte="<?php echo $item->princ_compte ?>"
                               data-date-oper="<?php echo $item->princ_date_oper ?>"
@@ -335,7 +335,7 @@
                 </a>
               </td>
             </tr>
-            <input type="submit" class="btn btn-danger" name="delete_selected" value="Supprimer sélection">
+            <!-- <input type="submit" class="btn btn-danger" name="delete_selected" value="Supprimer sélection"> -->
         <?php } ?> 
         </tbody>
       </table>

@@ -101,10 +101,10 @@
         <li>
           <a href="<?php echo site_url("Historique") ?>">
             <i class="bx bx-history"></i>
-            <span class="link_name">Historique</span>
+            <span class="link_name">Rapprochement</span>
           </a>
           <ul class="sub-menu blank">
-            <li><a class="link_name" href="<?php echo site_url("Historique") ?>">Historique</a></li>
+            <li><a class="link_name" href="<?php echo site_url("Historique") ?>">Rapprochement</a></li>
           </ul>
         </li>
       <?php } else if((isset($_SESSION["userExist"]) && isset($_SESSION["userExist"]->code_profil) && $_SESSION["userExist"]->code_profil ==="003")) { ?>
@@ -145,10 +145,19 @@
         <li>
           <a href="<?php echo site_url("Historique") ?>">
             <i class="bx bx-history"></i>
-            <span class="link_name">Historique</span>
+            <span class="link_name">Rapprochement</span>
           </a>
           <ul class="sub-menu blank">
-            <li><a class="link_name" href="<?php echo site_url("Historique") ?>">Historique</a></li>
+            <li><a class="link_name" href="<?php echo site_url("Historique") ?>">Rapprochement</a></li>
+          </ul>
+        </li>
+        <li>
+          <a href="<?php echo site_url("Ecart") ?>">
+            <i class="bx bx-history"></i>
+            <span class="link_name">Ecart</span>
+          </a>
+          <ul class="sub-menu blank">
+            <li><a class="link_name" href="<?php echo site_url("Ecart") ?>">Ecart</a></li>
           </ul>
         </li>
       <?php } ?>

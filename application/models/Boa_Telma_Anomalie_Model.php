@@ -57,6 +57,18 @@
             }
         }
 
+        public function insert_or_update_mvts_ci($data) {
+            $this->db->where("REF_IGOR", $data["REF_IGOR"]);
+                $exist= $this->db->get("telma_mvts_ci");
+                if($exist->num_rows() == 0) {
+                    return $this->db->insert("boa_telma_anomalie_vi", $data);
+                } else {
+                $this->db->where("REF_IGOR", $data["REF_IGOR"]);
+                
+                return $this->db->update("boa_telma_anomalie_vi", $data);
+            }
+        }
+
         public function update_dat($ref_igor, $etat, $date_regul) {
             $this->db->set('etat', $etat);
             $this->db->set('date_regul', $date_regul);

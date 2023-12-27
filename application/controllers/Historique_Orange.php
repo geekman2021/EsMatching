@@ -15,7 +15,6 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
             $this->load->view("templates/sidebar");
             $this->load->view("pages/historique/historique");
             $this->load->view("pages/historique/historique_orange", $this->get_data());
-
         }
 
         private function get_data() {

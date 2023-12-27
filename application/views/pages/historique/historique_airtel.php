@@ -18,7 +18,6 @@
 </div>
 
 <div id="tabNormaleCashOut" style="padding-left: 5vw; padding-right: 5vw;" class="tab-pane "><br>
-    
     <div class="table-responsive" ">
         <table class="table table-bordered" id="tableNormaleCashOut">
         <thead style="text-align: center ;">

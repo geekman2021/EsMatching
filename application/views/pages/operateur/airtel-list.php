@@ -1,25 +1,20 @@
-
-
-
 <div class="container-fluid mt-5">
-  <!-- Nav tabs -->
-  
     <ul class="nav nav-tabs">
-            <li class="nav-item col-sm-6">
-                <a class="nav-link" href="#normale">Normale</a>
-            </li>
-            <li class="nav-item col-sm-6">
-                <a class="nav-link" href="#anormale">Anomalie</a>
-            </li>
+      <li class="nav-item col-sm-6">
+          <a class="nav-link" href="#normale">Normale</a>
+      </li>
+      <li class="nav-item col-sm-6">
+          <a class="nav-link" href="#anormale">Anomalie</a>
+      </li>
     </ul>
 </div>
 
-  <!-- Tab panes -->
+
 <div class="tab-content">
-    <div id="normale" class="container-fluid tab-pane "><br>
+    <div id="normale" class="container-fluid tab-pane"><br>
       <ul class="nav nav-tabs">
         <li class="nav-item col-sm-6">
-          <a class="nav-link" href="#tabNormaleCashIn">Normale Cash in</a>
+          <a class="nav-link" href="#tabNormaleCashIn">Normale Cash in </a>
         </li>
         <li class="nav-item col-sm-6">
           <a class="nav-link" href="#tabNormaleCashOut">Normale Cash Out</a>
@@ -29,10 +24,10 @@
     <div id="anormale" class="container-fluid tab-pane fade"><br>
       <ul class="nav nav-tabs">
         <li class="nav-item col-sm-2">
-          <a class="nav-link" href="#tabDat">Débit à Tort</a>
+          <a class="nav-link" href="#tabDat">Débit à Tort </a>
         </li>
         <li class="nav-item col-sm-2">
-          <a class="nav-link" href="#tabCat">Crédit à Tort</a>
+          <a class="nav-link" href="#tabCat">Crédit à Tort </a>
         </li>
         <li class="nav-item col-sm-1">
           <a class="nav-link" href="#tabMvts">MVTS</a>
@@ -40,9 +35,9 @@
         <li class="nav-item col-sm-2">
           <a class="nav-link" href="#tabAmbi">Ambigu</a>
         </li>
-        <li class="nav-item col-sm-2">
+        <!-- <li class="nav-item col-sm-2">
           <a class="nav-link" href="#tabSucces">Succès Sans Réf</a>
-        </li>
+        </li> -->
         <li class="nav-item col-sm-2">
           <a class="nav-link" href="#tabDeallo">Dealloc</a>
         </li>
@@ -179,12 +174,12 @@
   <div id="tabDat" class="container-fluid tab-pane "><br>   
     <div class="table-responsive">
       <table class="table table-bordered" id="tableDat">
-        <thead style="text-align: center ;">
-            <tr>
+        <thead>
+            <!-- <tr>
                 <th colspan="9" style="text-align: center ;">BOA</th>
-                <!-- <th colspan="9" style="text-align: center ;">Airtel</th> -->
-                <th colspan="3" style="text-align: center ;">Regularisation</th>
-            </tr>
+                <th colspan="9" style="text-align: center ;">Airtel</th>
+                <th colspan="1" style="text-align: center ;">Action</th>
+            </tr> -->
             <tr>
               <th style="display: none;">Id</th>
               <th>Compte</th>
@@ -206,8 +201,8 @@
               <th>Description</th>
               <th>ServiceName</th>
               <th>ReferenceNumber</th> -->
-              <th>Etat</th>
-              <th>Date</th>
+              <!-- <th>Etat</th>
+              <th>Date</th> -->
               <th>Action</th>
             </tr>
         </thead>
@@ -234,8 +229,8 @@
                 <td></td>
                 <td></td>
                 <td></td> -->
-                <td><?php echo $item->etat ?></td>
-                <td><?php echo $item->date_regul ?></td>
+                <!-- <td><?php echo $item->etat ?></td>
+                <td><?php echo $item->date_regul ?></td> -->
                 <td>
                 <a href="javascript:void(0);" class="text-warning" data-toggle="modal" data-target="#myModal" onClick="modifier('<?php echo $item->REF_IGOR ?>', '<?php echo $item->etat ?>', '<?php echo $item->date_regul ?>')">
                 <i class="bx bx-edit" style="font-size: 25px;"></i>
@@ -301,11 +296,6 @@
       <table class="table table-bordered" id="tableCat">
       <thead style="text-align: center ;">
             <tr>
-                <th colspan="9" style="text-align: center ;">BOA</th>
-                <!-- <th colspan="9" style="text-align: center ;">Airtel</th> -->
-                <th colspan="3" style="text-align: center ;">Regularisation</th>
-            </tr>
-            <tr>
               <th>Compte</th>
               <th>DateOper</th>
               <th>DateVal</th>
@@ -315,8 +305,6 @@
               <th>Operation</th>
               <th>Expl</th>
               <th>ReferenceIgor</th>
-              <th>Etat</th>
-              <th>Date</th>
               <th>Action</th>
             </tr>
         </thead>
@@ -333,8 +321,8 @@
                 <td><?php echo $item->OPER ?></td>
                 <td><?php echo $item->EXPL ?></td>
                 <td><?php echo $item->REF_IGOR ?></td>
-                <td><?php echo $item->etat ?></td>
-                <td><?php echo $item->date_regul ?></td>
+                <!-- <td><?php echo $item->etat ?></td>
+                <td><?php echo $item->date_regul ?></td> -->
                 <td>
                 <a href="javascript:void(0);" class="text-warning" data-toggle="modal" data-target="#myModal2" onClick="modifier2('<?php echo $item->REF_IGOR ?>', '<?php echo $item->etat ?>', '<?php echo $item->date_regul ?>')">
                 <i class="bx bx-edit" style="font-size: 25px;"></i>
@@ -483,7 +471,7 @@
               <th>Description</th>
               <th>ServiceName</th>
               <th>ReferenceNumber</th>
-              <th>Action</th>
+              <!-- <th>Action</th> -->
           </tr>
         </thead>
         <tbody>
@@ -499,11 +487,6 @@
             <td><?php echo $item->description ?></td>
             <td><?php echo $item->service_name ?></td>
             <td><?php echo $item->reference_number ?></td>
-            <td>
-                <a href="javascript:void(0);" class="text-warning" data-toggle="modal" data-target="#myModal2" onClick="modifier2('<?php echo $item->external_id ?>', '<?php echo $item->etat ?>', '<?php echo $item->date_regul ?>')">
-                  <box-icon name='printer'  ></box-icon>Modifier
-                </a> 
-              </td>
           </tr>   
           <?php } ?>
 
@@ -1117,18 +1100,12 @@ $("#tableNormaleCashOut").DataTable({
     }
   });
 
-  $("#tableCat").DataTable({
+$("#tableCat").DataTable({
     responsive: true,
     scrollX: true,
-
-    dom: 'Bfrtip',
-    buttons: [
-      'copy', 'csv', 'excel', 'pdf', 'print'
-    ],
     language: {
       url: '<?php echo base_url(); ?>assets/fr-FR.json',
     }
-
   });
 
   $("#tableDeallo").DataTable({

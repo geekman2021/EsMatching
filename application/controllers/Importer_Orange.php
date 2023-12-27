@@ -13,7 +13,7 @@
             parent::__construct();
             $this->load->model("Boa_Orange_Anomalie_Model");
             $this->load->model("Orange_Normal_Model");
-            $this->load->model("orange_Anomalie_Model");
+            $this->load->model("Orange_Anomalie_Model");
             $this->load->model("Historique_Orange_Model");
             ini_set('memory_limit', '1024M');
             session_start();
@@ -231,19 +231,19 @@
 
 
 
-            // foreach($historique as $item ) {
-            //     $princ_solde += isset($item["princ_montant"])  ? $item["princ_montant"] : 0;
-            //     $comm_solde += isset($item["comm_montant"])  ? $item["comm_montant"] : 0;
-            //     $orange_solde += isset($item["orange_montant"])  ? $item["orange_montant"] : 0;
-            //     $solde += isset($item["orange_super_distri"])  ? $item["orange_super_distri"] : 0;
+            foreach($historique as $item ) {
+                $princ_solde += isset($item["princ_montant"])  ? $item["princ_montant"] : 0;
+                $comm_solde += isset($item["comm_montant"])  ? $item["comm_montant"] : 0;
+                $orange_solde += isset($item["orange_montant"])  ? $item["orange_montant"] : 0;
+                $solde += isset($item["orange_super_distri"])  ? $item["orange_super_distri"] : 0;
 
-            //     $item["princ_solde"] = $princ_solde;
-            //     $item["comm_solde"] = $comm_solde;
-            //     $item["orange_solde"] = $orange_solde;
-            //     $item["solde"] = $solde;
+                $item["princ_solde"] = $princ_solde;
+                $item["comm_solde"] = $comm_solde;
+                $item["orange_solde"] = $orange_solde;
+                $item["solde"] = $solde;
 
-            //     $this->Historique_Orange_Model->insert($item);
-            // }
+                $this->Historique_Orange_Model->insert($item);
+            }
 
             
 
@@ -256,39 +256,39 @@
 // // ---------------------------------------------------------------------------------- INSERTION ----------------------------------------------------------------------------------
             
          
-            // foreach($normalCI[0] as $item) {
-            //     $this->Orange_Normal_Model->insert_or_update_ci($item);
-            // }
+            foreach($normalCI[0] as $item) {
+                $this->Orange_Normal_Model->insert_or_update_ci($item);
+            }
 
 
-            // foreach($normalCO[0] as $item) {
-            //     $this->Orange_Normal_Model->insert_or_update_co($item);
-            // }
+            foreach($normalCO[0] as $item) {
+                $this->Orange_Normal_Model->insert_or_update_co($item);
+            }
 
-            // foreach ($dat[0] as $item ) {
-            //     $this->Boa_Orange_Anomalie_Model->insert_or_update_dat($item);
-            // }
+            foreach ($dat[0] as $item ) {
+                $this->Boa_Orange_Anomalie_Model->insert_or_update_dat($item);
+            }
 
 
-            // foreach ($cat[0] as $item ) {
-            //     $this->Boa_Orange_Anomalie_Model->insert_or_update_cat($item);
-            // }
+            foreach ($cat[0] as $item ) {
+                $this->Boa_Orange_Anomalie_Model->insert_or_update_cat($item);
+            }
 
-            // foreach($ind as $item) {
-            //     $this->Orange_Anomalie_Model->insert_or_update_ind($item);
-            // }
+            foreach($ind as $item) {
+                $this->Orange_Anomalie_Model->insert_or_update_ind($item);
+            }
 
-            // foreach($nonAuCI as $item) {
-            //     $this->Boa_Orange_Anomalie_Model->insert_or_update_nonAuCI($item);
-            // }
+            foreach($nonAuCI as $item) {
+                $this->Boa_Orange_Anomalie_Model->insert_or_update_nonAuCI($item);
+            }
 
-            // foreach($anomalieOrangeCI[0] as $item) {
-            //     $this->Orange_Anomalie_Model->insert_or_update_ci($item);
-            // }
+            foreach($anomalieOrangeCI[0] as $item) {
+                $this->Orange_Anomalie_Model->insert_or_update_ci($item);
+            }
 
-            // foreach($anomalieOrangeCO[0] as $item) {
-            //     $this->Orange_Anomalie_Model->insert_or_update_co($item);
-            // }
+            foreach($anomalieOrangeCO[0] as $item) {
+                $this->Orange_Anomalie_Model->insert_or_update_co($item);
+            }
 
             // echo "<pre>";
             //     print_r($normalCI[0]);

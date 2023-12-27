@@ -4,8 +4,6 @@
 }?>
 
 <div class=" container-fluid mt-5">
-
-  
     <ul class="nav nav-tabs">
             <li class="nav-item col-sm-6">
                 <a class="nav-link" href="#normale">Normale</a>
@@ -15,7 +13,6 @@
             </li>
     </ul>
 </div>
-
   <div class="tab-content">
     <div id="normale" class="container-fluid tab-pane "><br>
       <ul class="nav nav-tabs">
@@ -39,7 +36,7 @@
           <a class="nav-link" href="#tabMvts">MVTS</a>
         </li>
         <li class="nav-item col-sm-2">
-          <a class="nav-link" href="#tabAdmin">Admin</a>
+          <a class="nav-link" href="#tabAdmin">Adjustement</a>
         </li>
         <li class="nav-item col-sm-2">
           <a class="nav-link" href="#tabVI">VI</a>
@@ -54,18 +51,18 @@
     </div>
     
     <div id="tabNormaleCashIn" class="tab-pane"><br>
-        <div class="row">
-          <div class="col-sm-6">
-              <label for="dateDebut">Date Debut</label>
-              <input type="text" class="form-control" id="min" name="min">
-          </div>
-          <div class="col-sm-6">
-            <label for="dateDebut">Date Fin</label>
-              <input type="text" class="form-control" id="max" name="max">
-          </div> 
+      <div class="row">
+        <div class="col-sm-6">
+          <label for="dateDebut">Date Debut</label>
+          <input type="text" class="form-control" id="min" name="min">
         </div>
-            <div class="table-responsive mt-1">
-            <div class="card">
+        <div class="col-sm-6">
+          <label for="dateDebut">Date Fin</label>
+          <input type="text" class="form-control" id="max" name="max">
+        </div> 
+      </div>
+  <div class="table-responsive mt-1">
+    <div class="card">
       <div class="card-header">
           <div class="row">
             <div class="col-lg-6">
@@ -74,70 +71,65 @@
           </div>
       </div>
       <div class="card-body">
-                <table class="table table-bordered" id="tableNormaleCashIn">
-                    <thead style="text-align: center ;">
-                        <tr>
-                            <th colspan="9" style="text-align: center ;">BOA</th>
-                            <th></th>
-                            <th colspan="10" style="text-align: center ;">Telma</th>
-                        </tr>
-                        <tr> 
-                            <th>Date_Oper</th>
-                            <th>Date_Val</th>
-                            <th>Heure</th>
-                            <th>Montant</th>
-                            <th>Devise</th>
-                            <th>Libelle</th>
-                            <th>Operation</th>
-                            <th>Expl</th>
-                            <th>ReferenceIgor</th>
-                            <th>Numero</th>
-                            <th>Date</th>
-                            <th>Heure</th>
-                            <th>Transfer_id</th>
-                            <th>Type</th>
-                            <th>Channel</th>
-                            <th>Etat</th>
-                            <th>Montant</th>
-                            <th>sender</th>
-                            <th>receiver</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                      <?php foreach($normal_ci as $item) { ?>
-                        <tr>
-                          <td><?php echo $item->DATE_OPER ?></td>
-                          <td><?php echo $item->DATE_VAL ?></td>
-                          <td><?php echo $item->BOA_HEURE ?></td>
-                          <td><?php echo number_format($item->MONTANT, 0, ',', " ") ?></td>
-                          <td><?php echo $item->DEVISE ?></td>
-                          <td><?php echo $item->LIBELLE ?></td>
-                          <td><?php echo $item->OPER ?></td>
-                          <td><?php echo $item->EXPL ?></td>
-                          <td><?php echo $item->REF_IGOR ?></td>
-                          <td><?php echo $item->cle ?></td>
-                          <td><?php echo $item->date ?></td>
-                          <td><?php echo $item->telma_heure ?></td>
-                          <td><?php echo $item->trans_id ?></td>
-                          <td><?php echo $item->TYPE ?></td>
-                          <td><?php echo $item->channel ?></td>
-                          <td><?php echo $item->state ?></td>
-                          <td><?php echo number_format($item->Amount_MGA, 0, ',', " ") ?></td>
-                          <td><?php echo $item->sender_name ?></td>
-                          <td><?php echo $item->receiver_name ?></td>
-                          
-                        </tr>
-
-                      <?php }?>
-
-                        
-                        
-                    </tbody>
-                </table>
-            </div>
-        </div>
-                      </div>
-                      </div>
+        <table class="table table-bordered" id="tableNormaleCashIn">
+          <thead style="text-align: center ;">
+            <tr>
+                <th colspan="9" style="text-align: center ;">BOA</th>
+                <th></th>
+                <th colspan="10" style="text-align: center ;">Telma</th>
+            </tr>
+            <tr> 
+              <th>Date_Oper</th>
+              <th>Date_Val</th>
+              <th>Heure</th>
+              <th>Montant</th>
+              <th>Devise</th>
+              <th>Libelle</th>
+              <th>Operation</th>
+              <th>Expl</th>
+              <th>ReferenceIgor</th>
+              <th>Numero</th>
+              <th>Date</th>
+              <th>Heure</th>
+              <th>Transfer_id</th>
+              <th>Type</th>
+              <th>Channel</th>
+              <th>Etat</th>
+              <th>Montant</th>
+              <th>sender</th>
+              <th>receiver</th>
+            </tr>
+          </thead>
+          <tbody>
+            <?php foreach($normal_ci as $item) { ?>
+              <tr>
+                <td><?php echo $item->DATE_OPER ?></td>
+                <td><?php echo $item->DATE_VAL ?></td>
+                <td><?php echo $item->BOA_HEURE ?></td>
+                <td><?php echo number_format($item->MONTANT, 0, ',', " ") ?></td>
+                <td><?php echo $item->DEVISE ?></td>
+                <td><?php echo $item->LIBELLE ?></td>
+                <td><?php echo $item->OPER ?></td>
+                <td><?php echo $item->EXPL ?></td>
+                <td><?php echo $item->REF_IGOR ?></td>
+                <td><?php echo $item->cle ?></td>
+                <td><?php echo $item->date ?></td>
+                <td><?php echo $item->telma_heure ?></td>
+                <td><?php echo $item->trans_id ?></td>
+                <td><?php echo $item->TYPE ?></td>
+                <td><?php echo $item->channel ?></td>
+                <td><?php echo $item->state ?></td>
+                <td><?php echo number_format($item->Amount_MGA, 0, ',', " ") ?></td>
+                <td><?php echo $item->sender_name ?></td>
+                <td><?php echo $item->receiver_name ?></td>
+              </tr>
+            <?php }?>  
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
 
 
 
@@ -217,7 +209,7 @@
     </div>
                       </div>
 
-  <div class="container-fluid tab-content">
+<div class="container-fluid tab-content">
   <div id="tabDat" class="container-fluid tab-pane "><br>  
     <div class="table-responsive">
     <div class="card">
@@ -232,10 +224,6 @@
       <table class="table table-bordered" id="tableDat">
       <thead style="text-align: center ;">
         <tr>
-            <th colspan="9" style="text-align: center ;">BOA</th>
-            <th colspan="3" style="text-align: center ;">Régularisation</th>
-        </tr>
-        <tr>
             <th>Compte</th>
             <th>Date_Oper</th>
             <th>Date_Val</th>
@@ -245,8 +233,6 @@
             <th>Operation</th>
             <th>Expl</th>
             <th>ReferenceIgor</th>
-            <th>Etat</th>
-            <th>Date_Regul</th>
             <th>Action</th>
         </tr>
         </thead>
@@ -262,12 +248,12 @@
             <td><?php echo $item->OPER ?></td>
             <td><?php echo $item->EXPL ?></td>
             <td><?php echo $item->REF_IGOR ?></td>
-            <td><?php echo $item->etat ?></td>
-            <td><?php echo "" ?></td>
+            <!-- <td><?php echo $item->etat ?></td>
+            <td><?php echo "" ?></td> -->
             <td style="text-align-center;">
-              <a href="javascript:void(0);" class="text-warning" data-toggle="modal" data-target="#myModal" onClick="modifier('<?php echo $item->REF_IGOR ?>', '<?php echo $item->etat ?>', '<?php echo $item->date_regul ?>')">
+              <!-- <a href="javascript:void(0);" class="text-warning" data-toggle="modal" data-target="#myModal" onClick="modifier('<?php echo $item->REF_IGOR ?>', '<?php echo $item->etat ?>', '<?php echo $item->date_regul ?>')">
               <i class="bx bx-edit" style="font-size: 20px;"></i>
-              </a> 
+              </a>  -->
               <a href="javascript:void(0);" class="text-primary" data-target="#myModalFr10"
                     data-compte="<?php echo $item->COMPTE ?>"
                     data-date-oper="<?php echo $item->DATE_OPER ?>"
@@ -298,11 +284,11 @@
       </div>
       <div class="card-body">
       <table class="table table-bordered" id="tableCat">
-      <thead style="text-align: center ;">
-        <tr>
+        <thead style="text-align: center ;">
+        <!-- <tr>
             <th colspan="8" style="text-align: center ;">BOA</th>
             <th colspan="3" style="text-align: center ;">Régularisation</th>
-        </tr>
+        </tr> -->
         <tr>
             <th>Date_Oper</th>
             <th>Date_Val</th>
@@ -312,9 +298,9 @@
             <th>Operation</th>
             <th>Expl</th>
             <th>ReferenceIgor</th>
-            <th>Etat</th>
-            <th>Date_Regul</th>
-            <th>Action</th>
+            <!-- <th>Etat</th>
+            <th>Date_Regul</th> -->
+            <!-- <th>Action</th> -->
         </tr>
         </thead>
         <tbody>
@@ -328,9 +314,9 @@
             <td><?php echo $item->OPER ?></td>
             <td><?php echo $item->EXPL ?></td>
             <td><?php echo $item->REF_IGOR ?></td>
+            <!-- <td><?php echo "" ?></td>
             <td><?php echo "" ?></td>
-            <td><?php echo "" ?></td>
-            <td><?php echo "" ?></td>
+            <td><?php echo "" ?></td> -->
           </tr>
 
         <?php }?>
@@ -338,7 +324,7 @@
       </table>
     </div>     
   </div>
-        </div>
+</div>
         </div>
 
   <div id="tabMvts" class="container-fluid tab-pane "><br>    
@@ -357,7 +343,6 @@
           <tr>
             <th style="display: none;"></th>
             <th>Date</th>
-            <!-- <th>Heure</th> -->
             <th>Transfer_id</th>
             <th>Type</th>
             <th>Channel</th>
@@ -365,9 +350,6 @@
             <th>Montant</th>
             <th>sender</th>
             <th>receiver</th>
-            <th>Etat</th>
-            <th>Date_Regul</th>
-            <th>Action</th>
           </tr>
         </thead>
         <tbody>
@@ -397,26 +379,28 @@
       </table>
     </div>     
   </div>
-        </div>
-        </div>
+</div>
+</div>
 
-  <div id="tabAdmin" class="container-fluid tab-pane "><br>    
-    <div class="table-responsive">
+
+
+
+<div id="tabAdmin" class="tab-pane "><br>    
+<div class="table-responsive">
     <div class="card">
       <div class="card-header">
           <div class="row">
             <div class="col-lg-6">
-              <b>Liste Admin</b>
+              <b>Liste Adjusment</b>
             </div>
           </div>
       </div>
-      <div class="card-body">
+    <div class="card-body">
       <table class="table table-bordered" id="tableAdmin">
         <thead>
           <tr>
             <th style="display: none;"></th>
             <th>Date</th>
-            <!-- <th>Heure</th> -->
             <th>Transfer_id</th>
             <th>Type</th>
             <th>Channel</th>
@@ -424,9 +408,6 @@
             <th>Montant</th>
             <th>sender</th>
             <th>receiver</th>
-            <th>Etat</th>
-            <th>Date_Regul</th>
-            <th>Action</th>
           </tr>
         </thead>
         <tbody>
@@ -434,7 +415,6 @@
           <tr>
             <td style="display: none;"><?php echo $item->id ?></td>
             <td><?php echo $item->date ?></td>
-            <!-- <td><?php //echo $item->telma_heure ?></td> -->
             <td><?php echo $item->trans_id ?></td>
             <td><?php echo $item->TYPE ?></td>
             <td><?php echo $item->channel ?></td>
@@ -442,26 +422,19 @@
             <td><?php echo number_format($item->Amount_MGA, 0, ',', " ") ?></td>
             <td><?php echo $item->sender ?></td>
             <td><?php echo $item->receiver ?></td>
-            <td><?php echo $item->etat ?></td>
-            <td><?php echo $item->date_regul ?></td>
-            <td>
-              <a href="javascript:void(0);" class="text-warning" data-toggle="modal" data-target="#myModal" onClick="modifier('<?php echo $item->id ?>', '<?php echo $item->etat ?>', '<?php echo $item->date_regul ?>')">
-                Modifier
-              </a> 
-            </td>
           </tr>
-
         <?php }?>
         </tbody>
       </table>
     </div>     
   </div>
-        </div>
-        </div>
+</div>
+</div>
 
-  <div id="tabVI" class="tab-pane"><br>
-      <div class="table-responsive">
-      <div class="card">
+
+  <div id="tabVI" class="container-fluid tab-pane"><br>
+    <div class="table-responsive">
+    <div class="card">
       <div class="card-header">
           <div class="row">
             <div class="col-lg-6">
@@ -481,9 +454,9 @@
                     <th>Libelle</th>
                     <th>Operation</th>
                     <th>Expl</th>
-                    <th>Etat</th>
+                    <!-- <th>Etat</th>
                     <th>Date_Regul</th>
-                    <th>Action</th>
+                    <th>Action</th> -->
                   </tr>
               </thead>
               <tbody>
@@ -497,20 +470,20 @@
                     <td><?php echo $item->LIBELLE ?></td>
                     <td ><?php echo $item->OPER ?></td>
                     <td><?php echo $item->EXPL ?></td>
-                    <td><?php echo $item->etat ?></td>
+                    <!-- <td><?php echo $item->etat ?></td>
                     <td><?php echo $item->date_regul ?></td>
                     <td>
                       <a href="javascript:void(0);" class="text-warning" data-toggle="modal" data-target="#myModal" onClick="modifier('<?php echo $item->id ?>', '<?php echo $item->etat ?>', '<?php echo $item->date_regul ?>')">
                         <box-icon name='printer'  ></box-icon>Modifier
                       </a> 
-                    </td>
+                    </td> -->
                   </tr>
                 <?php }?>
               </tbody>
           </table>
+        </div>
       </div>
-                </div>
-                </div>
+    </div>
   </div>
 </div>
 </div>
@@ -637,10 +610,6 @@ $(document).ready(function(){
     responsive: true,
     "scrollX": true, // Active la barre de défilement horizontal
     "autoWidth": false,
-    dom: 'Bfrtip',
-    buttons: [
-      'copy', 'csv', 'excel', 'pdf', 'print'
-    ],
     language: {
         url: '<?php echo base_url(); ?>assets/fr-FR.json',
     }
@@ -657,81 +626,50 @@ $(document).ready(function(){
     //       url: '<?php echo base_url(); ?>assets/fr-FR.json',
     // }
     // });
+  
 
   $("#tableDat").DataTable({
     responsive: true,
     "scrollX": true,
-    dom: 'Bfrtip',
-    buttons: [
-      'copy', 'csv', 'excel', 'pdf', 'print'
-    ],
     language: {
       url: '<?php echo base_url(); ?>assets/fr-FR.json',
     }
   });
+
 
   $("#tableCat").DataTable({
     responsive: true,
     "scrollX": true,
-
-    dom: 'Bfrtip',
-    buttons: [
-      'copy', 'csv', 'excel', 'pdf', 'print'
-    ],
     language: {
       url: '<?php echo base_url(); ?>assets/fr-FR.json',
     }
-
-  });
-
-  $("#tableDeallo").DataTable({
-    responsive: true,
-    "scrollX": true,
-
-    dom: 'Bfrtip',
-    buttons: [
-      'copy', 'csv', 'excel', 'pdf', 'print'
-    ],
-    language: {
-      url: '<?php echo base_url(); ?>assets/fr-FR.json',
-    }
-
   });
 
   $("#tableAdmin").DataTable({
     responsive: true,
-    "scrollX": true,
-
-    dom: 'Bfrtip',
-    buttons: [
-      'copy', 'csv', 'excel', 'pdf', 'print'
-    ],
+    scrollX: true,
+    fixedColumns: {
+      leftColumns: 8,  // Adjust the number of fixed columns as needed
+    },
+    scrollCollapse: true,
     language: {
       url: '<?php echo base_url(); ?>assets/fr-FR.json',
     }
-
   });
 
   $("#tableVI").DataTable({
     responsive: true,
     "scrollX": true,
-
-    dom: 'Bfrtip',
-    buttons: [
-      'copy', 'csv', 'excel', 'pdf', 'print'
-    ],
     language: {
       url: '<?php echo base_url(); ?>assets/fr-FR.json',
     }
-
   });
   
 
-
-    $("#tableAnormaleCashOut").DataTable();
+  $("#tableAnormaleCashOut").DataTable();
   $(".nav-tabs a").click(function(){
-    $(this).tab('show');
-    // Ajoutez le code pour masquer la tab "Table Normale Cash In" ici
+  $(this).tab('show');
+
     if($(this).attr('href') === '#anormale') {
       $("#tabNormaleCashIn").removeClass("show active");
       $("#tabNormaleCashOut").removeClass("show active");

@@ -41,16 +41,8 @@
 
         public function remove_user() {
             $id = $this->input->post("id");    
-            $this->User_Model->delete_user($id);
+            $this->User_Model->delete_user($this->input->post("id"));
         }
-
-
-        // public function edit($id) {
-        //     $this->load->view("templates/header.php"); 
-        //     $this->load->view("pages/user_form");
-        //     $this->load->view("pages/user_list", $data);
-        //     $this->load->view("templates/footer");
-        // }
     }
     
 ?>

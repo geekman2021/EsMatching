@@ -45,6 +45,30 @@
             }
         }
 
+        public function insert_or_update_mvts_ci($data) {
+            
+            $this->db->where("trans_id", $data["trans_id"]);
+                $exist= $this->db->get("telma_mvts_ci");
+                if($exist->num_rows() == 0) {
+                    return $this->db->insert("telma_mvts_ci", $data);
+                } else {
+                $this->db->where("trans_id", $data["trans_id"]);
+                return $this->db->update("telma_mvts_ci", $data);
+            }
+        }
+        public function insert_or_update_mvts_co($data) {
+
+            $this->db->where("trans_id", $data["trans_id"]);
+                $exist= $this->db->get("telma_mvts_co");
+                if($exist->num_rows() == 0) {
+                    return $this->db->insert("telma_mvts_co", $data);
+                } else {
+                $this->db->where("trans_id", $data["trans_id"]);
+                
+                return $this->db->update("telma_mvts_co", $data);
+            }
+        }
+
         public function get_admin() {
             $this->db->select("*");
             $this->db->from("telma_admin");

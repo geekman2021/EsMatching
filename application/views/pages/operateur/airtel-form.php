@@ -19,7 +19,7 @@
         <div class="container">
             <div class="text-center">
                 <button type="reset" class="btn btn-warning" id="btn-reinitialiser">Reinitialiser</button>
-                <button type="submit" class="btn btn-success" id="btn-ajouter">Comparer ces deux fichiers</button>
+                <button type="submit" class="btn btn-success" id="btn-ajouter">Comparer</button>
             </div>
         </div>
     </div>

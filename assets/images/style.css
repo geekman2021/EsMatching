@@ -1,0 +1,131 @@
+body{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    width: 100%;
+    min-height: 100vh;
+    overflow: hidden;
+    padding: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Century Gothic', sans-serif;
+}
+body{
+    background: url("../image/fond (2).jpg") no-repeat center;
+    background-size: 30% auto; /* Ajustez la taille de l'image ici (30% de la largeur de l'écran, auto pour la hauteur proportionnelle) */
+    background-position: right top; /* Ajustez la position de l'image ici (right top) */
+    margin: 0;
+    padding: 0;
+    
+}
+.box {
+    position: relative;
+    width: 100%;
+    max-width: 1020px;
+    height: 640px;
+    background: url(../image/bac.jpg);
+    border-radius: 1.2rem;
+    box-shadow: 0 0 50px rgba(0, 0, 0, 0.50); /* Ajustez la valeur du décalage vertical, horizontal et du flou ici */
+    background-size: 380% auto;
+}
+.inner-box{
+    position: absolute;
+    width: calc(100% - 4.1rem);
+    height:calc(100% - 4.1rem);
+    top:50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+.forms-wrap{
+    position: absolute; 
+    height: 100%;
+    width: 45%;
+    top:0;
+    left:0;
+}
+.carousel{
+    position: absolute;
+    height: 100%;
+    width:55%;
+    left: 45%;
+    top: 0;
+    border-radius: 1rem;
+}
+
+h2{
+   font-size: 65px;
+   margin-left: 105px;
+}
+.classform{
+    padding-top: 25px;
+    margin-left: 95px;
+}
+.inputbox input {
+    width: 295px;
+    height: 35px;
+    outline: none;
+    font-size: 1em;
+    padding: 0 35px 0 5px;
+    border: 2px solid #008848;
+    padding-bottom:7px;
+    border-bottom:2px solid #008848;
+    border-radius:5px;
+    font-family: century gothic;
+    margin-bottom: 50px;
+}
+button{
+    width: 170px;
+    height: 40px;
+    border-radius: 20px;
+    color: #fff;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: 600;
+    transition: transform 0.5s;
+    border: 2px solid #008848;
+    margin-top: 25px;
+    margin-left: 85px;
+    background-color:#008848;
+}
+button:hover{
+    transform: scale(1.1) rotate(0deg);
+    background-color: #00743e;
+}
+.inputbox  i.bi.bi-person-circle{
+    margin-left: -30px;
+    position: relative;
+    font-size: 25px;
+    top: 5px;
+}
+.inputbox i.bi.bi-lock-fill{
+    margin-left: -30px;
+    position: relative;
+    font-size: 25px;
+    top: 5px;
+}
+@media (max-width:1077px){
+    .inputbox input {
+        margin-left: -100px;
+    }
+    .logo{
+        margin-left: -55px;
+    }
+    button{
+        margin-left: -100px;
+        margin-top: 9px;
+    }
+    .inputbox  i.bi.bi-person-circle{
+        margin-left: -35px;
+        font-size: 25px;
+    }
+    h2{
+        margin-left: -15px;
+     }
+     .inputbox i.bi.bi-lock-fill{
+        margin-left: -33px;
+    }
+   
+}

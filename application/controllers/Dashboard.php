@@ -19,17 +19,20 @@ class Dashboard extends CI_Controller {
 
     private function getDataForDonutChart() {
 
-        
         $airtel = $this->Historique_Airtel_Model->get_last_solde();
-        // $orange = $this->Historique_Orange_Model->get_last_solde();
+        $orange = $this->Historique_Orange_Model->get_last_solde();
         $telma = $this->Historique_Telma_Model->get_last_solde();
 
         $data["telma"] = [
-            "solde" =>!empty($telma[0]) ? $telma[0] : null
+            "solde" =>!empty($telma[0]) ? $telma[0] : 0
         ];
 
         $data["airtel"] = [
-            "solde" => !empty($airtel[0]) ? $airtel[0] : null
+            "solde" => !empty($airtel[0]) ? $airtel[0] : 0
+        ];
+
+        $data["orange"] = [
+            "solde" => !empty($orange[0]) ? $orange[0] : 0
         ];
 
         // $data = [

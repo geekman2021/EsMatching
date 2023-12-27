@@ -23,8 +23,6 @@
             $data["admin"] = $this->Telma_Anomalie_Model->get_admin();
             $data["dat"] = $this->Boa_Telma_Anomalie_Model->get_ci();
             $data["cat"] = $this->Boa_Telma_Anomalie_Model->get_co();
-
-
             return $data;
 
         }
