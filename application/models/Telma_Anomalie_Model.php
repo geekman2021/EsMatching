@@ -57,7 +57,6 @@
             }
         }
         public function insert_or_update_mvts_co($data) {
-
             $this->db->where("trans_id", $data["trans_id"]);
                 $exist= $this->db->get("telma_mvts_co");
                 if($exist->num_rows() == 0) {
@@ -70,8 +69,25 @@
         }
 
         public function get_admin() {
+            $sql= "SELECT * 
+                        FROM telma_admin 
+                    WHERE NOT EXISTS (SELECT * FROM boa_telma_anomalie_vi WHERE boa_telma_anomalie_vi.trans_id = telma_admin.trans_id)";
+
+            $query= $this->db->query($sql);
+            return $query->result();
+        }
+
+        public function get_mvts_ci() {
             $this->db->select("*");
-            $this->db->from("telma_admin");
+            $this->db->from("telma_mvts_ci");
+            $query= $this->db->get();
+
+            return $query->result();
+        }
+    
+        public function get_mvts_co() {
+            $this->db->select("*");
+            $this->db->from("telma_mvts_ci");
             $query= $this->db->get();
 
             return $query->result();

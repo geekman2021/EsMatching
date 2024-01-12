@@ -24,6 +24,8 @@
             $this->load->view("pages/importer/importer");
             $this->load->view("pages/operateur/telma-form");
             $_SESSION["dat"] = $this->Boa_Telma_Anomalie_Model->get_ci();
+            $_SESSION["vi"]= $this->Boa_Telma_Anomalie_Model->get_vi();
+            $_SESSION["admin"]= $this->Telma_Anomalie_Model->get_admin();
 
         }
 
@@ -168,35 +170,225 @@
                     $cat= $resultatCO[1];
                     $mvtsCI= $resultatCI[2];
                     $mvtsCO= $resultatCO[2];
-
+                    
                     $telmaAnomalieCI= $resultatCI[2];
                     $telmaAnomalieCO= $resultatCO[2];
                     $this->comparerTelmaEtIgor($igorCI, $telmaCI);
 
+                    // echo "<pre>";
+                    //     print_r($mvtsCI[0]);
+                    // echo "</pre>";
+                    // echo "<pre>";
+                    //     print_r($mvtsCO[0]);
+                    // echo "</pre>";
+                    // echo "<pre>";
+                    //     print_r($dat);
+                    // echo "</pre>";
                     // unset($igor);
                     // unset($telma);
 
 // ------------------------------------------------------------------------------REGULARISATION ----------------------------------------------------------------------
-                    // $dat2= array();
-                    // foreach($_SESSION["dat"] as $sessionItem) {
-                    //     $dat2[] = get_object_vars($sessionItem);
-                    // }
-                    // if(!empty($dat2) && !empty($nonAu)) {
-                    //     foreach($dat2 as $itemDat) {
-                    //         foreach($nonAu as $itemNonAu) {
-                    //             if($itemDat["REF_IGOR"] === $itemNonAu["ref_igor"]) {
-                    //                 $this->Boa_Telma_Anomalie_Model->update_dat($itemDat["REF_IGOR"], "Oui", $itemNonAu["date_oper"]);
-                    //             }
-                    //         }
-                    //     }
-                    // }
-// ------------------------------------------------------------------------------------INSERTION --------------------------------------------------------------------
 
-                    // echo "<pre>";
-                    //     print_r($reverseEtAnnule);
-                    // echo "</pre>";
+if(empty($_SESSION["admin"]) && empty($_SESSION["vi"]) && empty($admin) && !empty($vi)) {
 
-// **************************************************************************************** ANDROANY *********************************************************************************//
+    foreach($vi as $item) {
+        $this->Boa_Telma_Anomalie_Model->insert_or_update_vi($item);
+    }
+} else if(empty($_SESSION["admin"]) && empty($_SESSION["vi"]) && !empty($admin) && empty($vi)) {
+
+    foreach($admin as $item) {
+        $this->Telma_Anomalie_Model->insert_or_update_admin($item);
+    }
+} else if (!empty($_SESSION["admin"]) && empty($_SESSION["vi"]) && !empty($admin) && !empty($vi)) {
+
+    $this->RegulAdminVi($vi, $admin);
+    $adjust= array();
+    foreach ($_SESSION["admin"] as $item) {
+        $adjust[]= get_object_vars($item);
+    }
+    $this->RegulViAdmin($vi, $adjust);
+    
+    // $res = $this->RegulAdminVi($vi, $admin);
+
+    // foreach($res[1] as $item) {
+    //     $this->Telma_Anomalie_Model->insert_or_update_admin($item);
+    // }
+
+    // foreach($res[0] as $item) {
+    //     $this->Boa_Telma_Anomalie_Model->insert_or_update_vi($item);
+    // }
+
+    // $adjust= array();
+    // foreach ($_SESSION["admin"] as $item) {
+    //     $adjust[]= get_object_vars($item);
+    // }
+    // $res= $this->RegulViAdmin($vi, $adjust);
+  
+
+    // foreach($res[1] as $item) {
+    //     $this->Telma_Anomalie_Model->insert_or_update_admin($item);
+    // }
+
+    // foreach($res[0] as $item) {
+    //     $this->Boa_Telma_Anomalie_Model->insert_or_update_vi($item);
+    // }
+
+} else if (empty($_SESSION["admin"]) && !empty($_SESSION["vi"]) && !empty($admin) && !empty($vi)) {
+    
+    $this->RegulAdminVi($vi, $admin);
+    $v= array();
+    foreach ($_SESSION["vi"] as $item) {
+        $v[]= get_object_vars($item);
+    }
+
+    $this->RegulAdminVi($v, $admin);
+
+
+    // $v= array();
+    // foreach ($_SESSION["vi"] as $item) {
+    //     $v[]= get_object_vars($item);
+    // }
+
+    // $res = $this->RegulAdminVi($v, $admin);
+    
+
+    // foreach($res[1] as $item) {
+    //     $this->Telma_Anomalie_Model->insert_or_update_admin($item);
+    // }
+
+    // foreach($res[0] as $item) {
+    //     $this->Boa_Telma_Anomalie_Model->insert_or_update_vi($item);
+    // } 
+} else if (!empty($_SESSION["admin"]) && !empty($_SESSION["vi"]) && !empty($admin) && !empty($vi)) {
+
+    $this->RegulAdminVi($vi, $admin);
+    $v= array();
+    foreach ($_SESSION["vi"] as $item) {
+        $v[]= get_object_vars($item);
+    }
+
+    $this->RegulAdminVi($v, $admin);
+    $adjust= array();
+    foreach ($_SESSION["admin"] as $item) {
+        $adjust[]= get_object_vars($item);
+    }
+    $this->RegulViAdmin($vi, $adjust);
+    
+
+    
+    // $res = $this->RegulAdminVi($vi, $admin);
+    // foreach($res[1] as $item) {
+    //     $this->Telma_Anomalie_Model->insert_or_update_admin($item);
+    // }
+
+    // foreach($res[0] as $item) {
+    //     $this->Boa_Telma_Anomalie_Model->insert_or_update_vi($item);
+    // }
+
+
+    // $v= array();
+    // foreach ($_SESSION["vi"] as $item) {
+    //     $v[]= get_object_vars($item);
+    // }
+
+    // $res = $this->RegulAdminVi($v, $admin);
+    
+
+    // foreach($res[1] as $item) {
+    //     $this->Telma_Anomalie_Model->insert_or_update_admin($item);
+    // }
+
+    // foreach($res[0] as $item) {
+    //     $this->Boa_Telma_Anomalie_Model->insert_or_update_vi($item);
+    // } 
+} else if (empty($_SESSION["admin"]) && empty($_SESSION["vi"]) && !empty($admin) && !empty($vi)) {
+    $this->RegulAdminVi($vi, $admin);
+} else if (empty($_SESSION["admin"]) && !empty($_SESSION["vi"]) && !empty($admin) && empty($vi)) {
+    $v= array();
+    foreach ($_SESSION["vi"] as $item) {
+        $v[]= get_object_vars($item);
+    }
+    $this->RegulAdminVi($v, $admin);
+} else if (!empty($_SESSION["admin"]) && !empty($_SESSION["vi"]) && !empty($admin) && empty($vi)) {
+
+    $v= array();
+    foreach ($_SESSION["vi"] as $item) {
+        $v[]= get_object_vars($item);
+    }
+    $this->RegulAdminVi($v, $admin);
+} else if (!empty($_SESSION["admin"]) && empty($_SESSION["vi"]) && !empty($admin) && empty($vi)) {
+    foreach($admin as $item) {
+        $this->Telma_Anomalie_Model->insert_or_update_admin($item);
+    }
+} else if (empty($_SESSION["admin"]) && !empty($_SESSION["vi"]) && empty($admin) && !empty($vi)) {
+    foreach($vi as $item) {
+        $this->Boa_Telma_Anomalie_Model->insert_or_update_vi($item);
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+// if(!empty($_SESSION["admin"]) && !empty($vi)) {
+
+//     $adjust= array();
+//     foreach ($_SESSION["admin"] as $item) {
+//         $adjust[]= get_object_vars($item);
+//     }
+//     $res= $this->RegulViAdmin($vi, $adjust);
+  
+
+//     foreach($res[1] as $item) {
+//         $this->Telma_Anomalie_Model->insert_or_update_admin($item);
+//     }
+
+//     foreach($res[0] as $item) {
+//         $this->Boa_Telma_Anomalie_Model->insert_or_update_vi($item);
+//     }
+
+
+// } else if(!empty($_SESSION["vi"]) && !empty($admin)) {
+
+//     $v= array();
+//     foreach ($_SESSION["vi"] as $item) {
+//         $v[]= get_object_vars($item);
+//     }
+
+//     $res = $this->RegulAdminVi($v, $admin);
+    
+
+//     foreach($res[1] as $item) {
+//         $this->Telma_Anomalie_Model->insert_or_update_admin($item);
+//     }
+
+//     foreach($res[0] as $item) {
+//         $this->Boa_Telma_Anomalie_Model->insert_or_update_vi($item);
+//     }
+    
+// } else if ( !empty($admin) && !empty($vi)) {
+
+//     $res = $this->RegulAdminVi($vi, $admin);
+    
+
+//     foreach($res[1] as $item) {
+//         $this->Telma_Anomalie_Model->insert_or_update_admin($item);
+//     }
+
+//     foreach($res[0] as $item) {
+//         $this->Boa_Telma_Anomalie_Model->insert_or_update_vi($item);
+//     }
+
+// }
+
+// **************************************************************************************** INSERTION DES DONNEES *********************************************************************************//
 
                     $_SESSION["last_solde"] = $this->Historique_Telma_Model->get_last_solde();
                     if(count($_SESSION["last_solde"]) > 0 ) {
@@ -206,30 +398,30 @@
                         $solde_telma= 0;
                         $solde_boa= 0;
                     }
-                    $historique =array_merge($normalCI[0], $normalCO[0], $dat[0], $cat[0], $reverseEtAnnule, $rollback, $admin, $nonAu);
 
+                    $historique =array_merge($normalCI[0], $normalCO[0], $dat[0], $cat[0], $reverseEtAnnule, $admin, $nonAu, $mvtsCI[0], $mvtsCO[0], $vi);
+                    
                     foreach ($historique as $item) {
                         $solde_telma += isset($item["solde"]) ? $item["solde"] : 0;
                         $solde_boa += isset($item["MONTANT"]) ? $item["MONTANT"] : 0;
                         $item["solde_telma"] = $solde_telma;
                         $item["solde_boa"] = $solde_boa;
-                        $this->Historique_Telma_Model->insert($item);
+                        $this->Historique_Telma_Model->insert_or_update($item);
+
                     }
 
                     foreach ($normalCI[0] as $item) {
-                        // $solde_telma += isset($item["solde"]) ? $item["solde"] : 0;
-                        // $solde_boa += isset($item["MONTANT"]) ? $item["MONTANT"] : 0;
                         $this->Telma_Normal_Model->insert_or_update_ci($item);
-                        
                     }
+
                     foreach ($normalCO[0] as $item) {
                         $this->Telma_Normal_Model->insert_or_update_co($item);
                     }
 
-                    foreach($admin as $item) {
-                        $this->Telma_Anomalie_Model->insert_or_update_admin($item);
+                    // foreach($admin as $item) {
+                    //     $this->Telma_Anomalie_Model->insert_or_update_admin($item);
                             
-                    }
+                    // }
                     foreach($reverseEtAnnule as $item) {
                         $this->Telma_Anomalie_Model->insert_or_update_reverse($item);
                             
@@ -264,56 +456,15 @@
                         $this->Boa_Telma_Anomalie_Model->insert_or_update_nonAu($item);
                     }
 
-                    foreach($vi as $item) {
-                        $this->Boa_Telma_Anomalie_Model->insert_or_update_vi($item);
-                    }
+                    // foreach($vi as $item) {
+                    //     $this->Boa_Telma_Anomalie_Model->insert_or_update_vi($item);
+                    // }
 
                    
 
 // *******************************************************************************************************************************
 
-                    // echo "<pre>" ."Normale CI";   
-                    //     print_r($mvtsCI[0]);
-                    // echo "</pre>";
-                    
-
-                    // echo "<pre>" ."Normale CO";
-                    //     print_r($nonAu);
-                    // echo "</pre>";
-
-                    // echo "<pre>" ."reverseEtAnnule";
-                    //     print_r($reverseEtAnnule);
-                    // echo "</pre>";
-
-                    // echo "<pre>" ."admin";
-                    //     print_r($admin);
-                    // echo "</pre>";
-
-                    // echo "<pre>" ."rollback";
-                    //     print_r($telmaCI);
-                    // echo "</pre>";
-                    // echo "<pre>" ."rollback";
-                    //     print_r($igorCI);
-                    // echo "</pre>";
-
-                    // echo "<pre>" ."dat[0]";
-                    //     print_r($dat[0]);
-                    // echo "</pre>";
-
-
-                    // echo "<pre>" ."cat[0]";
-                    //     print_r($cat[0]);
-                    // echo "</pre>";
-
-                    // echo "<pre>" ."vi";
-                    //     print_r($vi);
-                    // echo "</pre>";
-
-
-                    // echo "<pre>" ."nonAu";
-                    //     print_r($nonAu);
-                    // echo "</pre>";
-                    $this->exporter($normalCI[0], $normalCO[0], $reverseEtAnnule,$admin, $rollback, $dat[0], $cat[0], $vi, $nonAu);
+                $this->exporter($normalCI[0], $normalCO[0], $reverseEtAnnule,$admin, $rollback, $dat[0], $cat[0], $vi, $nonAu, $mvtsCI[0], $mvtsCO[0]);
                 }
                 // redirect("importer_telma");
             }
@@ -370,7 +521,7 @@
             foreach($data as $item) {
                 if($item["TYPE"] ==="adjustment" && $item["State"] === "Completed") {
                     $item["etat"] = "Non";
-                    $item["solde"] = $item["Amount_MGA"] * -1;
+                    $item["solde"] = $item["Amount_MGA"] * 1;
                     $resultat[]= $item;
                 }
             }
@@ -404,6 +555,49 @@
             }
 
             return $resultat;
+        }
+
+        public function RegulViAdmin($vi, $adjust) {
+            $viCopy= $vi;
+            $adjustCopy= $adjust;
+
+            foreach($adjust as $itemAdjust) {
+                $i=0;
+                foreach($vi as $itemVi) {
+                    if($itemAdjust["Amount_MGA"] == $itemVi["MONTANT"]) {
+                        $adjustCopy[$i]["etat"]= "Oui";
+                        $adjustCopy[$i]["REF_IGOR"] = $itemVi["REF_IGOR"];
+                    }
+                }
+                $i++;
+            }
+
+            return [$vi, $adjustCopy];
+        }
+
+        public function RegulAdminVi($vi, $adjust) {
+            $viCopy= $vi;
+            $adjustCopy= $adjust;
+            foreach($vi as $itemVi) {
+                $i=0;
+                foreach($adjust as $itemAdjust) {
+                    
+                    if($itemVi["MONTANT"] == -$itemAdjust["Amount_MGA"]) {
+                        $vi[$i]["etat"]= "Oui";
+                        $vi[$i]["trans_id"] = $itemAdjust["trans_id"];
+                    }
+                }
+                $i++;
+            }
+
+            foreach($adjustCopy as $item) {
+                $this->Telma_Anomalie_Model->insert_or_update_admin($item);
+            }
+        
+            foreach($vi as $item) {
+                $this->Boa_Telma_Anomalie_Model->insert_or_update_vi($item);
+            } 
+            //return [$vi, $adjustCopy];
         }
 
         // public function filtrerSoapEtCompltedEtTransfer($data) {
@@ -540,7 +734,7 @@
             $i=0;
 
             for ($i=0; $i <count($data); $i++) {
-                if($data[$i]["TYPE"] ==="transfer" && $data[$i]["Channel"] ==="SOAP" && $data[$i]["State"] ==="RolledBack") {
+                if($data[$i]["TYPE"] ==="transfer" && $data[$i]["Channel"] === "SOAP" && $data[$i]["State"] ==="RolledBack") {
                     $index[]= $i;
                 }
             }
@@ -622,7 +816,7 @@
             return $resultat;
         }
 
-        public function exporter($normalCI, $normalCO, $reverseEtAnnule, $admin, $rollback, $dat, $cat, $vi, $nonAu) {
+        public function exporter($normalCI, $normalCO, $reverseEtAnnule, $admin, $rollback, $dat, $cat, $vi, $nonAu, $mvtsCI, $mvtsCO) {
             $dateAujourdhui = date("Y-m-d");
             $nomFichier = "RapproTelma-" .$dateAujourdhui .".xlsx";
             
@@ -808,6 +1002,55 @@
 
                 $lastRow++;
             }
+            // ROLLBACK 
+
+            $lastRow = $sheet->getHighestRow() + 2;
+
+            foreach ($rollback as $dataRow) {
+                $sheet->getStyle($cell_array[12] .$lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('8B4513');
+                $sheet->getStyle($cell_array[13] .$lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('8B4513');
+                $sheet->getStyle($cell_array[14] .$lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('8B4513');
+                $sheet->getStyle($cell_array[15] .$lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('8B4513');
+                $sheet->getStyle($cell_array[16] .$lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('8B4513');
+                $sheet->getStyle($cell_array[17] .$lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('8B4513');
+                $sheet->getStyle($cell_array[18] .$lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('8B4513');
+                $sheet->getStyle($cell_array[19] .$lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('8B4513');
+                $sheet->getStyle($cell_array[20] .$lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('8B4513');
+                $sheet->getStyle($cell_array[21] .$lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('8B4513');
+                $sheet->getStyle($cell_array[22] .$lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('8B4513');
+                $sheet->getStyle($cell_array[23] .$lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('8B4513');
+                $sheet->getStyle($cell_array[24] .$lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('8B4513');
+                $sheet->getStyle($cell_array[25] .$lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('8B4513');
+                $sheet->getStyle($cell_array[26] .$lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('8B4513');
+                $sheet->getStyle($cell_array[27] .$lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('8B4513');
+                $sheet->getStyle($cell_array[29] .$lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('8B4513');
+                $sheet->getStyle($cell_array[30] .$lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('8B4513');
+                $sheet->getStyle($cell_array[31] .$lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('8B4513');
+                $sheet->getStyle($cell_array[32] .$lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('8B4513');
+
+                $sheet->setCellValue($cell_array[12] .$lastRow, $dataRow["date_d"]);
+                $sheet->setCellValue($cell_array[13] .$lastRow, $dataRow["trans_id"]);
+                $sheet->setCellValue($cell_array[14] .$lastRow, $dataRow["initiator"]);
+                $sheet->setCellValue($cell_array[15] .$lastRow, $dataRow["TYPE"]);
+                $sheet->setCellValue($cell_array[16] .$lastRow, $dataRow["Channel"]);
+                $sheet->setCellValue($cell_array[17] .$lastRow, $dataRow["State"]);
+                $sheet->setCellValue($cell_array[18] .$lastRow, $dataRow["Wallet"]);
+                $sheet->setCellValue($cell_array[19] .$lastRow, $dataRow["Amount_MGA"]);
+                $sheet->setCellValue($cell_array[20] .$lastRow, $dataRow["Sender"]);
+                $sheet->setCellValue($cell_array[21] .$lastRow, $dataRow["Sender_name"]);
+                $sheet->setCellValue($cell_array[22] .$lastRow, $dataRow["receiver"]);
+                $sheet->setCellValue($cell_array[23] .$lastRow, $dataRow["receiver_name"]);
+                $sheet->setCellValue($cell_array[24] .$lastRow, $dataRow["details1"]);
+                $sheet->setCellValue($cell_array[25] .$lastRow, $dataRow["Confirming_agent"]);
+                $sheet->setCellValue($cell_array[26] .$lastRow, $dataRow["origine"]);
+                $sheet->setCellValue($cell_array[27] .$lastRow, $dataRow["TVA"]);
+                $sheet->setCellValue($cell_array[29] .$lastRow, $dataRow["ACTION"]);
+                $sheet->setCellValue($cell_array[30] .$lastRow, $dataRow["AA1_GROUP"]);
+                $sheet->setCellValue($cell_array[31] .$lastRow, $dataRow["PAR"]);
+                $sheet->setCellValue($cell_array[32] .$lastRow, $dataRow["solde"]);
+
+                $lastRow++;
+            }
 
             $lastRow = $sheet->getHighestRow() + 2;
             
@@ -858,52 +1101,29 @@
                 $lastRow++;
             }
 
-            // ROLLBACK 
+            $lastRow = $sheet->getHighestRow() + 0; 
+            foreach ($vi as $dataRow) {
+                $sheet->getStyle($cell_array[0] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('0000FF');
+                $sheet->getStyle($cell_array[1] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('0000FF');
+                $sheet->getStyle($cell_array[2] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('0000FF');
+                $sheet->getStyle($cell_array[3] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('0000FF');
+                $sheet->getStyle($cell_array[3] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('0000FF');
+                $sheet->getStyle($cell_array[4] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('0000FF');
+                $sheet->getStyle($cell_array[5] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('0000FF');
+                $sheet->getStyle($cell_array[6] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('0000FF');
+                $sheet->getStyle($cell_array[7] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('0000FF');
+                $sheet->getStyle($cell_array[8] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('0000FF');
+                $sheet->getStyle($cell_array[9] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('0000FF');
 
-            $lastRow = $sheet->getHighestRow() + 2;
+                $sheet->setCellValue($cell_array[0] .$lastRow, $dataRow["DATE_OPER"]);
+                $sheet->setCellValue($cell_array[1] .$lastRow, $dataRow["DATE_VAL"]);
+                $sheet->setCellValue($cell_array[2] .$lastRow, $dataRow["DEVISE"]);
+                $sheet->setCellValue($cell_array[3] .$lastRow, $dataRow["MONTANT"]);
+                $sheet->setCellValue($cell_array[4] .$lastRow, $dataRow["LIBELLE"]);
+                $sheet->setCellValue($cell_array[5] .$lastRow, $dataRow["OPER"]);
+                $sheet->setCellValue($cell_array[6] .$lastRow, $dataRow["EXPL"]);
+                $sheet->setCellValue($cell_array[7] .$lastRow, $dataRow["REF_IGOR"]);
 
-            foreach ($rollback as $dataRow) {
-                $sheet->getStyle($cell_array[12] .$lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('8B4513');
-                $sheet->getStyle($cell_array[13] .$lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('8B4513');
-                $sheet->getStyle($cell_array[14] .$lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('8B4513');
-                $sheet->getStyle($cell_array[15] .$lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('8B4513');
-                $sheet->getStyle($cell_array[16] .$lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('8B4513');
-                $sheet->getStyle($cell_array[17] .$lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('8B4513');
-                $sheet->getStyle($cell_array[18] .$lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('8B4513');
-                $sheet->getStyle($cell_array[19] .$lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('8B4513');
-                $sheet->getStyle($cell_array[20] .$lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('8B4513');
-                $sheet->getStyle($cell_array[21] .$lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('8B4513');
-                $sheet->getStyle($cell_array[22] .$lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('8B4513');
-                $sheet->getStyle($cell_array[23] .$lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('8B4513');
-                $sheet->getStyle($cell_array[24] .$lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('8B4513');
-                $sheet->getStyle($cell_array[25] .$lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('8B4513');
-                $sheet->getStyle($cell_array[26] .$lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('8B4513');
-                $sheet->getStyle($cell_array[27] .$lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('8B4513');
-                $sheet->getStyle($cell_array[29] .$lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('8B4513');
-                $sheet->getStyle($cell_array[30] .$lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('8B4513');
-                $sheet->getStyle($cell_array[31] .$lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('8B4513');
-                $sheet->getStyle($cell_array[32] .$lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('8B4513');
-
-                $sheet->setCellValue($cell_array[12] .$lastRow, $dataRow["date_d"]);
-                $sheet->setCellValue($cell_array[13] .$lastRow, $dataRow["trans_id"]);
-                $sheet->setCellValue($cell_array[14] .$lastRow, $dataRow["initiator"]);
-                $sheet->setCellValue($cell_array[15] .$lastRow, $dataRow["TYPE"]);
-                $sheet->setCellValue($cell_array[16] .$lastRow, $dataRow["Channel"]);
-                $sheet->setCellValue($cell_array[17] .$lastRow, $dataRow["State"]);
-                $sheet->setCellValue($cell_array[18] .$lastRow, $dataRow["Wallet"]);
-                $sheet->setCellValue($cell_array[19] .$lastRow, $dataRow["Amount_MGA"]);
-                $sheet->setCellValue($cell_array[20] .$lastRow, $dataRow["Sender"]);
-                $sheet->setCellValue($cell_array[21] .$lastRow, $dataRow["Sender_name"]);
-                $sheet->setCellValue($cell_array[22] .$lastRow, $dataRow["receiver"]);
-                $sheet->setCellValue($cell_array[23] .$lastRow, $dataRow["receiver_name"]);
-                $sheet->setCellValue($cell_array[24] .$lastRow, $dataRow["details1"]);
-                $sheet->setCellValue($cell_array[25] .$lastRow, $dataRow["Confirming_agent"]);
-                $sheet->setCellValue($cell_array[26] .$lastRow, $dataRow["origine"]);
-                $sheet->setCellValue($cell_array[27] .$lastRow, $dataRow["TVA"]);
-                $sheet->setCellValue($cell_array[29] .$lastRow, $dataRow["ACTION"]);
-                $sheet->setCellValue($cell_array[30] .$lastRow, $dataRow["AA1_GROUP"]);
-                $sheet->setCellValue($cell_array[31] .$lastRow, $dataRow["PAR"]);
-                $sheet->setCellValue($cell_array[32] .$lastRow, $dataRow["solde"]);
 
                 $lastRow++;
             }
@@ -965,33 +1185,103 @@
                 $lastRow++;
             }
 
-            $lastRow = $sheet->getHighestRow() + 2; 
-            foreach ($vi as $dataRow) {
-                $sheet->getStyle($cell_array[0] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('0000FF');
-                $sheet->getStyle($cell_array[1] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('0000FF');
-                $sheet->getStyle($cell_array[2] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('0000FF');
-                $sheet->getStyle($cell_array[3] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('0000FF');
-                $sheet->getStyle($cell_array[3] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('0000FF');
-                $sheet->getStyle($cell_array[4] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('0000FF');
-                $sheet->getStyle($cell_array[5] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('0000FF');
-                $sheet->getStyle($cell_array[6] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('0000FF');
-                $sheet->getStyle($cell_array[7] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('0000FF');
-                $sheet->getStyle($cell_array[8] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('0000FF');
-                $sheet->getStyle($cell_array[9] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('0000FF');
+            $lastRow = $sheet->getHighestRow() + 2;
 
-                $sheet->setCellValue($cell_array[0] .$lastRow, $dataRow["DATE_OPER"]);
-                $sheet->setCellValue($cell_array[1] .$lastRow, $dataRow["DATE_VAL"]);
-                $sheet->setCellValue($cell_array[2] .$lastRow, $dataRow["DEVISE"]);
-                $sheet->setCellValue($cell_array[3] .$lastRow, $dataRow["MONTANT"]);
-                $sheet->setCellValue($cell_array[4] .$lastRow, $dataRow["LIBELLE"]);
-                $sheet->setCellValue($cell_array[5] .$lastRow, $dataRow["OPER"]);
-                $sheet->setCellValue($cell_array[6] .$lastRow, $dataRow["EXPL"]);
-                $sheet->setCellValue($cell_array[7] .$lastRow, $dataRow["REF_IGOR"]);
+            foreach ($mvtsCI as $dataRow) {
+                $sheet->getStyle($cell_array[12] .$lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FF0000');
+                $sheet->getStyle($cell_array[13] .$lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FF0000');
+                $sheet->getStyle($cell_array[14] .$lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FF0000');
+                $sheet->getStyle($cell_array[15] .$lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FF0000');
+                $sheet->getStyle($cell_array[16] .$lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FF0000');
+                $sheet->getStyle($cell_array[17] .$lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FF0000');
+                $sheet->getStyle($cell_array[18] .$lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FF0000');
+                $sheet->getStyle($cell_array[19] .$lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FF0000');
+                $sheet->getStyle($cell_array[20] .$lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FF0000');
+                $sheet->getStyle($cell_array[21] .$lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FF0000');
+                $sheet->getStyle($cell_array[22] .$lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FF0000');
+                $sheet->getStyle($cell_array[23] .$lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FF0000');
+                $sheet->getStyle($cell_array[24] .$lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FF0000');
+                $sheet->getStyle($cell_array[25] .$lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FF0000');
+                $sheet->getStyle($cell_array[26] .$lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FF0000');
+                $sheet->getStyle($cell_array[27] .$lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FF0000');
+                $sheet->getStyle($cell_array[29] .$lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FF0000');
+                $sheet->getStyle($cell_array[30] .$lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FF0000');
+                $sheet->getStyle($cell_array[31] .$lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FF0000');
+                $sheet->getStyle($cell_array[32] .$lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FF0000');
 
+                $sheet->setCellValue($cell_array[12] .$lastRow, $dataRow["date_d"]);
+                $sheet->setCellValue($cell_array[13] .$lastRow, $dataRow["trans_id"]);
+                $sheet->setCellValue($cell_array[14] .$lastRow, $dataRow["initiator"]);
+                $sheet->setCellValue($cell_array[15] .$lastRow, $dataRow["TYPE"]);
+                $sheet->setCellValue($cell_array[16] .$lastRow, $dataRow["Channel"]);
+                $sheet->setCellValue($cell_array[17] .$lastRow, $dataRow["State"]);
+                $sheet->setCellValue($cell_array[18] .$lastRow, $dataRow["Wallet"]);
+                $sheet->setCellValue($cell_array[19] .$lastRow, $dataRow["Amount_MGA"]);
+                $sheet->setCellValue($cell_array[20] .$lastRow, $dataRow["Sender"]);
+                $sheet->setCellValue($cell_array[21] .$lastRow, $dataRow["Sender_name"]);
+                $sheet->setCellValue($cell_array[22] .$lastRow, $dataRow["receiver"]);
+                $sheet->setCellValue($cell_array[23] .$lastRow, $dataRow["receiver_name"]);
+                $sheet->setCellValue($cell_array[24] .$lastRow, $dataRow["details1"]);
+                $sheet->setCellValue($cell_array[25] .$lastRow, $dataRow["Confirming_agent"]);
+                $sheet->setCellValue($cell_array[26] .$lastRow, $dataRow["origine"]);
+                $sheet->setCellValue($cell_array[27] .$lastRow, $dataRow["TVA"]);
+                $sheet->setCellValue($cell_array[29] .$lastRow, $dataRow["ACTION"]);
+                $sheet->setCellValue($cell_array[30] .$lastRow, $dataRow["AA1_GROUP"]);
+                $sheet->setCellValue($cell_array[31] .$lastRow, $dataRow["PAR"]);
+                $sheet->setCellValue($cell_array[32] .$lastRow, $dataRow["solde"]);
 
                 $lastRow++;
             }
 
+            $lastRow = $sheet->getHighestRow() + 2;
+
+            foreach ($mvtsCO as $dataRow) {
+                $sheet->getStyle($cell_array[12] .$lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FF0000');
+                $sheet->getStyle($cell_array[13] .$lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FF0000');
+                $sheet->getStyle($cell_array[14] .$lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FF0000');
+                $sheet->getStyle($cell_array[15] .$lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FF0000');
+                $sheet->getStyle($cell_array[16] .$lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FF0000');
+                $sheet->getStyle($cell_array[17] .$lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FF0000');
+                $sheet->getStyle($cell_array[18] .$lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FF0000');
+                $sheet->getStyle($cell_array[19] .$lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FF0000');
+                $sheet->getStyle($cell_array[20] .$lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FF0000');
+                $sheet->getStyle($cell_array[21] .$lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FF0000');
+                $sheet->getStyle($cell_array[22] .$lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FF0000');
+                $sheet->getStyle($cell_array[23] .$lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FF0000');
+                $sheet->getStyle($cell_array[24] .$lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FF0000');
+                $sheet->getStyle($cell_array[25] .$lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FF0000');
+                $sheet->getStyle($cell_array[26] .$lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FF0000');
+                $sheet->getStyle($cell_array[27] .$lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FF0000');
+                $sheet->getStyle($cell_array[29] .$lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FF0000');
+                $sheet->getStyle($cell_array[30] .$lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FF0000');
+                $sheet->getStyle($cell_array[31] .$lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FF0000');
+                $sheet->getStyle($cell_array[32] .$lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FF0000');
+
+                $sheet->setCellValue($cell_array[12] .$lastRow, $dataRow["date_d"]);
+                $sheet->setCellValue($cell_array[13] .$lastRow, $dataRow["trans_id"]);
+                $sheet->setCellValue($cell_array[14] .$lastRow, $dataRow["initiator"]);
+                $sheet->setCellValue($cell_array[15] .$lastRow, $dataRow["TYPE"]);
+                $sheet->setCellValue($cell_array[16] .$lastRow, $dataRow["Channel"]);
+                $sheet->setCellValue($cell_array[17] .$lastRow, $dataRow["State"]);
+                $sheet->setCellValue($cell_array[18] .$lastRow, $dataRow["Wallet"]);
+                $sheet->setCellValue($cell_array[19] .$lastRow, $dataRow["Amount_MGA"]);
+                $sheet->setCellValue($cell_array[20] .$lastRow, $dataRow["Sender"]);
+                $sheet->setCellValue($cell_array[21] .$lastRow, $dataRow["Sender_name"]);
+                $sheet->setCellValue($cell_array[22] .$lastRow, $dataRow["receiver"]);
+                $sheet->setCellValue($cell_array[23] .$lastRow, $dataRow["receiver_name"]);
+                $sheet->setCellValue($cell_array[24] .$lastRow, $dataRow["details1"]);
+                $sheet->setCellValue($cell_array[25] .$lastRow, $dataRow["Confirming_agent"]);
+                $sheet->setCellValue($cell_array[26] .$lastRow, $dataRow["origine"]);
+                $sheet->setCellValue($cell_array[27] .$lastRow, $dataRow["TVA"]);
+                $sheet->setCellValue($cell_array[29] .$lastRow, $dataRow["ACTION"]);
+                $sheet->setCellValue($cell_array[30] .$lastRow, $dataRow["AA1_GROUP"]);
+                $sheet->setCellValue($cell_array[31] .$lastRow, $dataRow["PAR"]);
+                $sheet->setCellValue($cell_array[32] .$lastRow, $dataRow["solde"]);
+
+                $lastRow++;
+            }
+
+            
             $lastRow = $sheet->getHighestRow() + 2; 
             foreach ($nonAu as $dataRow) {
                 $sheet->getStyle($cell_array[0] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('90EE90');
@@ -1102,6 +1392,8 @@
                     $j++;
                 }
             }
+
+           
 
             // Traiter les éléments restants dans $igorTab comme des anomalies
             while ($i < $igorCount) {

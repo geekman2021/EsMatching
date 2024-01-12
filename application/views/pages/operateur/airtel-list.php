@@ -35,9 +35,6 @@
         <li class="nav-item col-sm-2">
           <a class="nav-link" href="#tabAmbi">Ambigu</a>
         </li>
-        <!-- <li class="nav-item col-sm-2">
-          <a class="nav-link" href="#tabSucces">Succès Sans Réf</a>
-        </li> -->
         <li class="nav-item col-sm-2">
           <a class="nav-link" href="#tabDeallo">Dealloc</a>
         </li>
@@ -173,13 +170,8 @@
 <div class="container-fluid tab-content">
   <div id="tabDat" class="container-fluid tab-pane "><br>   
     <div class="table-responsive">
-      <table class="table table-bordered" id="tableDat">
+      <table class="table table-bordered" id="tableDat" style="width: 100%">
         <thead>
-            <!-- <tr>
-                <th colspan="9" style="text-align: center ;">BOA</th>
-                <th colspan="9" style="text-align: center ;">Airtel</th>
-                <th colspan="1" style="text-align: center ;">Action</th>
-            </tr> -->
             <tr>
               <th style="display: none;">Id</th>
               <th>Compte</th>
@@ -191,18 +183,6 @@
               <th>Operation</th>
               <th>Expl</th>
               <th>ReferenceIgor</th>
-              <!-- <th>ExternalId</th>
-              <th>TransferId</th>
-              <th>TransferDate</th>
-              <th>AccountNo</th>
-              <th>SenderMsiSDN</th>
-              <th>DestMsiSDN</th>
-              <th>Amount</th>
-              <th>Description</th>
-              <th>ServiceName</th>
-              <th>ReferenceNumber</th> -->
-              <!-- <th>Etat</th>
-              <th>Date</th> -->
               <th>Action</th>
             </tr>
         </thead>
@@ -219,18 +199,6 @@
                 <td><?php echo $item->OPER ?></td>
                 <td><?php echo $item->EXPL ?></td>
                 <td><?php echo $item->REF_IGOR ?></td>
-                <!-- <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td> -->
-                <!-- <td><?php echo $item->etat ?></td>
-                <td><?php echo $item->date_regul ?></td> -->
                 <td>
                 <a href="javascript:void(0);" class="text-warning" data-toggle="modal" data-target="#myModal" onClick="modifier('<?php echo $item->REF_IGOR ?>', '<?php echo $item->etat ?>', '<?php echo $item->date_regul ?>')">
                 <i class="bx bx-edit" style="font-size: 25px;"></i>
@@ -246,47 +214,7 @@
               </td>
             </tr>
           <?php } ?>
-          <!-- <?php// foreach($anomalie_ci as $item) { ?>
-            <tr>
-            <td style="display: none;"><?php echo $item->id ?></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td><?php // echo $item->external_id ?></td>
-              <td><?php //echo $item->TRANSFER_ID ?></td>
-              <td><?php// echo $item->transfer_date ?></td>
-              <td><?php //echo $item->account_no ?></td>
-              <td><?php //echo $item->sender_msisdn ?></td>
-              <td><?php //echo $item->dest_msisdn ?></td>
-              <td><?php //echo $item->amount ?></td>
-              <td><?php //echo $item->description ?></td>
-              <td><?php //echo $item->service_name ?></td>
-              <td><?php //echo $item->reference_number ?></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td>
-                <a href="javascript:void(0);" class="text-warning" data-toggle="modal" data-target="#myModal2" onClick="modifier2('<?php echo $item->REF_IGOR ?>', '<?php echo $item->etat ?>', '<?php echo $item->date_regul ?>')">
-                  <box-icon name='printer'  ></box-icon>Modifier
-                </a> 
-                <a href="javascript:void(0);" class="text-primary" data-target="#myModalFr10"
-                    data-compte="<?php //echo $item->COMPTE ?>"
-                    data-date-oper="<?php //echo $item->DATE_OPER ?>"
-                    data-montant="<?php //echo $item->MONTANT ?>"
-                    data-libelle="<?php //echo $item->LIBELLE ?>"
-                    data-oper="<?php //echo $item->OPER ?>"
-                    data-ref-igor="<?php //echo $item->REF_IGOR ?>" data-toggle="modal">
-                  <box-icon name="printer"></box-icon>Imprimer
-                </a>
-              </td>
-              
-            </tr>
-          <?php //} ?> -->
+          
         </tbody>
       </table>
     </div>
@@ -1079,30 +1007,18 @@ $("#tableNormaleCashOut").DataTable({
 });
 
   $('#tableNormaleCashIn').DataTable( {
-      dom: 'Bfrtip',
       scrollX: true,
-      buttons: [
-          'copy', 'csv', 'excel', 'pdf', 'print'
-          ],
       language: {
         url: '<?php echo base_url(); ?>assets/fr-FR.json',
   }
   });
   $("#tableDat").DataTable({
-    responsive: true,
-    scrollX: true,
-    dom: 'Bfrtip',
-    buttons: [
-      'copy', 'csv', 'excel', 'pdf', 'print'
-    ],
     language: {
       url: '<?php echo base_url(); ?>assets/fr-FR.json',
     }
   });
 
 $("#tableCat").DataTable({
-    responsive: true,
-    scrollX: true,
     language: {
       url: '<?php echo base_url(); ?>assets/fr-FR.json',
     }
@@ -1111,11 +1027,6 @@ $("#tableCat").DataTable({
   $("#tableDeallo").DataTable({
     responsive: true,
     scrollX: true,
-
-    dom: 'Bfrtip',
-    buttons: [
-      'copy', 'csv', 'excel', 'pdf', 'print'
-    ],
     language: {
       url: '<?php echo base_url(); ?>assets/fr-FR.json',
     }

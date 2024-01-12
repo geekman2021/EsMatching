@@ -7,8 +7,26 @@
         }
 
         
-        public function insert($data) {
-            $this->db->insert("historique_airtel", $data);
+        public function insert_or_update($data) {
+            if(array_key_exists("REF_IGOR", $data)) {
+                $this->db->where("REF_IGOR", $data["REF_IGOR"]);
+            } if(array_key_exists("TRANSFER_ID", $data)) {
+                $this->db->where("TRANSFER_ID", $data["TRANSFER_ID"]);
+            }
+
+            $exist= $this->db->get("historique_airtel");
+            if($exist->num_rows() == 0) {
+                return $this->db->insert("historique_airtel", $data);
+            } else {
+                if(array_key_exists("REF_IGOR", $data)) {
+                    
+                    $this->db->where("REF_IGOR", $data["REF_IGOR"]);
+                    return $this->db->update("historique_airtel", $data);
+                } if(array_key_exists("TRANSFER_ID", $data)) {
+                    $this->db->where("TRANSFER_ID", $data["TRANSFER_ID"]);
+                    return $this->db->update("historique_airtel", $data);
+                }
+            }
         }
 
         public function get_historique() {
@@ -26,8 +44,6 @@
 
             return $query->result();
         }
-
-
     }
 
 

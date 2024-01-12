@@ -45,10 +45,25 @@
                         <th>Operation</th>
                         <th>Expl</th>
                         <th>ReferenceIgor</th>
+                        <th>Solde</th>
                     </tr>
                 </thead>
                 <tbody>
-
+                    <?php $montant_precedent= 0;  ?>
+                    <?php foreach($ecart_boa as $item) { ?>
+                        <tr>
+                            <td><?= $item->COMPTE ?></td>
+                            <td><?= $item->DATE_OPER ?></td>
+                            <td><?= $item->DATE_VAL  ?></td>
+                            <td><?= $item->DEVISE ?></td>
+                            <td style="white-space: nowrap;"><?= number_format($item->MONTANT, 0, ',', ' ') ?></td>
+                            <td><?= $item->LIBELLE ?></td>
+                            <td><?= $item->OPER ?></td>
+                            <td><?= $item->EXPL ?></td>
+                            <td><?= $item->REF_IGOR ?></td>
+                            <td style="white-space: nowrap;"><?= number_format($montant_precedent += $item->MONTANT, 0, ',', ' ')  ?> </td>
+                        </tr>
+                    <?php } ?>
                 </tbody>
             </table>
         </div>
@@ -83,10 +98,26 @@
                         <th>Description</th>
                         <th>ServiceName</th>
                         <th>ReferenceNumber</th>
+                        <th>Solde</th>
                     </tr>
                 </thead>
                 <tbody>
-
+                    <?php $montant_precedent = 0; ?>
+                    <?php foreach($ecart_airtel as $item) { ?>
+                        <tr>
+                            <td><?= $item->TRANSFER_ID ?></td>
+                            <td><?= $item->transfer_date ?></td>
+                            <td><?= $item->external_id ?></td>
+                            <td><?= $item->account_no ?></td>
+                            <td><?= $item->sender_msisdn ?></td>
+                            <td><?= $item->dest_msisdn ?></td>
+                            <td style="white-space: nowrap;"><?= number_format($item->amount, 0, ',', ' ' )  ?></td>
+                            <td><?= $item->description ?></td>
+                            <td><?= $item->service_name ?></td>
+                            <td><?= $item->reference_number ?></td>
+                            <td style="white-space: nowrap;"><?= number_format($montant_precedent += $item->solde, 0, ',', ' ')?></td>
+                        </tr>
+                    <?php } ?>
                 </tbody>
             </table>
         </div>

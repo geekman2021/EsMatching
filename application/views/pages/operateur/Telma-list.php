@@ -327,18 +327,18 @@
 </div>
         </div>
 
-  <div id="tabMvts" class="container-fluid tab-pane "><br>    
-    <div class="table-responsive">
+<div id="tabMvts" class="container-fluid tab-pane "><br>    
+  <div class="table-responsive">
     <div class="card">
       <div class="card-header">
           <div class="row">
             <div class="col-lg-6">
-              <b>Liste MVTS</b>
+              <b>Liste MVTS Cash In</b>
             </div>
           </div>
       </div>
       <div class="card-body">
-      <table class="table table-bordered" id="tableMvts">
+      <table class="table table-bordered" id="tableMvtsCI" style="width: 100%">
         <thead>
           <tr>
             <th style="display: none;"></th>
@@ -353,28 +353,63 @@
           </tr>
         </thead>
         <tbody>
-        <!-- <?php //foreach($admin as $item) { ?>
+        <?php foreach($mvts_ci as $item) { ?>
           <tr>
             <td style="display: none;"><?php echo $item->id ?></td>
-            <td><?php echo $item->date ?></td>
-            <td><?php //echo $item->telma_heure ?></td>
-            <td><?php //echo $item->trans_id ?></td>
-            <td><?php //echo $item->TYPE ?></td>
-            <td><?php //echo $item->channel ?></td>
-            <td><?php //echo $item->state ?></td>
-            <td><?php //echo number_format($item->Amount_MGA, 0, ',', " ") ?></td>
-            <td><?php //echo $item->sender ?></td>
-            <td><?php //echo $item->receiver ?></td>
-            <td><?php //echo $item->etat ?></td>
-            <td><?php //echo $item->date_regul ?></td>
-            <td>
-              <a href="javascript:void(0);" class="text-warning" data-toggle="modal" data-target="#myModal" onClick="modifier('<?php echo $item->id ?>', '<?php echo $item->etat ?>', '<?php echo $item->date_regul ?>')">
-                Modifier
-              </a> 
-            </td>
+            <td style="white-space: nowrap"><?php echo $item->date ?></td>
+            <td><?php echo $item->trans_id ?></td>
+            <td><?php echo $item->TYPE ?></td>
+            <td><?php echo $item->channel ?></td>
+            <td><?php echo $item->state ?></td>
+            <td><?php echo number_format($item->Amount_MGA, 0, ',', " ") ?></td>
+            <td><?php echo $item->sender ?></td>
+            <td><?php echo $item->receiver ?></td>
           </tr>
+        <?php }?>
+        </tbody>
+      </table>
+    </div>     
+  </div>
+</div>
 
-        <?php //}?> -->
+<div class="table-responsive">
+    <div class="card">
+      <div class="card-header">
+          <div class="row">
+            <div class="col-lg-6">
+              <b>Liste MVTS Cash Out</b>
+            </div>
+          </div>
+      </div>
+      <div class="card-body">
+      <table class="table table-bordered" id="tableMvtsCO" style="width: 100%">
+        <thead>
+          <tr>
+            <th style="display: none;"></th>
+            <th>Date</th>
+            <th>Transfer_id</th>
+            <th>Type</th>
+            <th>Channel</th>
+            <th>Etat</th>
+            <th>Montant</th>
+            <th>sender</th>
+            <th>receiver</th>
+          </tr>
+        </thead>
+        <tbody>
+        <?php foreach($mvts_ci as $item) { ?>
+          <tr>
+            <td style="display: none;"><?php echo $item->id ?></td>
+            <td style="white-space: nowrap"><?php echo $item->date ?></td>
+            <td><?php echo $item->trans_id ?></td>
+            <td><?php echo $item->TYPE ?></td>
+            <td><?php echo $item->channel ?></td>
+            <td><?php echo $item->state ?></td>
+            <td><?php echo number_format($item->Amount_MGA, 0, ',', " ") ?></td>
+            <td><?php echo $item->sender ?></td>
+            <td><?php echo $item->receiver ?></td>
+          </tr>
+        <?php }?>
         </tbody>
       </table>
     </div>     
@@ -396,7 +431,7 @@
           </div>
       </div>
     <div class="card-body">
-      <table class="table table-bordered" id="tableAdmin">
+      <table class="table table-bordered" id="tableAdmin" style="width: 100%">
         <thead>
           <tr>
             <th style="display: none;"></th>
@@ -414,7 +449,7 @@
         <?php foreach($admin as $item) { ?>
           <tr>
             <td style="display: none;"><?php echo $item->id ?></td>
-            <td><?php echo $item->date ?></td>
+            <td style="white-space: nowrap"><?php echo $item->date ?></td>
             <td><?php echo $item->trans_id ?></td>
             <td><?php echo $item->TYPE ?></td>
             <td><?php echo $item->channel ?></td>
@@ -454,9 +489,6 @@
                     <th>Libelle</th>
                     <th>Operation</th>
                     <th>Expl</th>
-                    <!-- <th>Etat</th>
-                    <th>Date_Regul</th>
-                    <th>Action</th> -->
                   </tr>
               </thead>
               <tbody>
@@ -470,13 +502,6 @@
                     <td><?php echo $item->LIBELLE ?></td>
                     <td ><?php echo $item->OPER ?></td>
                     <td><?php echo $item->EXPL ?></td>
-                    <!-- <td><?php echo $item->etat ?></td>
-                    <td><?php echo $item->date_regul ?></td>
-                    <td>
-                      <a href="javascript:void(0);" class="text-warning" data-toggle="modal" data-target="#myModal" onClick="modifier('<?php echo $item->id ?>', '<?php echo $item->etat ?>', '<?php echo $item->date_regul ?>')">
-                        <box-icon name='printer'  ></box-icon>Modifier
-                      </a> 
-                    </td> -->
                   </tr>
                 <?php }?>
               </tbody>
@@ -614,23 +639,10 @@ $(document).ready(function(){
         url: '<?php echo base_url(); ?>assets/fr-FR.json',
     }
   });
-
-    // $('#tableNormaleCashIn').DataTable( {
-    //     dom: 'Bfrtip',
-    //     responsive: true,
-    //     scrollX: true,
-    //     buttons: [
-    //         'copy', 'csv', 'excel', 'pdf', 'print'
-    //         ],
-    //     language: {
-    //       url: '<?php echo base_url(); ?>assets/fr-FR.json',
-    // }
-    // });
   
 
   $("#tableDat").DataTable({
-    responsive: true,
-    "scrollX": true,
+    scrollX: true,
     language: {
       url: '<?php echo base_url(); ?>assets/fr-FR.json',
     }
@@ -638,28 +650,29 @@ $(document).ready(function(){
 
 
   $("#tableCat").DataTable({
-    responsive: true,
-    "scrollX": true,
     language: {
       url: '<?php echo base_url(); ?>assets/fr-FR.json',
     }
   });
 
   $("#tableAdmin").DataTable({
-    responsive: true,
-    scrollX: true,
-    fixedColumns: {
-      leftColumns: 8,  // Adjust the number of fixed columns as needed
-    },
-    scrollCollapse: true,
     language: {
       url: '<?php echo base_url(); ?>assets/fr-FR.json',
     }
   });
 
   $("#tableVI").DataTable({
-    responsive: true,
-    "scrollX": true,
+    language: {
+      url: '<?php echo base_url(); ?>assets/fr-FR.json',
+    }
+  });
+  
+  $("#tableMvtsCI").DataTable({
+    language: {
+      url: '<?php echo base_url(); ?>assets/fr-FR.json',
+    }
+  });
+  $("#tableMvtsCO").DataTable({
     language: {
       url: '<?php echo base_url(); ?>assets/fr-FR.json',
     }

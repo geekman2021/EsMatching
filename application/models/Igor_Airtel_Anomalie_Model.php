@@ -71,9 +71,8 @@
 
         public function get_vi() {
             $this->db->select('*');
-            $this->db->select_sum('MONTANT', 'total');
             $this->db->from('igor_airtel_anomalie_vi');
-            $this->db->where("reference_number IS NULL");
+            $this->db->where("etat IS NULL");
             $this->db->group_by('REF_IGOR');
 
             $query = $this->db->get();

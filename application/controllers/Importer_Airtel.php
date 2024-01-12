@@ -143,20 +143,6 @@
             $anomalieIgorCO = $resultatAnomalieCO[1];   
             
 
-            // echo "<pre>";
-            //     print_r($nonAu);
-            // echo "</pre>";
-
-
-            // echo "<pre>";
-            //     print_r($anomalieAirtelCO);
-            // echo "</pre>";
-
-            // echo "<pre>";
-            //     print_r($airtelIgorNormaleCI);
-            // echo "</pre>";
-
-
             $rollback= $this->changerCleRollBack($rollback);
             $ambiguRegul =array();
             if(!empty($_SESSION["ambigu"])) {
@@ -168,66 +154,97 @@
 // // ------------------------------------------------------------------REGULARISATION-------------------------------------------------------------------------------------
 
 
-//----------------------------------------------------------- VI ET DEALLOCATION--------------------------------------------------------
 
-            // if(empty($_SESSION["deallo"]) && empty($_SESSION["anomalie_vi"]) && empty($igorVI) && !empty($deallocation)) {
-            //     foreach($deallocation as $item) {
-            //         $this->Airtel_Anomalie_Model->insert_or_update_deallocation($item);
-            //     }
-            // } else if (empty($_SESSION["deallo"]) && empty($_SESSION["anomalie_vi"]) && !empty($igorVI) && empty($deallocation)) {
-            //     foreach($igorVI as $item) {
-            //         $this->Igor_Airtel_Anomalie_Model->insert_or_update_vi($item);
-            //     }
-            // }
+//-----------------------------------------------------------REGULARISATION VI ET DEALLOCATION--------------------------------------------------------
+
+            if(empty($_SESSION["deallo"]) && empty($_SESSION["anomalie_vi"]) && empty($igorVI) && !empty($deallocation)) {
+                foreach($deallocation as $item) {
+                    $this->Airtel_Anomalie_Model->insert_or_update_deallocation($item);
+                }
+            } else if (empty($_SESSION["deallo"]) && empty($_SESSION["anomalie_vi"]) && !empty($igorVI) && empty($deallocation)) {
+                foreach($igorVI as $item) {
+                    $this->Igor_Airtel_Anomalie_Model->insert_or_update_vi($item);
+                }
+            }
+
+            if(!empty($_SESSION["deallo"]) && !empty($igorVI)) {
+                $d= array();
+                foreach ($_SESSION["deallo"] as $item) {
+                    $d[]= get_object_vars($item);
+                }
+
+                $res= $this->RegulViDeallocation($igorVI, $d);
+                $deallo= $res[1];
+                $vi= $res[0];
+
+                // echo "<pre>";
+                //     print_r($deallo);
+                // echo "</pre>";
+                // echo "<pre>";
+                //     print_r($vi);
+                // echo "</pre>";
 
 
-            // if(!empty($_SESSION["deallo"]) && !empty($igorVI)) {
-            //     $d= array();
-            //     foreach ($_SESSION["deallo"] as $item) {
-            //         $d= get_object_vars($item);
-            //     }
-            //     $dealloEtVI= $this->RegulViDeallocation($igorVI, $d);
-            //     $this->Airtel_Anomalie_Model->delete_deallocation($dealloEtVI[0]);
+                foreach($deallo as $item) {
+                    $this->Airtel_Anomalie_Model->insert_or_update_deallocation($item);
+                }
+                foreach($vi as $item) {
+                    $this->Igor_Airtel_Anomalie_Model->insert_or_update_vi($item);
+                }
+   
+            } else if (!empty($_SESSION["anomalie_vi"] && !empty($deallocation))) {
+                $v= array();
+                foreach ($_SESSION["anomalie_vi"] as $item) {
+                    $v[]= get_object_vars($item);
+                }
 
-            // } else if (!empty($_SESSION["anomalie_vi"] && !empty($deallocation))) {
-            //     $v= array();
-            //     foreach ($_SESSION["anomalie_vi"] as $item) {
-            //         $v[]= get_object_vars($item);
-            //     }
-            //     $dealloEtVI = $this->RegulViDeallocation($v, $deallocation);
-            //     $this->Igor_Airtel_Anomalie_Model->delete_vi($dealloEtVI[1]);
-            // } else if(!empty($deallocation) && !empty($igorVI)) {
-            //     $this->RegulViDeallocation($igorVI, $deallocation);
-            // }
+                $res= $this->RegulViDeallocation($v, $deallocation);
 
-            // $this->Igor_Airtel_Model->insert_or_update_co($airtelIgorNormaleCO);
 
-            // $this->RegulViDeallocation($_SESSION["anomalie_vi"], $_SESSION["deallocation"]);
-            
+                // echo "<pre>";
+                //     print_r($res[0]);
+                // echo "</pre>";
+                // echo "<pre>";
+                //     print_r($res[1]);
+                // echo "</pre>";
 
-            // $this->RegulViDeallocation($vi, $deallo);
-       
-            // $this->RegulnonAu($nonAu, $_SESSION["igor_anomalie_ci"]);
+                foreach($res[1] as $item) {
+                    $this->Airtel_Anomalie_Model->insert_or_update_deallocation($item);
+                }
+                foreach($res[0] as $item) {
+                    $this->Igor_Airtel_Anomalie_Model->insert_or_update_vi($item);
+                }
+
+
+
+
+            } else if(!empty($deallocation) && !empty($igorVI)) {
+
+                $res= $this->RegulViDeallocation($igorVI, $deallocation);
+                foreach($res[1] as $item) {
+                    $this->Airtel_Anomalie_Model->insert_or_update_deallocation($item);
+                }
+                foreach($res[0] as $item) {
+                    $this->Igor_Airtel_Anomalie_Model->insert_or_update_vi($item);
+                }
+
+                // echo "<pre>";
+                //     print_r($resultat[0]);
+                // echo "</pre>";
+                // echo "<pre>";
+                //     print_r($resultat[1]);
+                // echo "</pre>";
+                
+            }
 
 // ------------------------------------------------------------- INSERTION ------------------------------------------------------------------------------------
 
             foreach($airtelIgorNormaleCO as $item) {
                 $this->Igor_Airtel_Model->insert_or_update_co($item);
-                // $solde_airtel+=$item["solde"];
-                // $solde_boa+= $item["MONTANT"];
-                // $item["solde_airtel"]=  $solde_airtel;
-                // $item["solde_boa"]= $solde_boa;
-                // $this->Historique_Airtel_Model->insert($item);
             }
-
 
             foreach($airtelIgorNormaleCI as $item) {
                 $this->Igor_Airtel_Model->insert_or_update_ci($item);
-                // $solde_airtel+=$item["solde"];
-                // $solde_boa+= $item["MONTANT"];
-                // $item["solde_airtel"]=  $solde_airtel;
-                // $item["solde_boa"]= $solde_boa;
-                // $this->Historique_Airtel_Model->insert($item);
             }
 
             foreach($anomalieIgorCO as $item) {
@@ -250,12 +267,6 @@
                 $this->Airtel_Anomalie_Model->insert_or_update_co($item);
             }
 
-            foreach($deallocation as $item) {
-                // $item["etat"]= "Non";
-                $this->Airtel_Anomalie_Model->insert_or_update_deallocation($item);
-            }
-
-
             foreach($ambiguous as $item) {
                 $this->Airtel_Anomalie_Model->insert_or_update_ambiguous($item);
             }
@@ -263,13 +274,7 @@
             foreach($rollback as $item) {
                 $this->Airtel_Anomalie_Model->insert_or_update_rb($item);
             }
-
-            foreach($igorVI as $item) {
-                // $item["etat"] = "Non";
-                $this->Igor_Airtel_Anomalie_Model->insert_or_update_vi($item);
-            }
-
-            $historique = array_merge($airtelIgorNormaleCI, $airtelIgorNormaleCO, $anomalieIgorCI, $anomalieIgorCO, $anomalieAirtelCI, $anomalieAirtelCO, $igorVI, $dernierAmbiguous, $dernierRollBack, $nonAu);
+            $historique = array_merge($airtelIgorNormaleCI, $airtelIgorNormaleCO, $anomalieIgorCI, $anomalieIgorCO, $anomalieAirtelCI, $anomalieAirtelCO, $igorVI, $dernierAmbiguous, $dernierRollBack, $nonAu, $deallocation);
             
             if(count($_SESSION["last_solde"]) > 0 ) {
                 $solde_airtel= $_SESSION["last_solde"][0]->solde_airtel;
@@ -280,47 +285,25 @@
             }
 
             foreach ($historique as $item) {
+
                 $solde_airtel += isset($item["solde"]) ? $item["solde"] : 0;
                 $solde_boa += isset($item["MONTANT"]) ? $item["MONTANT"] : 0;
                 $item["solde_airtel"] = $solde_airtel;
                 $item["solde_boa"] = $solde_boa;
 
-                $this->Historique_Airtel_Model->insert($item);
+                $this->Historique_Airtel_Model->insert_or_update($item);
             }
 
             foreach($nonAu as $item) {
                 $this->Igor_Airtel_Model->insert_or_update_nonAu($item);
             }
 
-            // echo "<pre>" ."anomalie Airtel CI";
-            //     print_r($anomalieAirtelCI);
-            // echo "</pre>";
 
-            // echo "<pre>" ."dernierAmbiguous";
-            //     print_r($dernierAmbiguous);
-            // echo "</pre>";
-            // echo "<pre>" ."dernierRollBack";
-            //     print_r($dernierRollBack);
-            // echo "</pre>";
-            // echo "<pre>" ."anomalieAirtelCI";
-            //     print_r($anomalieAirtelCI);
-            // echo "</pre>";
-            // echo "<pre>" ."anomalieAirtelCO";
-            //     print_r($anomalieAirtelCO);
-            // echo "</pre>";
-            // echo "<pre>" ."anomalieAirtelCI";
-            //     print_r($anomalieAirtelCI);
-            // echo "</pre>";
-            // echo "<pre>" ."anomalieAirtelCO";
-            //     print_r($anomalieIgorCO);
-            // echo "</pre>";
-
-
-            // $_SESSION["finished"] = "true";
+            
             $this->exporter($airtelIgorNormaleCI, $airtelIgorNormaleCO, $dernierAmbiguous, $dernierRollBack, $anomalieAirtelCI, $anomalieAirtelCO, $anomalieIgorCI, $anomalieIgorCO, $igorVI, $deallocation, $resultat[2], $ambiguRegul);
 
             // redirect("importer_airtel");
-          
+            
 }
 
 
@@ -409,14 +392,26 @@
 
         public function filtrerAmbiguous($data) {
             $resultat= array();
+            $res= array();
 
             foreach($data as $item) {
-                if($item["description"] ==="TransactionAmbiguous" || ($item["description"] === "TransactionSuccess" && empty($item["external_id"]))  && ($item["service_name"] === "BanktoWalletTransfer" || $item["service_name"] === "ChannelBanktoWalletTransfer" || $item["service_name"] === "AutoSweepMoneyTransfer" || $item["service_name"] === "WalletToBankTransfer" || $item["service_name"] === "ChannelWalletToBankTransfer") ) {
-                    $item["solde"] = $item["amount"] * (-1);
+                if($item["description"] === "TransactionAmbiguous" || ($item["description"] === "TransactionSuccess" && empty($item["external_id"]))  && ($item["service_name"] === "BanktoWalletTransfer" || $item["service_name"] === "ChannelBanktoWalletTransfer" || $item["service_name"] === "AutoSweepMoneyTransfer" || $item["service_name"] === "WalletToBankTransfer" || $item["service_name"] === "ChannelWalletToBankTransfer") ) {
                     $resultat[] = $item;
                 }
             }
-            return $resultat;
+
+            foreach($resultat as &$item) {
+                if($item["service_name"] === "BanktoWalletTransfer" || $item["service_name"] === "ChannelBanktoWalletTransfer") {
+                    $item["solde"] = $item["amount"] * (-1);
+                    $res[] = $item;
+                    
+                } else if($item["service_name"] === "ChannelWalletToBankTransfer" || $item["service_name"] === "WalletToBankTransfer" || $item["service_name"] ===AutoSweepMoneyTransfer) {
+                    $item["solde"] = $item["amount"] * (1);
+                    $res[] = $item;
+                }
+            }
+
+            return $res;
         }
 
         public function comparerRollBackEtAmbigous($rollback, $ambiguous) {
@@ -448,7 +443,7 @@
             return [$dernierRollBack, $dernierAmbiguous];
         }
         
-
+        
         public function mergedAmbigousEtRollback($rollback, $ambiguous) {
             $resAmbi= array();
             $resRoll= array();
@@ -567,15 +562,17 @@
         }
 
         public function RegulViDeallocation($vi, $deallocation) {
+            
             $viCopy= $vi;
             $deallocationCopy= $deallocation;
             $reference_number_to_total_amount = array();
 
             $mergeDeallocationVI= array();
             foreach ($deallocation as $itemDeallo) {
+
                 $reference_number = $itemDeallo['reference_number'];
                 $amount = $itemDeallo['amount'];
-                
+
                 if (array_key_exists($reference_number, $reference_number_to_total_amount)) {
                     $reference_number_to_total_amount[$reference_number] += $amount;
                 } else {
@@ -584,84 +581,99 @@
             }
 
             foreach ($reference_number_to_total_amount as $reference_number => $total_amount) {
-                foreach($vi as $itemVi) {
-
-                    if($itemVi["MONTANT"] == -$total_amount) {
+                foreach($vi as &$itemVi) {
+                    if(intval($itemVi["MONTANT"]) == $total_amount) {
                         for ($i=0; $i < count($deallocationCopy); $i++) {
                             if($deallocationCopy[$i]["reference_number"] === $reference_number) {
-        
-                                $mergeDeallocationVI[] = array_merge($deallocationCopy[$i], $itemVi);
+
+                                $deallocationCopy[$i]["etat"] = "Oui";
+                                $deallocationCopy[$i]["REF_IGOR"]= $itemVi["REF_IGOR"];
+                                
                             }
                         }
+                        $itemVi["etat"]= "Oui";
                     }
                 }
             }
+        return [$vi, $deallocationCopy];
+    }
 
-            foreach($mergeDeallocationVI as &$item) {
-                if(array_key_exists("total", $item)) {
-                    unset($item["total"]);
-                }
+
+    public function DealloRegulVi($vi, $deallocation) {
+
+
+
+        $viCopy= $vi;
+        $deallocationCopy= $deallocation;
+        $reference_number_to_total_amount = array();
+
+        $mergeDeallocationVI= array();
+        foreach ($deallocation as $itemDeallo) {
+
+            $reference_number = $itemDeallo['reference_number'];
+            $amount = $itemDeallo['amount'];
+
+            if (array_key_exists($reference_number, $reference_number_to_total_amount)) {
+                $reference_number_to_total_amount[$reference_number] += $amount;
+            } else {
+                $reference_number_to_total_amount[$reference_number] = $amount;
             }
-            foreach($mergeDeallocationVI as $item) {
-                $this->Igor_Airtel_Model->insert_or_update_deallo_vi($item);
-            }
-            return [$reference_number, $mergeDeallocationVI[0]["REF_IGOR"]];
-            // session_destroy();
         }
 
-        public function RegulnonAu($nonAu, $anomalieIgor) {
-
-            $regul= array();
-            foreach ($anomalieIgor as $sessionItem) {
-                foreach ($$nonAu as $igorItem) {
-                    if ($sessionItem->REF_IGOR === $igorItem["ref_igor"]) {
-                        $sessionItem = get_object_vars($sessionItem);
-                        $sessionItem["etat"] = "oui";
-                        $sessionItem["date_regul"] = $igorItem["date_oper"];
-                        $regul[]= $sessionItem;
-                        $regul[]= $igorItem;
-
-                        $this->Regul_Igor_Airtel_Model->update_anomalie_ci($sessionItem);
-                        $this->Non_Au_Model->insert_or_update($igorItem);
+        foreach ($reference_number_to_total_amount as $reference_number => $total_amount) {
+            foreach($vi as &$itemVi) {
+                if(intval($itemVi["MONTANT"]) == $total_amount) {
+                    for ($i=0; $i < count($deallocationCopy); $i++) {
+                        if($deallocationCopy[$i]["reference_number"] === $reference_number) {
+                            $deallocationCopy[$i]["etat"] = "Oui";
+                            $itemVi["reference_number"]= $reference_number;
+                        }
                     }
+                    $itemVi["etat"]= "Oui";
                 }
             }
-            return $regul;
         }
+
+    return [$vi, $deallocationCopy];
+}
+
+
+    public function RegulnonAu($nonAu, $anomalieIgor) {
+
+        $regul= array();
+        foreach ($anomalieIgor as $sessionItem) {
+            foreach ($$nonAu as $igorItem) {
+                if ($sessionItem->REF_IGOR === $igorItem["ref_igor"]) {
+                    $sessionItem = get_object_vars($sessionItem);
+                    $sessionItem["etat"] = "oui";
+                    $sessionItem["date_regul"] = $igorItem["date_oper"];
+                    $regul[]= $sessionItem;
+                    $regul[]= $igorItem;
+
+                    $this->Regul_Igor_Airtel_Model->update_anomalie_ci($sessionItem);
+                    $this->Non_Au_Model->insert_or_update($igorItem);
+                }
+            }
+        }
+        return $regul;
+    }
 
           
-        public function changerCleRollBack($data) {
-            $resultat= array();
-            foreach ($data as &$item) {
-                $item = array_combine(
-                    array_map(function ($key) {
-                        return 'rollback_' . $key;
-                    }, array_keys($item)),
-                    $item
-                );
+    public function changerCleRollBack($data) {
+        $resultat= array();
+        foreach ($data as &$item) {
+            $item = array_combine(
+                array_map(function ($key) {
+                    return 'rollback_' . $key;
+                }, array_keys($item)),
+                $item
+            );
 
-                $resultat[]= $item;
-            }
-
-            return $resultat;
+            $resultat[]= $item;
         }
 
-
-        // public function regulRollBackAmbiguous($rollback, $ambiguous) {
-        //     $regulRoll= array();
-        //     $regulAmbi= array();
-        //     foreach($rollback as $itemRoll) {
-        //         foreach($ambiguous as $itemAmbi) {
-        //             if($itemAmbi["TRANSFER_ID"]===$itemRoll["reference_number"]) {
-        //                 $itemAmbi["reference_number"]= $itemRoll["reference_number"];
-        //                 $item["date_regul"]= $itemRoll["date_oper"];
-        //                 $this->Airtel_Anomalie_Model->update_ambigu($itemAmbi);
-        //                 $this->Airtel_Anomalie_Model->insert_or_update_rb($itemRoll);
-        //             }
-        //         }
-        //     }
-        // }
-
+        return $resultat;
+    }
 
     public function exporter($airtelIgorNormaleCI, $airtelIgorNormaleCO, $dernierAmbiguous, $dernierRollBack, $anomalieAirtelCI, $anomalieAirtelCO, $anomalieIgorCI, $anomalieIgorCO, $igorVI, $deallocation, $nonAu, $ambiguRegul) {
 
@@ -798,36 +810,6 @@
                 $lastRow ++;
             }
 
-            // $lastRow = $sheet->getHighestRow() + 2;
-            // foreach($ambiguRegul as $dataRow) {
-            //     $i=10;
-            //     $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["TRANSFER_ID"]);
-            //     $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["transfer_date"]);
-            //     $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["external_id"]);
-            //     $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["account_no"]);
-            //     $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["sender_msisdn"]);
-            //     $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["dest_msisdn"]);
-            //     $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["amount"]);
-            //     $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["description"]);
-            //     $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["service_name"]);
-            //     $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["reference_number"]);
-            //     $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["solde"]);
-                
-            //     $i=10;
-            //     $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('DDDDDD');
-            //     $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('DDDDDD');
-            //     $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('DDDDDD');
-            //     $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('DDDDDD');
-            //     $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('DDDDDD');
-            //     $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('DDDDDD');
-            //     $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('DDDDDD');
-            //     $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('DDDDDD');
-            //     $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('DDDDDD');
-            //     $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('DDDDDD');
-            //     $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('DDDDDD');
-
-            //     $lastRow ++;
-            // }
 
             $lastRow = $sheet->getHighestRow() + 2;
             foreach($dernierRollBack as $dataRow) {

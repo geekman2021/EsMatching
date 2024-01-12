@@ -8,11 +8,14 @@
             $this->load->model("Telma_Normal_Model");
             $this->load->model("Telma_Anomalie_Model");
             $this->load->model("Boa_Telma_Anomalie_Model");
+            ini_set('memory_limit', '1024M');
             session_start();
         }
         public function index() {
+
             $this->load->view("templates/sidebar");
             $this->load->view("pages/operateur/telma-list", $this->get_data());
+
         }
 
         public function get_data() {
@@ -23,6 +26,8 @@
             $data["admin"] = $this->Telma_Anomalie_Model->get_admin();
             $data["dat"] = $this->Boa_Telma_Anomalie_Model->get_ci();
             $data["cat"] = $this->Boa_Telma_Anomalie_Model->get_co();
+            $data["mvts_ci"] = $this->Telma_Anomalie_Model->get_mvts_ci();
+            $data["mvts_co"] = $this->Telma_Anomalie_Model->get_mvts_co();
             return $data;
 
         }
