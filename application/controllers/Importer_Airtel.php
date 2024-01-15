@@ -16,6 +16,7 @@
             $this->load->model("Regul_Igor_Airtel_Model");
             $this->load->model("Non_Au_Model");
             ini_set('memory_limit', '1024M');
+            set_time_limit(300);
             session_start();
         }
 
@@ -165,76 +166,93 @@
                 foreach($igorVI as $item) {
                     $this->Igor_Airtel_Anomalie_Model->insert_or_update_vi($item);
                 }
-            }
+            } else if (!empty($_SESSION["deallo"]) && !empty($_SESSION["anomalie_vi"]) && !empty($igorVI) && empty($deallocation)) {
+                $v= array();
+                $d= array();
+                foreach($_SESSION["anomalie_vi"] as $item) {
+                    $v[]= get_object_vars($item);
+                }
+                foreach($_SESSION["deallo"] as $item) {
+                    $d[]= get_object_vars($item);
+                }
+                $vi_merge= array_merge($v, $igorVI);
+                $this->RegulViDeallocation($igorVI, $d);
+            } else if (empty($_SESSION["deallo"]) && !empty($_SESSION["anomalie_vi"]) && !empty($igorVI) && !empty($deallocation)) {
+                $v= array();
+                foreach($_SESSION["anomalie_vi"] as $item) {
+                    $v[]= get_object_vars($item);
+                }
+                $vi_merge= array_merge($v, $igorVI);
+                $this->RegulViDeallocation($vi_merge, $deallocation);
 
-            if(!empty($_SESSION["deallo"]) && !empty($igorVI)) {
+            } else if (!empty($_SESSION["deallo"]) && empty($_SESSION["anomalie_vi"]) && !empty($igorVI) && !empty($deallocation)) {
+                $d= array();
+                foreach($_SESSION["deallo"] as $item) {
+                    $d[]= get_object_vars($item);
+                }
+                $deallo_merge= array_merge($d, $deallocation);
+                $this->RegulViDeallocation($igorVI, $deallo_merge);
+            } else if (!empty($_SESSION["deallo"]) && !empty($_SESSION["anomalie_vi"]) && empty($igorVI) && !empty($deallocation)) {
+                $v= array();
+                $d= array();
+                foreach($_SESSION["deallo"] as $item) {
+                    $d[]= get_object_vars($item);
+                }
+                foreach($_SESSION["anomalie_vi"] as $item) {
+                    $v[]= get_object_vars($item);
+                }
+                $deallo_merge= array_merge($d, $deallocation);
+                $this->RegulViDeallocation($v, $deallo_merge);
+            }
+            
+            else if (empty($_SESSION["deallo"]) && !empty($_SESSION["anomalie_vi"]) && !empty($igorVI) && empty($deallocation)) {
+                $v= array();
+                foreach($_SESSION["anomalie_vi"] as $item) {
+                    $v[]= get_object_vars($item);
+                }
+                $vi_merge= array_merge($v, $igorVI);
+                foreach($vi_merge as $item) {
+                    $this->Igor_Airtel_Anomalie_Model->insert_or_update_vi($item);
+                }
+            } else if(!empty($_SESSION["deallo"]) && empty($_SESSION["anomalie_vi"]) && !empty($igorVI) && empty($deallocation)) {
+                $d= array();
+                foreach($_SESSION["deallo"] as $item) {
+                    $d[]= get_object_vars($item);
+                }
+                $this->RegulViDeallocation($igorVI, $d);
+            } else if (empty($_SESSION["deallo"]) && empty($_SESSION["anomalie_vi"]) && !empty($igorVI) && !empty($deallocation)) {
+                $this->RegulViDeallocation($igorVI, $deallocation);
+            } else if (empty($_SESSION["deallo"]) && !empty($_SESSION["anomalie_vi"]) && empty($igorVI) && !empty($deallocation)) {
+                $v= array();
+                foreach($_SESSION["anomalie_vi"] as $item) {
+                    $v[]= get_object_vars($item);
+                }
+                $this->RegulViDeallocation($v, $deallocation);
+            
+            } else if (!empty($_SESSION["deallo"]) && empty($_SESSION["anomalie_vi"]) && empty($igorVI) && !empty($deallocation)) {
                 $d= array();
                 foreach ($_SESSION["deallo"] as $item) {
                     $d[]= get_object_vars($item);
-                }
-
-                $res= $this->RegulViDeallocation($igorVI, $d);
-                $deallo= $res[1];
-                $vi= $res[0];
-
-                // echo "<pre>";
-                //     print_r($deallo);
-                // echo "</pre>";
-                // echo "<pre>";
-                //     print_r($vi);
-                // echo "</pre>";
-
-
-                foreach($deallo as $item) {
+                } 
+                $deallo_merge= array_merge($d, $deallocation);
+                foreach($deallo_merge as $item) {
                     $this->Airtel_Anomalie_Model->insert_or_update_deallocation($item);
                 }
-                foreach($vi as $item) {
-                    $this->Igor_Airtel_Anomalie_Model->insert_or_update_vi($item);
-                }
-   
-            } else if (!empty($_SESSION["anomalie_vi"] && !empty($deallocation))) {
+            } else if (!empty($_SESSION["deallo"]) && !empty($_SESSION["anomalie_vi"]) && !empty($igorVI) && !empty($deallocation)) {
+                $d= array();
                 $v= array();
-                foreach ($_SESSION["anomalie_vi"] as $item) {
+
+                foreach($_SESSION["deallo"] as $item) {
+                    $d[]= get_object_vars($item);
+                }
+                foreach($_SESSION["anomalie_vi"] as $item) {
                     $v[]= get_object_vars($item);
                 }
 
-                $res= $this->RegulViDeallocation($v, $deallocation);
+                $deallo_merge = array_merge($d, $deallocation);
+                $vi_merge= array_merge($v, $igorVI);
 
-
-                // echo "<pre>";
-                //     print_r($res[0]);
-                // echo "</pre>";
-                // echo "<pre>";
-                //     print_r($res[1]);
-                // echo "</pre>";
-
-                foreach($res[1] as $item) {
-                    $this->Airtel_Anomalie_Model->insert_or_update_deallocation($item);
-                }
-                foreach($res[0] as $item) {
-                    $this->Igor_Airtel_Anomalie_Model->insert_or_update_vi($item);
-                }
-
-
-
-
-            } else if(!empty($deallocation) && !empty($igorVI)) {
-
-                $res= $this->RegulViDeallocation($igorVI, $deallocation);
-                foreach($res[1] as $item) {
-                    $this->Airtel_Anomalie_Model->insert_or_update_deallocation($item);
-                }
-                foreach($res[0] as $item) {
-                    $this->Igor_Airtel_Anomalie_Model->insert_or_update_vi($item);
-                }
-
-                // echo "<pre>";
-                //     print_r($resultat[0]);
-                // echo "</pre>";
-                // echo "<pre>";
-                //     print_r($resultat[1]);
-                // echo "</pre>";
-                
+                $this->RegulViDeallocation($vi_merge, $deallo_merge);
             }
 
 // ------------------------------------------------------------- INSERTION ------------------------------------------------------------------------------------
@@ -298,8 +316,6 @@
                 $this->Igor_Airtel_Model->insert_or_update_nonAu($item);
             }
 
-
-            
             $this->exporter($airtelIgorNormaleCI, $airtelIgorNormaleCO, $dernierAmbiguous, $dernierRollBack, $anomalieAirtelCI, $anomalieAirtelCO, $anomalieIgorCI, $anomalieIgorCO, $igorVI, $deallocation, $resultat[2], $ambiguRegul);
 
             // redirect("importer_airtel");
@@ -549,6 +565,20 @@
             return [$igorCI, $igorVI, $nonAu];
         }
 
+        public function viWithReference($data) {
+            foreach($data as &$item) {
+                $pattern = '/(\d{2})(\d{2})(\d{2})/';
+
+                if (preg_match($pattern, $item["LIBELLE"], $matches)) {
+                    $date = $matches[1] . '/' . $matches[2] . '/' . $matches[3];
+                    $item["reference_number"]= "MBANKING" .$date ;
+                } else {
+                    $item["reference_number"] = NULL;
+                }
+            }
+            return $data;
+        }
+
         public function filtrerIgorCO ($data) {
             $resultat= array();
 
@@ -569,7 +599,6 @@
 
             $mergeDeallocationVI= array();
             foreach ($deallocation as $itemDeallo) {
-
                 $reference_number = $itemDeallo['reference_number'];
                 $amount = $itemDeallo['amount'];
 
@@ -581,21 +610,28 @@
             }
 
             foreach ($reference_number_to_total_amount as $reference_number => $total_amount) {
-                foreach($vi as &$itemVi) {
+                foreach($viCopy as $j=>&$itemVi) {
                     if(intval($itemVi["MONTANT"]) == $total_amount) {
+                        unset($viCopy[$j]);
                         for ($i=0; $i < count($deallocationCopy); $i++) {
                             if($deallocationCopy[$i]["reference_number"] === $reference_number) {
-
                                 $deallocationCopy[$i]["etat"] = "Oui";
-                                $deallocationCopy[$i]["REF_IGOR"]= $itemVi["REF_IGOR"];
-                                
+                                $deallocationCopy[$i]["REF_IGOR"]= $itemVi["REF_IGOR"]; 
                             }
                         }
-                        $itemVi["etat"]= "Oui";
+                        $vi[$j]["etat"]= "Oui";
+                        break;
                     }
                 }
             }
-        return [$vi, $deallocationCopy];
+
+            foreach ($deallocationCopy as $item) {
+                $this->Airtel_Anomalie_Model->insert_or_update_deallocation($item);
+            }
+            foreach($vi as $item) {
+                $this->Igor_Airtel_Anomalie_Model->insert_or_update_vi($item);
+            }
+        // return [$vi, $deallocationCopy];
     }
 
 

@@ -156,12 +156,6 @@
                     $reverseEtAnnule= $this->reverseEtAnnule($indexAnnul, $telma);
 
 // -----------------------------------------------------------------------------------COMPARAISON -------------------------------------------------------------------------
-
-                    // if ($this->estTrieParCle($telmaCI)) {
-                    //     echo "Le tableau est trié par ordre croissant en se référant à la clé 'cle'.";
-                    // } else {
-                    //     echo "Le tableau n'est pas trié par ordre croissant en se référant à la clé 'cle'.";
-                    // }
                     $resultatCI= $this->comparerTelmaEtIgor($igorCI, $telmaCI);
                     $resultatCO= $this->comparerTelmaEtIgor($igorCO, $telmaCO);
                     $normalCI= $resultatCI[0];
@@ -174,18 +168,6 @@
                     $telmaAnomalieCI= $resultatCI[2];
                     $telmaAnomalieCO= $resultatCO[2];
                     $this->comparerTelmaEtIgor($igorCI, $telmaCI);
-
-                    // echo "<pre>";
-                    //     print_r($mvtsCI[0]);
-                    // echo "</pre>";
-                    // echo "<pre>";
-                    //     print_r($mvtsCO[0]);
-                    // echo "</pre>";
-                    // echo "<pre>";
-                    //     print_r($dat);
-                    // echo "</pre>";
-                    // unset($igor);
-                    // unset($telma);
 
 // ------------------------------------------------------------------------------REGULARISATION ----------------------------------------------------------------------
 
@@ -201,106 +183,41 @@ if(empty($_SESSION["admin"]) && empty($_SESSION["vi"]) && empty($admin) && !empt
     }
 } else if (!empty($_SESSION["admin"]) && empty($_SESSION["vi"]) && !empty($admin) && !empty($vi)) {
 
-    $this->RegulAdminVi($vi, $admin);
+    // $this->RegulAdminVi($vi, $admin);
     $adjust= array();
     foreach ($_SESSION["admin"] as $item) {
         $adjust[]= get_object_vars($item);
     }
-    $this->RegulViAdmin($vi, $adjust);
+    $jiaby= array_merge($adjust, $admin);
+    $this->RegulAdminVi($vi, $jiaby);
+
     
-    // $res = $this->RegulAdminVi($vi, $admin);
-
-    // foreach($res[1] as $item) {
-    //     $this->Telma_Anomalie_Model->insert_or_update_admin($item);
-    // }
-
-    // foreach($res[0] as $item) {
-    //     $this->Boa_Telma_Anomalie_Model->insert_or_update_vi($item);
-    // }
-
-    // $adjust= array();
-    // foreach ($_SESSION["admin"] as $item) {
-    //     $adjust[]= get_object_vars($item);
-    // }
-    // $res= $this->RegulViAdmin($vi, $adjust);
-  
-
-    // foreach($res[1] as $item) {
-    //     $this->Telma_Anomalie_Model->insert_or_update_admin($item);
-    // }
-
-    // foreach($res[0] as $item) {
-    //     $this->Boa_Telma_Anomalie_Model->insert_or_update_vi($item);
-    // }
-
 } else if (empty($_SESSION["admin"]) && !empty($_SESSION["vi"]) && !empty($admin) && !empty($vi)) {
     
-    $this->RegulAdminVi($vi, $admin);
+    // $this->RegulAdminVi($vi, $admin);
     $v= array();
     foreach ($_SESSION["vi"] as $item) {
         $v[]= get_object_vars($item);
     }
 
-    $this->RegulAdminVi($v, $admin);
+    $vi_merge= array_merge($v, $vi);
+    $this->RegulAdminVi($vi_merge, $admin);
 
-
-    // $v= array();
-    // foreach ($_SESSION["vi"] as $item) {
-    //     $v[]= get_object_vars($item);
-    // }
-
-    // $res = $this->RegulAdminVi($v, $admin);
-    
-
-    // foreach($res[1] as $item) {
-    //     $this->Telma_Anomalie_Model->insert_or_update_admin($item);
-    // }
-
-    // foreach($res[0] as $item) {
-    //     $this->Boa_Telma_Anomalie_Model->insert_or_update_vi($item);
-    // } 
 } else if (!empty($_SESSION["admin"]) && !empty($_SESSION["vi"]) && !empty($admin) && !empty($vi)) {
-
-    $this->RegulAdminVi($vi, $admin);
     $v= array();
     foreach ($_SESSION["vi"] as $item) {
         $v[]= get_object_vars($item);
     }
 
-    $this->RegulAdminVi($v, $admin);
     $adjust= array();
     foreach ($_SESSION["admin"] as $item) {
         $adjust[]= get_object_vars($item);
     }
-    $this->RegulViAdmin($vi, $adjust);
+
+    $vi_merge= array($v, $vi);
+    $adjust_merge = array($adjust, $admin);
+    $this->RegulAdminVi($vi_merge, $adjust_merge);
     
-
-    
-    // $res = $this->RegulAdminVi($vi, $admin);
-    // foreach($res[1] as $item) {
-    //     $this->Telma_Anomalie_Model->insert_or_update_admin($item);
-    // }
-
-    // foreach($res[0] as $item) {
-    //     $this->Boa_Telma_Anomalie_Model->insert_or_update_vi($item);
-    // }
-
-
-    // $v= array();
-    // foreach ($_SESSION["vi"] as $item) {
-    //     $v[]= get_object_vars($item);
-    // }
-
-    // $res = $this->RegulAdminVi($v, $admin);
-    
-
-    // foreach($res[1] as $item) {
-    //     $this->Telma_Anomalie_Model->insert_or_update_admin($item);
-    // }
-
-    // foreach($res[0] as $item) {
-    //     $this->Boa_Telma_Anomalie_Model->insert_or_update_vi($item);
-    // } 
 } else if (empty($_SESSION["admin"]) && empty($_SESSION["vi"]) && !empty($admin) && !empty($vi)) {
     $this->RegulAdminVi($vi, $admin);
 } else if (empty($_SESSION["admin"]) && !empty($_SESSION["vi"]) && !empty($admin) && empty($vi)) {
@@ -315,8 +232,19 @@ if(empty($_SESSION["admin"]) && empty($_SESSION["vi"]) && empty($admin) && !empt
     foreach ($_SESSION["vi"] as $item) {
         $v[]= get_object_vars($item);
     }
-    $this->RegulAdminVi($v, $admin);
+    $adjust= array();
+    foreach($_SESSION["admin"] as $item) {
+        $adjust[]= get_object_vars($item);
+    }
+
+    $adjust_merge= array_merge($admin, $adjust);
+    $this->RegulAdminVi($v, $adjust_merge);
+
+
+
+    
 } else if (!empty($_SESSION["admin"]) && empty($_SESSION["vi"]) && !empty($admin) && empty($vi)) {
+
     foreach($admin as $item) {
         $this->Telma_Anomalie_Model->insert_or_update_admin($item);
     }
@@ -326,67 +254,6 @@ if(empty($_SESSION["admin"]) && empty($_SESSION["vi"]) && empty($admin) && !empt
     }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-// if(!empty($_SESSION["admin"]) && !empty($vi)) {
-
-//     $adjust= array();
-//     foreach ($_SESSION["admin"] as $item) {
-//         $adjust[]= get_object_vars($item);
-//     }
-//     $res= $this->RegulViAdmin($vi, $adjust);
-  
-
-//     foreach($res[1] as $item) {
-//         $this->Telma_Anomalie_Model->insert_or_update_admin($item);
-//     }
-
-//     foreach($res[0] as $item) {
-//         $this->Boa_Telma_Anomalie_Model->insert_or_update_vi($item);
-//     }
-
-
-// } else if(!empty($_SESSION["vi"]) && !empty($admin)) {
-
-//     $v= array();
-//     foreach ($_SESSION["vi"] as $item) {
-//         $v[]= get_object_vars($item);
-//     }
-
-//     $res = $this->RegulAdminVi($v, $admin);
-    
-
-//     foreach($res[1] as $item) {
-//         $this->Telma_Anomalie_Model->insert_or_update_admin($item);
-//     }
-
-//     foreach($res[0] as $item) {
-//         $this->Boa_Telma_Anomalie_Model->insert_or_update_vi($item);
-//     }
-    
-// } else if ( !empty($admin) && !empty($vi)) {
-
-//     $res = $this->RegulAdminVi($vi, $admin);
-    
-
-//     foreach($res[1] as $item) {
-//         $this->Telma_Anomalie_Model->insert_or_update_admin($item);
-//     }
-
-//     foreach($res[0] as $item) {
-//         $this->Boa_Telma_Anomalie_Model->insert_or_update_vi($item);
-//     }
-
-// }
 
 // **************************************************************************************** INSERTION DES DONNEES *********************************************************************************//
 
@@ -418,10 +285,6 @@ if(empty($_SESSION["admin"]) && empty($_SESSION["vi"]) && empty($admin) && !empt
                         $this->Telma_Normal_Model->insert_or_update_co($item);
                     }
 
-                    // foreach($admin as $item) {
-                    //     $this->Telma_Anomalie_Model->insert_or_update_admin($item);
-                            
-                    // }
                     foreach($reverseEtAnnule as $item) {
                         $this->Telma_Anomalie_Model->insert_or_update_reverse($item);
                             
@@ -454,13 +317,7 @@ if(empty($_SESSION["admin"]) && empty($_SESSION["vi"]) && empty($admin) && !empt
                     $newNonAu = $this->changerCle($nonAu);
                     foreach($newNonAu as $item) {
                         $this->Boa_Telma_Anomalie_Model->insert_or_update_nonAu($item);
-                    }
-
-                    // foreach($vi as $item) {
-                    //     $this->Boa_Telma_Anomalie_Model->insert_or_update_vi($item);
-                    // }
-
-                   
+                    }              
 
 // *******************************************************************************************************************************
 
@@ -564,7 +421,7 @@ if(empty($_SESSION["admin"]) && empty($_SESSION["vi"]) && empty($admin) && !empt
             foreach($adjust as $itemAdjust) {
                 $i=0;
                 foreach($vi as $itemVi) {
-                    if($itemAdjust["Amount_MGA"] == $itemVi["MONTANT"]) {
+                    if($itemAdjust["Amount_MGA"] == -$itemVi["MONTANT"]) {
                         $adjustCopy[$i]["etat"]= "Oui";
                         $adjustCopy[$i]["REF_IGOR"] = $itemVi["REF_IGOR"];
                     }
@@ -578,18 +435,18 @@ if(empty($_SESSION["admin"]) && empty($_SESSION["vi"]) && empty($admin) && !empt
         public function RegulAdminVi($vi, $adjust) {
             $viCopy= $vi;
             $adjustCopy= $adjust;
-            foreach($vi as $itemVi) {
-                $i=0;
-                foreach($adjust as $itemAdjust) {
-                    
-                    if($itemVi["MONTANT"] == -$itemAdjust["Amount_MGA"]) {
-                        $vi[$i]["etat"]= "Oui";
-                        $vi[$i]["trans_id"] = $itemAdjust["trans_id"];
+
+                foreach($vi as $i=>$itemVi) {
+                    foreach($adjust as $j=>$itemAdjust) {
+                        if($itemVi["MONTANT"] == -$itemAdjust["Amount_MGA"]) {
+                            $vi[$i]["etat"]= "Oui";
+                            $vi[$i]["trans_id"] = $itemAdjust["trans_id"];
+                            unset($adjust[$j]);
+                            break;
+                        }
                     }
                 }
-                $i++;
-            }
-
+            
             foreach($adjustCopy as $item) {
                 $this->Telma_Anomalie_Model->insert_or_update_admin($item);
             }
@@ -1383,8 +1240,6 @@ if(empty($_SESSION["admin"]) && empty($_SESSION["vi"]) && empty($admin) && !empt
 
                    
                 } elseif ($difference < 0) {
-                    
-
                     $igorAnomalie[] = $igorTab[$i];
                     $i++;
                 } else {
