@@ -16,6 +16,7 @@
             $this->load->model("Orange_Anomalie_Model");
             $this->load->model("Historique_Orange_Model");
             ini_set('memory_limit', '1024M');
+            set_time_limit(300);
             session_start();
         }
 
@@ -90,7 +91,7 @@
                        "princ_oper" => $princ_read[$i][6],
                        "princ_expl" => $princ_read[$i][7],
                        "princ_ref_igor" => $princ_read[$i][8],
-                       "princ_ref_rel" => $princ_read[$i][9],
+                       "princ_ref_rel" => $princ_read[$i][10],
                     );
                 }
             }
@@ -113,8 +114,6 @@
                     if ($date_val !== false) {
                         $date_val = $date_val->format('Y-m-d');
                     }
-
-
                     $comm[]= array(
                        "comm_compte" => $com_read[$i][0],
                        "comm_date_oper" =>  $date_oper,
@@ -188,29 +187,6 @@
             $anomalieOrangeCI= $resultatOrangeCI[2];
             $anomalieOrangeCO= $resultatOrangeCO[2];
 
-            // echo "<pre>";
-            //     print_r($anomalieOrangeCO);
-            // echo "</pre>";
-
-            // echo "<pre>";
-            //     print_r($anomalieOrangeCI);
-            // echo "</pre>";
-
-            // echo "<pre>";
-            //     print_r($dat);
-            // echo "</pre>";
-
-            // echo "<pre>";
-            //     print_r($cat);
-            // echo "</pre>";
-
-            // echo "<pre>";
-            //     print_r($normalCI);
-            // echo "</pre>";
-
-            // echo "<pre>";
-            //     print_r($orange);
-            // echo "</pre>";
 
 // ------------------------------------------------------------------------------- HISTORIQUE -----------------------------------------------------------
 
@@ -228,8 +204,6 @@
                 $orange_solde= 0;
                 $solde= 0;
             }
-
-
 
             foreach($historique as $item ) {
                 $princ_solde += isset($item["princ_montant"])  ? $item["princ_montant"] : 0;
@@ -289,35 +263,9 @@
             foreach($anomalieOrangeCO[0] as $item) {
                 $this->Orange_Anomalie_Model->insert_or_update_co($item);
             }
-
-            // echo "<pre>";
-            //     print_r($normalCI[0]);
-            // echo "</pre>";
-            // echo "<pre>";
-            //     print_r($dat[0]);
-            // echo "</pre>";
-            // echo "<pre>";
-            //     print_r($cat[0]);
-            // echo "</pre>";
-            // echo "<pre>";
-            //     print_r($ind);
-            // echo "</pre>";
-            // echo "<pre>";
-            //     print_r($vi);
-            // echo "</pre>";
-            // echo "<pre>";
-            //     print_r($nonAuCI);
-            // echo "</pre>";
-            // echo "<pre>";
-            //     print_r($nonAuCO);
-            // echo "</pre>";
-            // echo "<pre>";
-            //     print_r($anomalieOrangeCI[0]);
-            // echo "</pre>";
-            // echo "<pre>";
-            //     print_r($anomalieOrangeCO[0]);
-            // echo "</pre>";
-
+            foreach($vi as $item) {
+                $this->Boa_Orange_Anomalie_Model->insert_or_update_vi($item);
+            }
             
             $this->exporter($normalCI[0], $normalCO[0], $dat[0], $cat[0], $ind, $vi, $nonAuCI, $nonAuCO, $anomalieOrangeCI[0], $anomalieOrangeCO[0]);
             $_SESSION["importer"] ="OUI";
@@ -782,7 +730,7 @@
                 $sheet->setCellValue($cell_array[$i++].$lastRow, $dataRow["princ_ref_igor"]);
                 $sheet->setCellValue($cell_array[$i++].$lastRow, $dataRow["princ_ref_rel"]);
                 $sheet->setCellValue($cell_array[$i++].$lastRow, substr($dataRow["cle"], 0, 10));
-                $i+=13;
+                $i+=14;
                 $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["orange_date"]);
                 $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["orange_heure"]);
                 $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["orange_ref"]);
@@ -903,7 +851,7 @@
                 $lastRow++;
             }
 
-            $lastRow = $sheet->getHighestRow() + 2;
+            $lastRow = $sheet->getHighestRow();
             foreach($ind as $dataRow) {
                 $i=24;
                 $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FFA500');

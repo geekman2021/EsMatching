@@ -17,7 +17,7 @@
                       $formatter2 = new IntlDateFormatter('fr_FR', IntlDateFormatter::LONG, IntlDateFormatter::NONE);
                       $formattedDate2 = $formatter2->format($dateObj);
                     
-                    echo "le" .$formattedDate2 ?>
+                    echo "le " .$formattedDate2 ?>
                     
                   </div>
                   <div class="col-sm-5">
@@ -33,14 +33,12 @@
                       $date2 = new DateTime($ci[0]->date_regul);
                       $interval = $date1->diff($date2);
                       $diffInDays = $interval->days;
-                      echo $diffInDays ."Jours";
+                      echo $diffInDays ."Jour";
                     ?>
                   </div>
                   <div class="col-sm-7">
                   <b> Montant: </b>
-                  <?php 
-                      echo $ci[0]->montant ." MGA";
-                    ?>
+                    <?=  number_format($ci[0]->montant, 0, ',', ' ') ." MGA";?>
                   </div>
                   <div class="col-sm-5">
                   <b> Exploitant: </b>

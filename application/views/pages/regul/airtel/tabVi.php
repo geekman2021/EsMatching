@@ -38,7 +38,7 @@
             <td><?= $item->DATE_OPER ?></td>
             <td><?= $item->DATE_VAL ?></td>
             <td><?= $item->DEVISE ?></td>
-            <td><?= $item->MONTANT ?></td>
+            <td style="white-space: nowrap;"><?= number_format($item->MONTANT, 0, ',', ' ') ?></td>
             <td><?= $item->LIBELLE ?></td>
             <td><?= $item->OPER ?></td>
             <td><?= $item->EXPL ?></td>

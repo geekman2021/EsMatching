@@ -75,6 +75,7 @@
                 </tr>
             </thead>
             <tbody>
+                <?php $princ_solde= 0; $comm_solde= 0; $orange_solde= 0;?>
                 
                 <?php foreach($historique as $item) { ?>
                 <tr>
@@ -88,7 +89,7 @@
                 <td><?= $item->princ_ref_igor ?></td>
                 <td><?= $item->princ_ref_rel ?></td>
                 <td><?= substr($item->cle, 0, 10)?></td>
-                <td><?= $item->princ_solde ?></td>
+                <td><?= number_format($princ_solde += $item->princ_montant, 0, ',', ' '); ?></td>
 
                 <td style="background: white;"></td>
 
@@ -102,7 +103,7 @@
                 <td><?= $item->comm_ref_igor ?></td>
                 <td><?= $item->comm_ref_rel ?></td>
                 <td><?= $item->comm_code_agence ?></td>
-                <td><?= $item->comm_solde ?></td>
+                <td><?= number_format($comm_solde += $item->comm_montant, 0, ',', ' ') ?></td>
 
                 <td style="background: white;"></td>
                 
@@ -114,11 +115,11 @@
                 <td><?= $item->orange_debit ?></td>
                 <td><?= $item->orange_credit ?></td>
                 <td><?= $item->orange_montant ?></td>
-                <td><?= $item->orange_solde ?></td>
+                <td><?= number_format($orange_solde += $item->orange_montant, 0, ',', ' ') ?></td>
                 <td><?= $item->orange_sous_distri ?></td>
                 <td><?= $item->orange_super_distri ?></td>
                 <td><?= $item->orange_super_distri ?></td>
-                <td><?= $item->solde ?></td>
+                <td><?= number_format($orange_solde += $item->orange_montant, 0, ',', ' '); ?></td>
                 <td><?= $item->princ_montant + $item->orange_montant  ?></td>
                 <td><?= $item->comm_montant + $item->orange_super_distri ?></td>
                 </tr>

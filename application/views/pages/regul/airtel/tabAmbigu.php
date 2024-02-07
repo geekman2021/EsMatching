@@ -97,7 +97,7 @@
                 <td><?php echo $item->account_no; ?></td>
                 <td><?php echo $item->sender_msisdn; ?></td>
                 <td><?php echo $item->dest_msisdn; ?></td>
-                <td><?php echo number_format($item->amount, 0, ',', ' '); ?></td>
+                <td style="white-space: nowrap;"><?php echo number_format($item->amount, 0, ',', ' '); ?></td>
                 <td><?php echo $item->description; ?></td>
                 <td><?php echo $item->service_name; ?></td>
                 <td><?php echo $item->reference_number; ?></td>

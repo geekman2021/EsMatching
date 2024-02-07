@@ -44,6 +44,29 @@
 
             return $query->result();
         }
+
+        public function get_solde_by_month() {
+            $resultArray = array();
+
+            for ($i = 1; $i <= 12; $i++) {
+                $sql = "SELECT transfer_date, COALESCE(solde,0) AS solde, COALESCE(MONTANT,0) AS MONTANT FROM `historique_airtel` WHERE MONTH(transfer_date)=$i";
+                $query = $this->db->query($sql);
+                if ($query->num_rows() > 0) {
+                    $resultArray[$i] = $query->result_array();
+                } else {
+                    $resultArray[$i] = array(
+                        'transfer_date' => 0,
+                        'solde' => 0,
+                        'MONTANT' => 0
+                    );
+                }
+            }
+            
+            return $resultArray;
+            
+        }
+
+
     }
 
 

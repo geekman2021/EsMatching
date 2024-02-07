@@ -17,13 +17,12 @@
 
             $this->form_validation->set_rules("num_mat", "Numero Matricule introuvalble", "trim|required");
             $this->form_validation->set_rules("password", "Mot de passe incorrect", "required");
-
-            if($this->form_validation->run() == FALSE) {
+            
+            if($this->form_validation->run() === FALSE) {
                 $this->load->view("pages/login");
             } else {
                 if(isset($_POST["num_mat"]) && isset($_POST["password"])) {
                     if($this->Check_Model->loginAD($_POST["num_mat"], $_POST["password"])){
-                       
                         if($this->Check_Model->checkMatriculeIfExist($_POST["num_mat"])){
                             $_SESSION["isLogin"]= true;
                             $_SESSION["userExist"]= $this->User_Model->get_userBynumMat($_POST["num_mat"]);
@@ -32,7 +31,7 @@
                     }
 
                 } else {
-                    $data["login_fail"] = "Erreur de connexion à LDAP";
+                    $data["login_fail"] = "Problème de connexion au LDAP.";
                     $this->load->view("auth/login", $data);
                 }
             }

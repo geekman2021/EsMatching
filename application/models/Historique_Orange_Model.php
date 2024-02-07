@@ -8,7 +8,25 @@
 
         
         public function insert($data) {
-            $this->db->insert("historique_orange", $data);
+            if(array_key_exists("princ_ref_igor", $data)) {
+                $this->db->where("princ_ref_igor", $data["princ_ref_igor"]);
+            } if(array_key_exists("orange_ref", $data)) {
+                $this->db->where("orange_ref", $data["orange_ref"]);
+            }
+
+            $exist= $this->db->get("historique_orange");
+
+            if($exist->num_rows() == 0) {
+                $this->db->insert("historique_orange", $data);
+            } else {
+                if(array_key_exists("princ_ref_igor", $data)) {
+                    $this->db->where("princ_ref_igor", $data["princ_ref_igor"]);
+                    return $this->db->update("historique_orange", $data);
+                } if(array_key_exists("orange_ref", $data)) {
+                    $this->db->where("orange_ref", $data["orange_ref"]);
+                    return $this->db->update("historique_orange", $data);
+                }
+            }
         }
 
         public function get_historique() {

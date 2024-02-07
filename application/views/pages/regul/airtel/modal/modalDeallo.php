@@ -1,5 +1,5 @@
 <?php if (!empty($vi_deallo)) { ?>
-    <?php foreach($vi_deallo as $item) { ?>     
+<?php foreach($vi_deallo as $item) { ?>     
   <div class="modal fade" id="myModalDeallo<?= $item->id_deallo ?>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
       <div class="modal-dialog" role="document">
           <div class="modal-content">
@@ -18,7 +18,7 @@
                       $formatter2 = new IntlDateFormatter('fr_FR', IntlDateFormatter::LONG, IntlDateFormatter::NONE);
                       $formattedDate2 = $formatter2->format($dateObj);
                     
-                    echo "le" .$formattedDate2 ?>
+                    echo "le " .$formattedDate2 ?>
                     
                   </div>
                   <div class="col-sm-5">
@@ -34,14 +34,12 @@
                       $date2 = new DateTime($item->transfer_date);
                       $interval = $date1->diff($date2);
                       $diffInDays = $interval->days;
-                      echo $diffInDays ."Jours";
+                      echo $diffInDays ."Jour";
                     ?>
                   </div>
                   <div class="col-sm-7">
                   <b> Montant: </b>
-                  <?php 
-                      echo $item->MONTANT ." MGA";
-                    ?>
+                  <?= number_format($item->MONTANT, 0, ',', ' ') ." MGA";?>
                   </div>
                   <div class="col-sm-5">
                   <b> Exploitant: </b>

@@ -40,15 +40,15 @@
                 <?php if (!empty($ci)) { ?>
                   <?php foreach($ci as $item)  { ?>
                     <tr> 
-                      <td><?php echo $item->COMPTE ?></td>
-                      <td><?php echo $item->DATE_OPER ?></td>
-                      <td><?php echo $item->DATE_VAL ?></td>
-                      <td><?php echo $item->DEVISE ?></td>
-                      <td><?php echo $item->MONTANT ?></td>
-                      <td><?php echo $item->LIBELLE ?></td>
-                      <td><?php echo $item->OPER ?></td>
-                      <td><?php echo $item->EXPL ?></td>
-                      <td><?php echo $item->REF_IGOR ?></td>
+                      <td><?= $item->COMPTE ?></td>
+                      <td><?= $item->DATE_OPER ?></td>
+                      <td><?= $item->DATE_VAL ?></td>
+                      <td><?= $item->DEVISE ?></td>
+                      <td style="white-space: nowrap;"><?= number_format($item->MONTANT, 0, ',', ' ') ?></td>
+                      <td><?= $item->LIBELLE ?></td>
+                      <td><?= $item->OPER ?></td>
+                      <td><?= $item->EXPL ?></td>
+                      <td><?= $item->REF_IGOR ?></td>
                       <td style="text-align: center;"><a href="#" class="btn btn-info" data-toggle="modal" data-target="#myModalDat<?php echo $item->id_nonau; ?>"><i class="bx bx-show" style="font-size: 20px"></i></a></td>
                     </tr>
                   <?php } ?>

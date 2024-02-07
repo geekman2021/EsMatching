@@ -55,6 +55,7 @@
             </tr>
         </thead>
             <tbody>
+                <?php $solde_precedent= 0; ?>
                 <?php foreach($historique as $item) { ?>
                 <tr>
                     <td style="display: none;"><?php echo $item->id; ?></td>
@@ -80,7 +81,7 @@
                     <td><?php echo $item->service_name ?></td>
                     <td><?php echo $item->reference_number ?></td>
                     <td><?php echo number_format($item->solde, 0, ',', ' ') ?></td>
-                    <td><?php echo number_format($item->solde_airtel, 0, ',', ' ') ?></td>
+                    <td><?php echo number_format(($solde_precedent += $item->solde), 0, ',', ' ') ?></td>
                     <td><?php echo $item->solde_airtel + $item->solde_boa  ?></td>
                 </tr>
                 <?php } ?>

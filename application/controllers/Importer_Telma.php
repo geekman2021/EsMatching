@@ -266,7 +266,7 @@ if(empty($_SESSION["admin"]) && empty($_SESSION["vi"]) && empty($admin) && !empt
                         $solde_boa= 0;
                     }
 
-                    $historique =array_merge($normalCI[0], $normalCO[0], $dat[0], $cat[0], $reverseEtAnnule, $admin, $nonAu, $mvtsCI[0], $mvtsCO[0], $vi);
+                    $historique =array_merge($dat[0], $cat[0], $reverseEtAnnule, $admin, $nonAu, $mvtsCI[0], $mvtsCO[0], $vi ,$normalCI[0], $normalCO[0]);
                     
                     foreach ($historique as $item) {
                         $solde_telma += isset($item["solde"]) ? $item["solde"] : 0;
@@ -274,7 +274,6 @@ if(empty($_SESSION["admin"]) && empty($_SESSION["vi"]) && empty($admin) && !empt
                         $item["solde_telma"] = $solde_telma;
                         $item["solde_boa"] = $solde_boa;
                         $this->Historique_Telma_Model->insert_or_update($item);
-
                     }
 
                     foreach ($normalCI[0] as $item) {

@@ -53,9 +53,8 @@
             if($exist->num_rows() == 0) {
                 return $this->db->insert("airtel_deallocation", $data);
             } else {
-            $this->db->where("TRANSFER_ID", $data["TRANSFER_ID"]);
-            
-            return $this->db->update("airtel_deallocation", $data);
+                $this->db->where("TRANSFER_ID", $data["TRANSFER_ID"]);
+                return $this->db->update("airtel_deallocation", $data);
             }
         }
 

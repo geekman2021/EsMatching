@@ -9,9 +9,18 @@
 
         public function get_ecart_airtel() {
             $sql = "SELECT TRANSFER_ID, transfer_date, external_id, account_no, sender_msisdn, dest_msisdn,amount, solde, description, service_name, reference_number FROM airtel_ambiguous WHERE airtel_ambiguous.TRANSFER_ID NOT IN (SELECT rollback_reference_number FROM airtel_rollback)
+                                                        
                                                         UNION
+
                     SELECT TRANSFER_ID, transfer_date, external_id, account_no, sender_msisdn, dest_msisdn, amount, solde, description, service_name, reference_number FROM airtel_deallocation WHERE REF_IGOR IS NULL 
-            
+                                                        
+                                                        UNION 
+                    
+                    SELECT TRANSFER_ID, transfer_date, external_id, account_no, sender_msisdn, dest_msisdn, amount, solde, description, service_name, reference_number FROM airtel_anomalie_ci
+                                                        
+                                                        UNION
+                                                    
+                    SELECT TRANSFER_ID, transfer_date, external_id, account_no, sender_msisdn, dest_msisdn, amount, solde, description, service_name, reference_number FROM airtel_anomalie_co
             ";
     
             $query = $this->db->query($sql);
@@ -24,7 +33,6 @@
                     LEFT JOIN boa_airtel_nonau ON igor_airtel_anomalie_ci.REF_IGOR = boa_airtel_nonau.ref_igor
                         WHERE boa_airtel_nonau.ref_igor IS NULL
 
-                    
                     UNION 
 
                     SELECT *

@@ -32,11 +32,13 @@
 <script>
     $(document).ready(function(e) {
         $("#tableDat").DataTable({
+            scrollX: true,
             language: {
             url: '<?php echo base_url(); ?>assets/fr-FR.json',
             }
         });
         $("#tableCat").DataTable({
+            scrollX: true,
             language: {
             url: '<?php echo base_url(); ?>assets/fr-FR.json',
             }

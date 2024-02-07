@@ -56,12 +56,12 @@
                             <td><?= $item->DATE_OPER ?></td>
                             <td><?= $item->DATE_VAL  ?></td>
                             <td><?= $item->DEVISE ?></td>
-                            <td style="white-space: nowrap;"><?= number_format($item->MONTANT, 0, ',', ' ') ?></td>
+                            <td><?= number_format($item->MONTANT, 0, ',', ' ') ?></td>
                             <td><?= $item->LIBELLE ?></td>
                             <td><?= $item->OPER ?></td>
                             <td><?= $item->EXPL ?></td>
                             <td><?= $item->REF_IGOR ?></td>
-                            <td style="white-space: nowrap;"><?= number_format($montant_precedent += $item->MONTANT, 0, ',', ' ')  ?> </td>
+                            <td><?= number_format($montant_precedent += $item->MONTANT, 0, ',', ' ')  ?> </td>
                         </tr>
                     <?php } ?>
                 </tbody>
@@ -111,11 +111,11 @@
                             <td><?= $item->account_no ?></td>
                             <td><?= $item->sender_msisdn ?></td>
                             <td><?= $item->dest_msisdn ?></td>
-                            <td style="white-space: nowrap;"><?= number_format($item->amount, 0, ',', ' ' )  ?></td>
+                            <td><?= number_format($item->amount, 0, ',', ' ' )  ?></td>
                             <td><?= $item->description ?></td>
                             <td><?= $item->service_name ?></td>
                             <td><?= $item->reference_number ?></td>
-                            <td style="white-space: nowrap;"><?= number_format($montant_precedent += $item->solde, 0, ',', ' ')?></td>
+                            <td><?= number_format($montant_precedent += $item->solde, 0, ',', ' ')?></td>
                         </tr>
                     <?php } ?>
                 </tbody>

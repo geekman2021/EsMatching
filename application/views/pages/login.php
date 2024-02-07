@@ -77,7 +77,7 @@
                 <h2>Monétique</h2>
             </div>
 
-        <form method="post" action="<?php echo site_url("Auth/login") ?>">
+        <form method="post" action="<?php echo site_url("Auth/login") ?>" autocomplete="off">
             <div class="classform">
                 <div class="inputbox">
                     <input type="text" placeholder="Numero Matricule" id="num_mat" name="num_mat" required maxlength="6">

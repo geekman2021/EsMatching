@@ -49,16 +49,16 @@
         <?php if (!empty($vi_deallo)) { ?>
           <?php foreach($vi_deallo as $item)  { ?>
             <tr> 
-              <td><?php echo $item->external_id; ?></td>
-              <td><?php echo $item->TRANSFER_ID; ?></td>
-              <td><?php echo $item->transfer_date; ?></td>
-              <td><?php echo $item->account_no; ?></td>
-              <td><?php echo $item->sender_msisdn; ?></td>
-              <td><?php echo $item->dest_msisdn; ?></td>
-              <td><?php echo number_format($item->amount, 0, ',', ' '); ?></td>
-              <td><?php echo $item->description; ?></td>
-              <td><?php echo $item->service_name; ?></td>
-              <td><?php echo $item->reference_number; ?></td>
+              <td><?= $item->external_id; ?></td>
+              <td><?= $item->TRANSFER_ID; ?></td>
+              <td><?= $item->transfer_date; ?></td>
+              <td><?= $item->account_no; ?></td>
+              <td><?= $item->sender_msisdn; ?></td>
+              <td><?= $item->dest_msisdn; ?></td>
+              <td style="white-space: nowrap;"><?= number_format($item->amount, 0, ',', ' '); ?></td>
+              <td><?= $item->description; ?></td>
+              <td><?= $item->service_name; ?></td>
+              <td><?= $item->reference_number; ?></td>
               <td style="text-align: center;"><a href="#" data-toggle="modal" data-target="#myModalDeallo<?php echo $item->id_deallo; ?>" class="btn btn-info"><i class="bx bx-show" style="font-size: 24px;"></i></a></td>
             </tr>
           <?php } ?>

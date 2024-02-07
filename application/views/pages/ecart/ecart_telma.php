@@ -45,10 +45,26 @@
                         <th>Operation</th>
                         <th>Expl</th>
                         <th>ReferenceIgor</th>
-
+                        <th>Solde</th>
                     </tr>
                 </thead>
                 <tbody>
+                    <?php $montant_precedent= 0; ?>
+                    <?php foreach($boa as $item) { ?>
+                        <tr>
+                            <td><?= $item->COMPTE ?></td>
+                            <td><?= $item->DATE_OPER ?></td>
+                            <td><?= $item->DATE_VAL ?></td>
+                            <td><?= $item->DEVISE ?></td>
+                            <td><?= number_format($item->MONTANT, 0, ',', ' ') ?></td>
+                            <td><?= $item->LIBELLE ?></td>
+                            <td><?= $item->OPER ?></td>
+                            <td><?= $item->EXPL ?></td>
+                            <td><?= $item->REF_IGOR ?></td>
+                            <td><?= number_format($montant_precedent+= $item->MONTANT, 0, ',', ' ') ?></td>
+                        </tr>
+                    <?php } ?>
+                    
 
                 </tbody>
             </table>
@@ -70,24 +86,36 @@
                 </div>
             </div>
         </div>
-        <div class="table-responsive">
-            <table class="table table-bordered" id="tableAirtel">
+        <div class="table-responsive mt-2">
+            <table class="table table-bordered" id="tableTelma">
                 <thead>
                     <tr>
-                        <th>TransferId</th>
-                        <th>TransferDate</th>
-                        <th>ExternalId</th>
-                        <th>AccountNo</th>
-                        <th>SenderMsiSDN</th>
-                        <th>DestMsiSDN</th>
-                        <th>Amount</th>
-                        <th>Description</th>
-                        <th>ServiceName</th>
-                        <th>ReferenceNumber</th>
+                        <th>Date</th>
+                        <th>Transfer_id</th>
+                        <th>Type</th>
+                        <th>Channel</th>
+                        <th>Etat</th>
+                        <th>Montant</th>
+                        <th>sender</th>
+                        <th>receiver</th>
+                        <th>Solde</th>
                     </tr>
                 </thead>
                 <tbody>
-
+                    <?php $montant_precedent=0; ?>
+                    <?php foreach($telma as $item) { ?>
+                        <tr>
+                            <td><?php echo $item->date ?></td>
+                            <td><?= $item->trans_id ?></td>
+                            <td><?= $item->TYPE ?></td>
+                            <td><?= $item->channel ?></td>
+                            <td><?= $item->state ?></td>
+                            <td><?= number_format($item->Amount_MGA, 0, ',', ' ') ?></td>
+                            <td><?= $item->sender ?></td>
+                            <td><?= $item->receiver ?></td>
+                            <td><?= number_format($montant_precedent+= $item->solde, 0, ',', ' ') ?></td>
+                        </tr>
+                    <?php }?>
                 </tbody>
             </table>
         </div>
@@ -96,9 +124,7 @@
 </div>
 
 <script>
-$("#tableAirtel").DataTable({
-    responsive: true,
-    scrollX: true,
+$("#tableTelma").DataTable({
     language: {
       url: '<?php echo base_url(); ?>assets/fr-FR.json',
     }

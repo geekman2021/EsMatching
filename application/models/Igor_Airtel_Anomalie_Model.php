@@ -70,13 +70,13 @@
         }
 
         public function get_vi() {
-            $this->db->select('*');
-            $this->db->from('igor_airtel_anomalie_vi');
-            $this->db->where("etat IS NULL");
-            $this->db->group_by('REF_IGOR');
+            $sql= "SELECT DISTINCT igor_airtel_anomalie_vi.*
+                        FROM igor_airtel_anomalie_vi
+                    LEFT JOIN airtel_deallocation ON airtel_deallocation.reference_number = igor_airtel_anomalie_vi.reference_number WHERE airtel_deallocation.reference_number IS NULL ";
+            $query= $this->db->query($sql);
 
-            $query = $this->db->get();
             return $query->result();
+            
         }
 
         public function delete_vi($ref_igor) {

@@ -2,8 +2,6 @@
 
 
 <div class=" container-fluid mt-5">
-  <!-- Nav tabs -->
-  
     <ul class="nav nav-tabs">
             <li class="nav-item col-sm-6">
                 <a class="nav-link" href="#normale">Normale</a>
@@ -98,8 +96,8 @@
                       <td><?php echo $item->princ_date_oper ?></td>
                       <td><?php echo $item->princ_date_val ?></td>
                       <td><?php echo $item->comm_date_val ?></td>
-                      <td><?php echo $item->princ_montant ?></td>
-                      <td><?php echo $item->comm_montant ?></td>
+                      <td><?php echo number_format($item->princ_montant, 0, ',', ' ') ?></td>
+                      <td><?php echo number_format($item->comm_montant, 0, ',', ' ') ?></td>
                       <td><?php echo "" ?></td>
                       <td><?php echo $item->princ_devise?></td>
                       <td><?php echo $item->princ_oper ?></td>
@@ -113,8 +111,8 @@
                       <td><?php echo $item->orange_ref ?></td>
                       <td><?php echo $item->orange_service ?></td>
                       <td><?php echo $item->orange_num_compte ?></td>
-                      <td><?php echo $item->orange_debit ?></td>
-                      <td><?php echo $item->orange_credit ?></td>
+                      <td><?php echo number_format($item->orange_debit, 0, ',', ' ') ?></td>
+                      <td><?php echo number_format($item->orange_credit, 0, ',', ' ') ?></td>
                     </tr>
                   <?php  } ;?>
                 </tbody>
@@ -124,9 +122,8 @@
             
       </div>
     </div>
-    <div id="tabNormaleCashOut" class="container-fluid tab-pane "><br>
-        <div class="container table-responsive ">
-
+    <div id="tabNormaleCashOut" class="tab-pane "><br>
+        <div class="table-responsive">
         <div class="card"> 
           <div class="card-header">
             <div class="row">
@@ -169,7 +166,7 @@
                   <tr>
                     <td><?php echo $item->princ_date_oper ?></td>
                     <td><?php echo $item->princ_date_val ?></td>
-                    <td><?php echo $item->princ_montant ?></td>
+                    <td><?php echo number_format($item->princ_montant, 0, ',', ' ') ?></td>
                     <td><?php echo $item->princ_devise ?></td>
                     <td><?php echo $item->princ_oper ?></td>
                     <td><?php echo $item->princ_expl ?></td>
@@ -182,8 +179,8 @@
                     <td><?php echo $item->orange_ref ?></td>
                     <td><?php echo $item->orange_service ?></td>
                     <td><?php echo $item->orange_num_compte ?></td>
-                    <td><?php echo $item->orange_debit ?></td>
-                    <td><?php echo $item->orange_credit ?></td>
+                    <td><?php echo number_format($item->orange_debit, 0, ',', ' ') ?></td>
+                    <td><?php echo number_format($item->orange_credit, 0, ',', ' ') ?></td>
                   </tr>
 
                 <?php } ?>
@@ -196,9 +193,9 @@
   </div>
 
   <div class="container-fluid tab-content">
-  <div id="tabDat" class="container-fluid tab-pane "><br>   
-    <div class="table-responsive">
-    <div class="card"> 
+    <div id="tabDat" class="tab-pane "><br>   
+      <div class="table-responsive">
+        <div class="card"> 
           <div class="card-header">
             <div class="row">
               <div class="col-lg-6">
@@ -207,37 +204,27 @@
             </div>
           </div>
           <div class="card-body">
-      <table class="table table-bordered" id="tableDat">
-        <thead style="text-align: center ;">
-          <!-- <tr> -->
-              <!-- <th colspan="12" style="text-align: center ;">BOA</th> -->
-              <!-- <th style="text-align: center ;"></th>
-              <th colspan="9" style="text-align: center ;">ORANGE</th>-->
-              <!-- <th colspan="3">Régularisation</th>  -->
-          <!-- </tr> -->
-          <tr>
-            <!-- <th><input type="checkbox" id="select-all"></th>  -->
-            <th>Code_Agence</th>
-            <th>Date_Oper</th>
-            <th>princ_date_val</th>
-            <th>comm_date_val</th>
-            <th>princ_montant</th>
-            <th>comm_montant</th>
-            <th>Montant</th>
-            <th>Devise</th>
-            <th>Oper</th>
-            <th>Expl</th>
-            <th>ReferenceIgor</th>
-            <th>Numéro</th>
-            <!-- <th>Etat</th>
-            <th>Date_regul</th> -->
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody>  
-          <?php foreach($dat as $item) { ?> 
-            <tr>
-                    <!-- <td><input type="checkbox" name="selected_items[]" value="<?php echo $item->princ_ref_igor; ?>"></td> -->
+            <table class="table table-bordered" id="tableDat">
+              <thead style="text-align: center ;">
+                <tr>
+                  <th>Code_Agence</th>
+                  <th>Date_Oper</th>
+                  <th>princ_date_val</th>
+                  <th>comm_date_val</th>
+                  <th>princ_montant</th>
+                  <th>comm_montant</th>
+                  <th>Montant</th>
+                  <th>Devise</th>
+                  <th>Oper</th>
+                  <th>Expl</th>
+                  <th>ReferenceIgor</th>
+                  <th>Numéro</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>  
+                <?php foreach($dat as $item) { ?> 
+                  <tr>
                     <td><?php echo $item->comm_code_agence ?></td>
                     <td><?php echo $item->princ_date_oper ?></td>
                     <td><?php echo $item->princ_date_val ?></td>
@@ -250,12 +237,7 @@
                     <td><?php echo $item->princ_expl ?></td>
                     <td><?php echo $item->princ_ref_igor ?></td>
                     <td><?php echo substr($item->cle, 0, 10) ?></td>
-                    <!-- <td>Non</td>
-                    <td></td> -->
                     <td style="text-align: center;">
-                      <!-- <a href="javascript:void(0);" class="text-warning" data-toggle="modal" data-target="#myModal" onClick="modifier('<?php echo $item->princ_ref_igor ?>', 'Non', '')">
-                        <i class="bx bx-edit" style="font-size: 20px;"></i>
-                      </a>  -->
                       <a href="javascript:void(0);" class="text-primary" data-target="#myModalFr10"
                               data-compte="<?php echo $item->princ_compte ?>"
                               data-date-oper="<?php echo $item->princ_date_oper ?>"
@@ -266,19 +248,17 @@
                         <i class="bx bx-printer" style="font-size: 20px;"></i>
                       </a>
                     </td>
-              </tr>
-          <?php } ?>  
-          <!-- <input type="submit" class="btn btn-danger" name="delete_selected" value="Supprimer sélection" disabled> -->
-          
-        </tbody>
-      </table>
+                  </tr>
+                <?php } ?>  
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
     </div>
-  </div>
-    </div>
-  </div>
   <div id="tabCat" class="container-fluid tab-pane "><br>    
     <div class="table-responsive">
-    <div class="card"> 
+      <div class="card"> 
           <div class="card-header">
             <div class="row">
               <div class="col-lg-6">
@@ -287,60 +267,48 @@
             </div>
           </div>
           <div class="card-body">
-      <table class="table table-bordered" id="tableCat">
-        <thead style="text-align: center ;">
-        <!-- <tr>
-          <th colspan="9"> BOA</th>
-          <th colspan="3"> Regularisation</th>
-        </tr> -->
-          <tr>
-            <th>Date_Oper</th>
-            <th>date_val</th>
-            <th>montant</th>
-            <th>Devise</th>
-            <th>Oper</th>
-            <th>Expl</th>
-            <th>ReferenceIgor</th>
-            <th>Numero</th>
-            <!-- <th>Etat</th>
-            <th>Date_regul</th> -->
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody>
-        <?php foreach($cat as $item) { ?> 
-            <tr>
-              <td><?php echo $item->princ_date_oper ?></td>
-              <td><?php echo $item->princ_date_val ?></td>
-              <td><?php echo number_format($item->princ_montant, 0, ",", " ") ?></td>
-              <td><?php echo $item->princ_devise ?></td>
-              <td><?php echo $item->princ_oper ?></td>
-              <td><?php echo $item->princ_expl ?></td>
-              <td><?php echo $item->princ_ref_igor ?></td>
-              <td><?php echo substr($item->cle, 0, 10) ?></td>
-              <!-- <td>Non</td>
-              <td></td> -->
-              <td style="text-align:center;">
-                <!-- <a href="javascript:void(0);" class="text-warning" data-toggle="modal" data-target="#myModal" onClick="modifier('<?php echo $item->princ_ref_igor ?>', 'Non', '')">
-                  <i class="bx bx-edit"></i>
-                </a> -->
-                <a href="javascript:void(0);" class="text-primary" data-target="#myModalFr10"
-                              data-compte="<?php echo $item->princ_compte ?>"
-                              data-date-oper="<?php echo $item->princ_date_oper ?>"
-                              data-montant="<?php echo $item->princ_montant ?>"
-                              data-libelle="<?php echo $item->princ_libelle ?>"
-                              data-oper="<?php echo $item->princ_oper ?>"
-                              data-ref-igor="<?php echo $item->princ_ref_igor ?>" data-toggle="modal">
-                <i class="bx bx-printer"></i>
-                </a>
-              </td>
-            </tr>
-            <!-- <input type="submit" class="btn btn-danger" name="delete_selected" value="Supprimer sélection"> -->
-        <?php } ?> 
-        </tbody>
-      </table>
-        </div>
-        </div>
+            <table class="table table-bordered" id="tableCat">
+              <thead style="text-align: center ;">
+                <tr>
+                  <th>Date_Oper</th>
+                  <th>date_val</th>
+                  <th>montant</th>
+                  <th>Devise</th>
+                  <th>Oper</th>
+                  <th>Expl</th>
+                  <th>ReferenceIgor</th>
+                  <th>Numero</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+              <?php foreach($cat as $item) { ?> 
+                  <tr>
+                    <td><?php echo $item->princ_date_oper ?></td>
+                    <td><?php echo $item->princ_date_val ?></td>
+                    <td><?php echo number_format($item->princ_montant, 0, ",", " ") ?></td>
+                    <td><?php echo $item->princ_devise ?></td>
+                    <td><?php echo $item->princ_oper ?></td>
+                    <td><?php echo $item->princ_expl ?></td>
+                    <td><?php echo $item->princ_ref_igor ?></td>
+                    <td><?php echo substr($item->cle, 0, 10) ?></td>
+                    <td style="text-align:center;">
+                      <a href="javascript:void(0);" class="text-primary" data-target="#myModalFr10"
+                                    data-compte="<?php echo $item->princ_compte ?>"
+                                    data-date-oper="<?php echo $item->princ_date_oper ?>"
+                                    data-montant="<?php echo $item->princ_montant ?>"
+                                    data-libelle="<?php echo $item->princ_libelle ?>"
+                                    data-oper="<?php echo $item->princ_oper ?>"
+                                    data-ref-igor="<?php echo $item->princ_ref_igor ?>" data-toggle="modal">
+                      <i class="bx bx-printer"></i>
+                      </a>
+                    </td>
+                  </tr>
+              <?php } ?> 
+              </tbody>
+            </table>
+          </div>
+      </div>
     </div>     
   </div>
 
@@ -350,12 +318,12 @@
           <div class="card-header">
             <div class="row">
               <div class="col-lg-6">
-                <b>Liste MVTS</b>
+                <b>Liste MVTS cash IN</b>
               </div>
             </div>
           </div>
           <div class="card-body">
-      <table class="table table-bordered" id="tableMvts">
+      <table class="table table-bordered" id="tableMvtsCI">
         <thead>
           <tr>
             <th>Date</th>
@@ -367,14 +335,14 @@
           </tr>
         </thead>
         <tbody>
-        <?php foreach($ind as $item) { ?>
+        <?php foreach($anomalie_ci as $item) { ?>
             <tr>
               <td><?php echo $item->orange_date ?></td>
               <td><?php echo $item->orange_heure ?></td>
               <td><?php echo $item->orange_ref ?></td>
               <td><?php echo $item->orange_service ?></td>
               <td><?php echo $item->orange_num_compte ?></td>
-              <td><?php echo $item->orange_debit ?></td>
+              <td><?php echo number_format($item->orange_debit, 0, ',', ' ') ?></td>
             </tr>
           <?php } ?> 
         </tbody>
@@ -382,18 +350,19 @@
         </div>
         </div>
     </div> 
+  
     
-    <div class="table-responsive">
+    <div class="table-responsive mt-3">
     <div class="card"> 
           <div class="card-header">
             <div class="row">
               <div class="col-lg-6">
-                <b>Liste MVTS</b>
+                <b>Liste MVTS Cash Out</b>
               </div>
             </div>
           </div>
           <div class="card-body">
-      <table class="table table-bordered" id="tableMvts">
+      <table class="table table-bordered" id="tableMvtsCo">
         <thead>
           <tr>
             <th>Date</th>
@@ -401,18 +370,18 @@
             <th>Réference</th>
             <th>Service</th>
             <th>Num_Compte</th>
-            <th>Débit</th>
+            <th>Crédit</th>
           </tr>
         </thead>
         <tbody>
-        <?php foreach($ind as $item) { ?>
+        <?php foreach($anomalie_co as $item) { ?>
             <tr>
               <td><?php echo $item->orange_date ?></td>
               <td><?php echo $item->orange_heure ?></td>
               <td><?php echo $item->orange_ref ?></td>
               <td><?php echo $item->orange_service ?></td>
               <td><?php echo $item->orange_num_compte ?></td>
-              <td><?php echo $item->orange_debit ?></td>
+              <td><?php echo number_format($item->orange_credit, 0, ',', ' ') ?></td>
             </tr>
           <?php } ?> 
         </tbody>
@@ -451,7 +420,7 @@
               <td><?php echo $item->orange_ref ?></td>
               <td><?php echo $item->orange_service ?></td>
               <td><?php echo $item->orange_num_compte ?></td>
-              <td><?php echo $item->orange_debit ?></td>
+              <td><?php echo number_format($item->orange_debit, 0, ',', ' ') ?></td>
             </tr>
           <?php } ?> 
         </tbody>
@@ -485,28 +454,29 @@
                   <th>Libelle</th>
                   <th>Operation</th>
                   <th>Expl</th>
+                  <th>Ref_Rel</th>
                 </tr>
               </thead>
               <tbody>
-              <?php foreach($vi as $item) { ?> 
+          <?php foreach($vi as $item) { ?> 
             <tr>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            
 
+              <td><?php echo $item->princ_compte ?></td>
+              <td><?php echo $item->princ_date_oper ?></td>
+              <td><?php echo $item->princ_date_val ?></td>
+              <td><?php echo number_format($item->princ_montant, 0, ",", " ") ?></td>
+              <td><?php echo $item->princ_devise ?></td>
+              <td><?php echo $item->princ_ref_igor ?></td>
+              <td><?php echo $item->princ_libelle ?></td>
+              <td><?php echo $item->princ_oper ?></td>
+              <td><?php echo $item->princ_expl ?></td>
+              <td><?php echo $item->princ_ref_rel ?></td>
+            </tr>
           <?php } ?> 
               </tbody>
           </table>
-              </div>
-              </div>
+          </div>
+        </div>
       </div>
   </div>
 
@@ -660,24 +630,18 @@ $(document).ready(function(){
 
   $("#tableNormaleCashOut").DataTable({
     responsive: true,
-    scrollX: true, // Active la barre de défilement horizontal
-    "autoWidth": false,
-    dom: 'Bfrtip',
-    buttons: [
-      'copy', 'csv', 'excel', 'pdf', 'print'
-    ],
+    scrollX: true,
+    "autoWidth": false, 
     language: {
         url: '<?php echo base_url(); ?>assets/fr-FR.json',
     }
   });
 
     $('#tableNormaleCashIn').DataTable( {
-        dom: 'Bfrtip',
-        scrollX: true,
-        buttons: [
-            'copy', 'csv', 'excel', 'pdf', 'print'
-            ],
-        language: {
+      responsive: true,
+      scrollX: true,
+      "autoWidth": false,
+      language: {
           url: '<?php echo base_url(); ?>assets/fr-FR.json',
     }
     });
@@ -685,17 +649,7 @@ $(document).ready(function(){
   $("#tableDat").DataTable({
     responsive: true,
     scrollX: true,
-
-    dom: 'Bfrtip',
-    buttons: [
-      'copy', 'csv', 'excel', 'pdf', 'print'
-    ],
-    language: {
-      url: '<?php echo base_url(); ?>assets/fr-FR.json',
-    }
-  });
-
-  $("#tableMvts").DataTable({
+    "autoWidth": false,
     language: {
       url: '<?php echo base_url(); ?>assets/fr-FR.json',
     }
@@ -703,25 +657,34 @@ $(document).ready(function(){
   $("#tableCat").DataTable({
     responsive: true,
     scrollX: true,
-
-    dom: 'Bfrtip',
-    buttons: [
-      'copy', 'csv', 'excel', 'pdf', 'print'
-    ],
+    "autoWidth": false,
     language: {
       url: '<?php echo base_url(); ?>assets/fr-FR.json',
     }
+  });
 
+  $("#tableMvtsCI").DataTable({
+    responsive: true,
+    scrollX: true,
+    "autoWidth": false,
+    language: {
+      url: '<?php echo base_url(); ?>assets/fr-FR.json',
+    }
+  });
+  $("#tableMvtsCo").DataTable({
+    responsive: true,
+    scrollX: true,
+    "autoWidth": false,
+    language: {
+      url: '<?php echo base_url(); ?>assets/fr-FR.json',
+    }
   });
 
 
   $("#tableInd").DataTable({
     responsive: true,
-
-    dom: 'Bfrtip',
-    buttons: [
-      'copy', 'csv', 'excel', 'pdf', 'print'
-    ],
+    scrollX: true,
+    "autoWidth": false,
     language: {
       url: '<?php echo base_url(); ?>assets/fr-FR.json',
     }
@@ -730,11 +693,8 @@ $(document).ready(function(){
 
   $("#tableVI").DataTable({
     responsive: true,
-
-    dom: 'Bfrtip',
-    buttons: [
-      'copy', 'csv', 'excel', 'pdf', 'print'
-    ],
+    scrollX: true,
+    "autoWidth": false,
     language: {
       url: '<?php echo base_url(); ?>assets/fr-FR.json',
     }
@@ -746,12 +706,16 @@ $(document).ready(function(){
   
 
 
-    // $("#tableAnormaleCashOut").DataTable();
+  // $("#tableAnormaleCashOut").DataTable();
   $(".nav-tabs a").click(function(){
     $(this).tab('show');
+    $($.fn.dataTable.tables(true)).DataTable()
+      .columns.adjust();
+
     if($(this).attr('href') === '#anormale') {
       $("#tabNormaleCashIn").removeClass("show active");
       $("#tabNormaleCashOut").removeClass("show active");
+      
     }
     if($(this).attr('href') === '#normale') {
       $("#tabDat").removeClass("show active");

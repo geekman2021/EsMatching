@@ -78,7 +78,7 @@
                       $formatter2 = new IntlDateFormatter('fr_FR', IntlDateFormatter::LONG, IntlDateFormatter::NONE);
                       $formattedDate2 = $formatter2->format($dateObj);
                     
-                    echo "le" .$formattedDate2 ?>
+                    echo "le " .$formattedDate2 ?>
                     
                   </div>
                   <div class="col-sm-5">
@@ -94,14 +94,12 @@
                       $date2 = new DateTime($item->rollback_transfer_date);
                       $interval = $date1->diff($date2);
                       $diffInDays = $interval->days;
-                      echo $diffInDays ."Jours";
+                      echo $diffInDays ."Jour";
                     ?>
                   </div>
                   <div class="col-sm-7">
-                  <b> Montant: </b>
-                  <?php 
-                      echo $item->amount ." MGA";
-                    ?>
+                    <b> Montant: </b>
+                    <?= number_format($item->amount, 0, ',', ' ') ." MGA";?>
                   </div>
                   <div class="col-sm-5">
                   <b> Description: </b>

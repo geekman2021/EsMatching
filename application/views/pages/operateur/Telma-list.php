@@ -356,7 +356,7 @@
         <?php foreach($mvts_ci as $item) { ?>
           <tr>
             <td style="display: none;"><?php echo $item->id ?></td>
-            <td style="white-space: nowrap"><?php echo $item->date ?></td>
+            <td><?php echo $item->date ?></td>
             <td><?php echo $item->trans_id ?></td>
             <td><?php echo $item->TYPE ?></td>
             <td><?php echo $item->channel ?></td>
@@ -372,7 +372,7 @@
   </div>
 </div>
 
-<div class="table-responsive">
+<div class="table-responsive mt-5">
     <div class="card">
       <div class="card-header">
           <div class="row">
@@ -400,7 +400,7 @@
         <?php foreach($mvts_ci as $item) { ?>
           <tr>
             <td style="display: none;"><?php echo $item->id ?></td>
-            <td style="white-space: nowrap"><?php echo $item->date ?></td>
+            <td><?php echo $item->date ?></td>
             <td><?php echo $item->trans_id ?></td>
             <td><?php echo $item->TYPE ?></td>
             <td><?php echo $item->channel ?></td>
@@ -449,7 +449,7 @@
         <?php foreach($admin as $item) { ?>
           <tr>
             <td style="display: none;"><?php echo $item->id ?></td>
-            <td style="white-space: nowrap"><?php echo $item->date ?></td>
+            <td><?php echo $item->date ?></td>
             <td><?php echo $item->trans_id ?></td>
             <td><?php echo $item->TYPE ?></td>
             <td><?php echo $item->channel ?></td>
@@ -634,7 +634,7 @@ $(document).ready(function(){
   $("#tableNormaleCashOut").DataTable({
     responsive: true,
     "scrollX": true, // Active la barre de défilement horizontal
-    "autoWidth": false,
+    "autoWidth": true,
     language: {
         url: '<?php echo base_url(); ?>assets/fr-FR.json',
     }
@@ -650,24 +650,28 @@ $(document).ready(function(){
 
 
   $("#tableCat").DataTable({
+    scrollX: true,
     language: {
       url: '<?php echo base_url(); ?>assets/fr-FR.json',
     }
   });
 
   $("#tableAdmin").DataTable({
+    scrollX: true,
     language: {
       url: '<?php echo base_url(); ?>assets/fr-FR.json',
     }
   });
 
   $("#tableVI").DataTable({
+    scrollX: true,
     language: {
       url: '<?php echo base_url(); ?>assets/fr-FR.json',
     }
   });
   
   $("#tableMvtsCI").DataTable({
+    scrollX: true,
     language: {
       url: '<?php echo base_url(); ?>assets/fr-FR.json',
     }
@@ -682,6 +686,8 @@ $(document).ready(function(){
   $("#tableAnormaleCashOut").DataTable();
   $(".nav-tabs a").click(function(){
   $(this).tab('show');
+  $($.fn.dataTable.tables(true)).DataTable()
+      .columns.adjust();
 
     if($(this).attr('href') === '#anormale') {
       $("#tabNormaleCashIn").removeClass("show active");

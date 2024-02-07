@@ -13,6 +13,16 @@ user_guide_src/cilexer/build/*
 user_guide_src/cilexer/dist/*
 user_guide_src/cilexer/pycilexer.egg-info/*
 /vendor/
+/system/
+/application/cache/
+/application/core
+/application/helpers
+/application/hooks
+/application/language
+/application/libraries
+/application/logs
+/application/third_party
+
 
 # IDE Files
 #-------------------------

@@ -24,7 +24,7 @@
     <div id="anormale" class="container-fluid tab-pane fade"><br>
       <ul class="nav nav-tabs">
         <li class="nav-item col-sm-2">
-          <a class="nav-link" href="#tabDat">Débit à Tort </a>
+          <a class="nav-link" href="#tabDat">Débit à Tort</a>
         </li>
         <li class="nav-item col-sm-2">
           <a class="nav-link" href="#tabCat">Crédit à Tort </a>
@@ -189,20 +189,20 @@
         <tbody>
           <?php foreach($igor_anomalie_ci as $item) { ?>
               <tr>
-                <td style="display: none;"><?php echo $item->id ?></td>
-                <td><?php echo $item->COMPTE ?></td>
-                <td><?php echo $item->DATE_OPER ?></td>
-                <td><?php echo $item->DATE_VAL ?></td>
-                <td><?php echo $item->DEVISE ?></td>
-                <td><?php echo number_format($item->MONTANT, 0, ',', " ")  ?></td>
-                <td><?php echo $item->LIBELLE ?></td>
-                <td><?php echo $item->OPER ?></td>
-                <td><?php echo $item->EXPL ?></td>
-                <td><?php echo $item->REF_IGOR ?></td>
-                <td>
-                <a href="javascript:void(0);" class="text-warning" data-toggle="modal" data-target="#myModal" onClick="modifier('<?php echo $item->REF_IGOR ?>', '<?php echo $item->etat ?>', '<?php echo $item->date_regul ?>')">
+                <td style="display: none;"><?= $item->id ?></td>
+                <td><?= $item->COMPTE ?></td>
+                <td><?= $item->DATE_OPER ?></td>
+                <td><?= $item->DATE_VAL ?></td>
+                <td><?= $item->DEVISE ?></td>
+                <td><?= number_format($item->MONTANT, 0, ',', " ")  ?></td>
+                <td><?= $item->LIBELLE ?></td>
+                <td><?= $item->OPER ?></td>
+                <td><?= $item->EXPL ?></td>
+                <td><?= $item->REF_IGOR ?></td>
+                <td style= "text-align: center;">
+                <!-- <a href="javascript:void(0);" class="text-warning" data-toggle="modal" data-target="#myModal" onClick="modifier('<?php echo $item->REF_IGOR ?>', '<?php echo $item->etat ?>', '<?php echo $item->date_regul ?>')">
                 <i class="bx bx-edit" style="font-size: 25px;"></i>
-                </a> 
+                </a>  -->
                 <a href="javascript:void(0);" class="text-primary" data-target="#myModalFr10"
                     data-compte="<?php echo $item->COMPTE ?>"
                     data-date-oper="<?php echo $item->DATE_OPER ?>"
@@ -225,15 +225,15 @@
       <thead style="text-align: center ;">
             <tr>
               <th>Compte</th>
-              <th>DateOper</th>
-              <th>DateVal</th>
+              <th>Date_Oper</th>
+              <th>Date_Val</th>
               <th>Devise</th>
               <th>Montant</th>
               <th>Libelle</th>
               <th>Operation</th>
               <th>Expl</th>
               <th>ReferenceIgor</th>
-              <th>Action</th>
+              <!-- <th>Action</th> -->
             </tr>
         </thead>
         <tbody>
@@ -249,13 +249,11 @@
                 <td><?php echo $item->OPER ?></td>
                 <td><?php echo $item->EXPL ?></td>
                 <td><?php echo $item->REF_IGOR ?></td>
-                <!-- <td><?php echo $item->etat ?></td>
-                <td><?php echo $item->date_regul ?></td> -->
-                <td>
+                <!-- <td>
                 <a href="javascript:void(0);" class="text-warning" data-toggle="modal" data-target="#myModal2" onClick="modifier2('<?php echo $item->REF_IGOR ?>', '<?php echo $item->etat ?>', '<?php echo $item->date_regul ?>')">
                 <i class="bx bx-edit" style="font-size: 25px;"></i>
                 </a> 
-              </td>
+              </td> -->
               </tr>
           <?php } ?>
           <?php //foreach($anomalie_co as $item) { ?>
@@ -971,8 +969,6 @@ $("#modifFormfr10").submit(function(e) {
     const date_regul= $("#date_regul2").val();
     const ref_igor = $("#ref_igor2").val();
 
-
-
     $.ajax({
         url: "<?php echo site_url("airtel/edit_anomalie_igor_co") ?>",
         type: "POST",
@@ -997,10 +993,6 @@ $("#tableNormaleCashOut").DataTable({
   responsive: true,
   "scrollX": true, // Active la barre de défilement horizontal
   "autoWidth": false,
-  dom: 'Bfrtip',
-  buttons: [
-    'copy', 'csv', 'excel', 'pdf', 'print'
-  ],
   language: {
       url: '<?php echo base_url(); ?>assets/fr-FR.json',
   }
@@ -1013,12 +1005,15 @@ $("#tableNormaleCashOut").DataTable({
   }
   });
   $("#tableDat").DataTable({
+    scrollX: true,
     language: {
       url: '<?php echo base_url(); ?>assets/fr-FR.json',
-    }
+    },
+    visible: true
   });
 
 $("#tableCat").DataTable({
+    scrollX: true,
     language: {
       url: '<?php echo base_url(); ?>assets/fr-FR.json',
     }
@@ -1036,11 +1031,6 @@ $("#tableCat").DataTable({
   $("#tableMvtsCO").DataTable({
     responsive: true,
     scrollX: true,
-
-    dom: 'Bfrtip',
-    buttons: [
-      'copy', 'csv', 'excel', 'pdf', 'print'
-    ],
     language: {
       url: '<?php echo base_url(); ?>assets/fr-FR.json',
     }
@@ -1049,11 +1039,6 @@ $("#tableCat").DataTable({
   $("#tableMvtsCI").DataTable({
     responsive: true,
     scrollX: true,
-
-    dom: 'Bfrtip',
-    buttons: [
-      'copy', 'csv', 'excel', 'pdf', 'print'
-    ],
     language: {
       url: '<?php echo base_url(); ?>assets/fr-FR.json',
     }
@@ -1062,11 +1047,6 @@ $("#tableCat").DataTable({
   $("#tableAmbi").DataTable({
     responsive: true,
     scrollX: true,
-
-    dom: 'Bfrtip',
-    buttons: [
-      'copy', 'csv', 'excel', 'pdf', 'print'
-    ],
     language: {
       url: '<?php echo base_url(); ?>assets/fr-FR.json',
     }
@@ -1115,6 +1095,7 @@ $("#tableCat").DataTable({
   });
 
   $("#tableVI").DataTable({
+    scrollX: true,
     language: {
       url: '<?php echo base_url(); ?>assets/fr-FR.json',
     }
@@ -1123,6 +1104,8 @@ $("#tableCat").DataTable({
     // $("#tableAnormaleCashOut").DataTable();
   $(".nav-tabs a").click(function(){
     $(this).tab('show');
+    $($.fn.dataTable.tables(true)).DataTable()
+      .columns.adjust();
     // Ajoutez le code pour masquer la tab "Table Normale Cash In" ici
     if($(this).attr('href') === '#anormale') {
       $("#tabNormaleCashIn").removeClass("show active");

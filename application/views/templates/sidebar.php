@@ -19,15 +19,15 @@
     <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>assets/dataTables.dateTime.min.css" > 
     <link rel="stylesheet" href="<?php echo base_url(); ?>assets/jquery/datatables.css" />
     <link href="<?php echo base_url() ?>assets/boxicons/css/boxicons.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="<?php echo base_url();?>assets/style.css">
+    <link rel="stylesheet" href="<?php echo base_url();?>assets/style.css" type="text/css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
   </head>
   <body>
     <div class="sidebar">
       <div class="logo-details">
-        <i class="bx bxl-c-plus-plus"></i>
-        <span class="logo_name">Monétique</span>
+        <!-- <i class="bx bxl-c-plus-plus"></i> -->
+        <img src="<?= base_url() ?>assets/images/logs.png" alt="boa-logos" style="width: 2vw; height: 4vh; margin-left: 10%;"/>
+        <span class="logo_name" style="margin-left: 5%;">Monétique</span>
       </div>
       <ul class="nav-links">
         <li>
@@ -43,7 +43,7 @@
         <?php if (isset($_SESSION["userExist"]) && isset($_SESSION["userExist"]->code_profil) && $_SESSION["userExist"]->code_profil ==="002") { ?>  
           <div class="iocn-link">
             <a href="<?php echo site_url("users") ?>">
-              <i class="bx bx-collection"></i>
+              <i class='bx bx-user' ></i>
               <span class="link_name">Utilisateur</span>
             </a>
           </div>
@@ -54,7 +54,7 @@
         <li>
           <div class="iocn-link">
             <a href="<?php echo site_url("Profiles") ?>">
-              <i class="bx bx-book-alt"></i>
+              <i class='bx bxs-user-badge bx-flip-horizontal' ></i>
               <span class="link_name">Profil</span>
             </a>
           </div>
@@ -76,7 +76,7 @@
         <li>
           <div class="iocn-link">
             <a href="#">
-              <i class="bx bx-plug"></i>
+              <i class='bx bx-wallet-alt'></i>
               <span class="link_name">Operateur</span>
             </a>
             <i class="bx bxs-chevron-down arrow"></i>
@@ -91,7 +91,7 @@
 
         <li>
           <a href="<?php echo site_url("Regul") ?>">
-            <i class="bx bx-compass"></i>
+            <i class="bx bx-cog"></i>
             <span class="link_name">Regularisation</span>
           </a>
           <ul class="sub-menu blank">
@@ -100,17 +100,26 @@
         </li>
         <li>
           <a href="<?php echo site_url("Historique") ?>">
-            <i class="bx bx-history"></i>
+            <i class='bx bx-collapse-horizontal'></i>
             <span class="link_name">Rapprochement</span>
           </a>
           <ul class="sub-menu blank">
             <li><a class="link_name" href="<?php echo site_url("Historique") ?>">Rapprochement</a></li>
           </ul>
         </li>
+        <li>
+          <a href="<?php echo site_url("Ecart") ?>">
+            <i class='bx bx-expand-horizontal' ></i>
+            <span class="link_name">Ecart</span>
+          </a>
+          <ul class="sub-menu blank">
+            <li><a class="link_name" href="<?php echo site_url("Ecart") ?>">Ecart</a></li>
+          </ul>
+        </li>
       <?php } else if((isset($_SESSION["userExist"]) && isset($_SESSION["userExist"]->code_profil) && $_SESSION["userExist"]->code_profil ==="003")) { ?>
         <li>
           <a href="<?php echo site_url("Importer") ?>">
-            <i class="bx bx-compass"></i>
+            <i class='bx bx-upload' ></i>
             <span class="link_name">Importer</span>
           </a>
           <ul class="sub-menu blank">
@@ -120,7 +129,7 @@
         <li>
           <div class="iocn-link">
             <a href="#">
-              <i class="bx bx-plug"></i>
+              <i class='bx bx-wallet-alt'></i>
               <span class="link_name">Operateur</span>
             </a>
             <i class="bx bxs-chevron-down arrow"></i>
@@ -135,7 +144,7 @@
 
         <li>
           <a href="<?php echo site_url("Regul") ?>">
-            <i class="bx bx-compass"></i>
+            <i class='bx bx-cog'></i>
             <span class="link_name">Regularisation</span>
           </a>
           <ul class="sub-menu blank">
@@ -144,7 +153,7 @@
         </li>
         <li>
           <a href="<?php echo site_url("Historique") ?>">
-            <i class="bx bx-history"></i>
+            <i class='bx bx-collapse-horizontal'></i>
             <span class="link_name">Rapprochement</span>
           </a>
           <ul class="sub-menu blank">
@@ -153,7 +162,7 @@
         </li>
         <li>
           <a href="<?php echo site_url("Ecart") ?>">
-            <i class="bx bx-history"></i>
+            <i class='bx bx-expand-horizontal' ></i>
             <span class="link_name">Ecart</span>
           </a>
           <ul class="sub-menu blank">
