@@ -87,7 +87,7 @@
     
         public function get_mvts_co() {
             $this->db->select("*");
-            $this->db->from("telma_mvts_ci");
+            $this->db->from("telma_mvts_co");
             $query= $this->db->get();
 
             return $query->result();

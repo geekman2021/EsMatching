@@ -60,10 +60,8 @@
                         'MONTANT' => 0
                     );
                 }
-            }
-            
+            } 
             return $resultArray;
-            
         }
 
 

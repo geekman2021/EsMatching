@@ -17,7 +17,7 @@
 
 <div class="tab-content">
     <div id="boa" class="container tab-pane fade"><br>
-        <div class="container">
+        <!-- <div class="container">
             <div class="row">
                 <div class="col-sm-6">
                     <label for="dateDebut">Date Debut</label>
@@ -31,7 +31,7 @@
                     <button id="exportExcel" class="btn btn-success">Exporter vers Excel </button>
                 </div>
             </div>
-        </div>
+        </div> -->
         <div class="table-responsive mt-5">
         <table class="table table-bordered" id="tableBoa">
                 <thead>
@@ -69,7 +69,7 @@
         </div>
     </div>
     <div id="airtel" class="container tab-pane fade"><br>
-        <div class="container">
+        <!-- <div class="container">
             <div class="row">
                 <div class="col-sm-6">
                     <label for="dateDebut">Date Debut</label>
@@ -83,7 +83,7 @@
                     <button id="exportExcel" class="btn btn-success">Exporter vers Excel </button>
                 </div>
             </div>
-        </div>
+        </div> -->
         <div class="table-responsive">
             <table class="table table-bordered" id="tableAirtel">
                 <thead>
@@ -126,9 +126,12 @@
 </div>
 
 <script>
+
 $("#tableAirtel").DataTable({
     responsive: true,
     scrollX: true,
+    autoWidth: false,
+    order: [],
     language: {
       url: '<?php echo base_url(); ?>assets/fr-FR.json',
     }
@@ -137,9 +140,17 @@ $("#tableAirtel").DataTable({
 $("#tableBoa").DataTable({
     responsive: true,
     scrollX: true,
+    autoWidth: false,
+    order: [],
     language: {
       url: '<?php echo base_url(); ?>assets/fr-FR.json',
     }
+});
+
+$(".nav-tabs a").click(function(){
+  $(this).tab('show');
+  $($.fn.dataTable.tables(true)).DataTable()
+      .columns.adjust();
 });
 
 </script>

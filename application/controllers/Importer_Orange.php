@@ -709,7 +709,7 @@
                 $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["orange_num_compte"]);
                 $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["orange_debit"]);
                 $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["orange_credit"]);
-                // $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["orange_debit"] * -1);
+                $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["orange_debit"] * -1);
 
                 $i+=1;
                 $sheet->setCellValue($cell_array[$i++] .$lastRow, $dataRow["orange_sous_distri"]);
@@ -851,7 +851,6 @@
                 $lastRow++;
             }
 
-            $lastRow = $sheet->getHighestRow();
             foreach($ind as $dataRow) {
                 $i=24;
                 $sheet->getStyle($cell_array[$i++] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FFA500');

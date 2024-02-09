@@ -991,64 +991,79 @@ $("#modifFormfr10").submit(function(e) {
 
 $("#tableNormaleCashOut").DataTable({
   responsive: true,
-  "scrollX": true, // Active la barre de défilement horizontal
-  "autoWidth": false,
+  scrollX: true,
+  autoWidth: false,
+  order: [],
   language: {
       url: '<?php echo base_url(); ?>assets/fr-FR.json',
   }
 });
 
   $('#tableNormaleCashIn').DataTable( {
-      scrollX: true,
-      language: {
+    responsive: true,
+    scrollX: true,
+    autoWidth: false,
+    order: [],
+    language: {
         url: '<?php echo base_url(); ?>assets/fr-FR.json',
-  }
+    }
   });
   $("#tableDat").DataTable({
+    responsive: true,
     scrollX: true,
+    autoWidth: false,
+    order: [],
     language: {
-      url: '<?php echo base_url(); ?>assets/fr-FR.json',
-    },
-    visible: true
+        url: '<?php echo base_url(); ?>assets/fr-FR.json',
+    }
   });
 
 $("#tableCat").DataTable({
+    responsive: true,
     scrollX: true,
+    autoWidth: false,
+    order: [],
     language: {
-      url: '<?php echo base_url(); ?>assets/fr-FR.json',
+        url: '<?php echo base_url(); ?>assets/fr-FR.json',
     }
   });
 
   $("#tableDeallo").DataTable({
     responsive: true,
     scrollX: true,
+    autoWidth: false,
+    order: [],
     language: {
-      url: '<?php echo base_url(); ?>assets/fr-FR.json',
+        url: '<?php echo base_url(); ?>assets/fr-FR.json',
     }
-
   });
 
   $("#tableMvtsCO").DataTable({
     responsive: true,
     scrollX: true,
+    autoWidth: false,
+    order: [],
     language: {
-      url: '<?php echo base_url(); ?>assets/fr-FR.json',
+        url: '<?php echo base_url(); ?>assets/fr-FR.json',
     }
-
   });
   $("#tableMvtsCI").DataTable({
     responsive: true,
     scrollX: true,
+    autoWidth: false,
+    order: [],
     language: {
-      url: '<?php echo base_url(); ?>assets/fr-FR.json',
+        url: '<?php echo base_url(); ?>assets/fr-FR.json',
     }
 
   });
   $("#tableAmbi").DataTable({
     responsive: true,
     scrollX: true,
+    autoWidth: false,
+    order: [],
     language: {
-      url: '<?php echo base_url(); ?>assets/fr-FR.json',
+        url: '<?php echo base_url(); ?>assets/fr-FR.json',
     }
 
   });
@@ -1057,47 +1072,41 @@ $("#tableCat").DataTable({
   $("#tableSuccesCO").DataTable({
     responsive: true,
     scrollX: true,
-
-    dom: 'Bfrtip',
-    buttons: [
-      'copy', 'csv', 'excel', 'pdf', 'print'
-    ],
+    autoWidth: false,
+    order: [],
     language: {
-      url: '<?php echo base_url(); ?>assets/fr-FR.json',
+        url: '<?php echo base_url(); ?>assets/fr-FR.json',
     }
 
   });
   $("#tableSuccesCI").DataTable({
     responsive: true,
     scrollX: true,
-
-    dom: 'Bfrtip',
-    buttons: [
-      'copy', 'csv', 'excel', 'pdf', 'print'
-    ],
+    autoWidth: false,
+    order: [],
     language: {
-      url: '<?php echo base_url(); ?>assets/fr-FR.json',
+        url: '<?php echo base_url(); ?>assets/fr-FR.json',
     }
 
   });
   $("#tableAmbiCO").DataTable({
     responsive: true,
     scrollX: true,
-
-    dom: 'Bfrtip',
-    buttons: [
-      'copy', 'csv', 'excel', 'pdf', 'print'
-    ],
+    autoWidth: false,
+    order: [],
     language: {
-      url: '<?php echo base_url(); ?>assets/fr-FR.json',
+        url: '<?php echo base_url(); ?>assets/fr-FR.json',
     }
 
   });
 
   $("#tableVI").DataTable({
+    responsive: true,
     scrollX: true,
+    autoWidth: false,
+    order: [],
     language: {
-      url: '<?php echo base_url(); ?>assets/fr-FR.json',
+        url: '<?php echo base_url(); ?>assets/fr-FR.json',
     }
   });
 
@@ -1106,7 +1115,6 @@ $("#tableCat").DataTable({
     $(this).tab('show');
     $($.fn.dataTable.tables(true)).DataTable()
       .columns.adjust();
-    // Ajoutez le code pour masquer la tab "Table Normale Cash In" ici
     if($(this).attr('href') === '#anormale') {
       $("#tabNormaleCashIn").removeClass("show active");
       $("#tabNormaleCashOut").removeClass("show active");

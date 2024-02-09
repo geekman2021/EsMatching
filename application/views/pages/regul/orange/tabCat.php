@@ -31,17 +31,6 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td style="text-align: center;"><a href="#" data-toggle="modal" data-target="#myModalCat"><i class="bx bx-show" style="font-size: 20px"></i></a></td>
-                    </tr>
                 </tbody>
             </table>
                 </div>

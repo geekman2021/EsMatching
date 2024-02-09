@@ -49,7 +49,7 @@
         public function get_solde_by_month() {
             $resultArray = array();
                 for ($i = 1; $i <= 12; $i++) {
-                    $sql = "SELECT date, COALESCE(solde,0) AS solde, COALESCE(MONTANT,0) AS MONTANT FROM `historique_telma` WHERE MONTH(date)=$i";
+                    $sql = "SELECT date, DATE_OPER, COALESCE(solde,0) AS solde, COALESCE(MONTANT,0) AS MONTANT FROM `historique_telma` WHERE MONTH(date)=$i OR MONTH(DATE_OPER) =$i ";
                     $query = $this->db->query($sql);
                     if ($query->num_rows() > 0) {
                         $resultArray[$i] = $query->result_array();

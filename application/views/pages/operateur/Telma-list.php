@@ -51,7 +51,7 @@
     </div>
     
     <div id="tabNormaleCashIn" class="tab-pane"><br>
-      <div class="row">
+      <!-- <div class="row">
         <div class="col-sm-6">
           <label for="dateDebut">Date Debut</label>
           <input type="text" class="form-control" id="min" name="min">
@@ -60,7 +60,7 @@
           <label for="dateDebut">Date Fin</label>
           <input type="text" class="form-control" id="max" name="max">
         </div> 
-      </div>
+      </div> -->
   <div class="table-responsive mt-1">
     <div class="card">
       <div class="card-header">
@@ -397,7 +397,7 @@
           </tr>
         </thead>
         <tbody>
-        <?php foreach($mvts_ci as $item) { ?>
+        <?php foreach($mvts_co as $item) { ?>
           <tr>
             <td style="display: none;"><?php echo $item->id ?></td>
             <td><?php echo $item->date ?></td>
@@ -633,8 +633,9 @@ $(document).ready(function(){
 
   $("#tableNormaleCashOut").DataTable({
     responsive: true,
-    "scrollX": true, // Active la barre de défilement horizontal
-    "autoWidth": true,
+    scrollX: true, // Active la barre de défilement horizontal
+    autoWidth: false,
+    order: [],
     language: {
         url: '<?php echo base_url(); ?>assets/fr-FR.json',
     }
@@ -642,43 +643,62 @@ $(document).ready(function(){
   
 
   $("#tableDat").DataTable({
-    scrollX: true,
+    responsive: true,
+    scrollX: true, // Active la barre de défilement horizontal
+    autoWidth: false,
+    order: [],
     language: {
-      url: '<?php echo base_url(); ?>assets/fr-FR.json',
+        url: '<?php echo base_url(); ?>assets/fr-FR.json',
     }
   });
 
 
   $("#tableCat").DataTable({
+    responsive: true,
     scrollX: true,
+    autoWidth: false,
+    order: [],
     language: {
-      url: '<?php echo base_url(); ?>assets/fr-FR.json',
+        url: '<?php echo base_url(); ?>assets/fr-FR.json',
     }
   });
 
   $("#tableAdmin").DataTable({
+    responsive: true,
     scrollX: true,
+    autoWidth: false,
+    order: [],
     language: {
-      url: '<?php echo base_url(); ?>assets/fr-FR.json',
+        url: '<?php echo base_url(); ?>assets/fr-FR.json',
     }
   });
 
   $("#tableVI").DataTable({
-    scrollX: true,
+    responsive: true,
+    scrollX: true, 
+    autoWidth: false,
+    order: [],
     language: {
-      url: '<?php echo base_url(); ?>assets/fr-FR.json',
+        url: '<?php echo base_url(); ?>assets/fr-FR.json',
     }
   });
   
   $("#tableMvtsCI").DataTable({
+    responsive: true,
     scrollX: true,
+    autoWidth: false,
+    order: [],
     language: {
-      url: '<?php echo base_url(); ?>assets/fr-FR.json',
+        url: '<?php echo base_url(); ?>assets/fr-FR.json',
     }
   });
   $("#tableMvtsCO").DataTable({
+    responsive: true,
+    scrollX: true,
+    autoWidth: false,
+    order: [],
     language: {
-      url: '<?php echo base_url(); ?>assets/fr-FR.json',
+        url: '<?php echo base_url(); ?>assets/fr-FR.json',
     }
   });
   

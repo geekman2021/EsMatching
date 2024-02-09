@@ -7,7 +7,7 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
         public function __construct(){
             parent::__construct();
             $this->load->model("Historique_Telma_Model");
-            ini_set('memory_limit', '1024M'); // Set the memory limit to 256 megabytes
+            ini_set('memory_limit', '2048M'); // Set the memory limit to 256 megabytes
             session_start();
 
         }

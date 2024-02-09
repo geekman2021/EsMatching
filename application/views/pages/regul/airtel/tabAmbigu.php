@@ -1,5 +1,5 @@
 <div id="tabAmbigu" class="container-fluid mt-5 tab-pane ">
-    <div class="row">
+    <!-- <div class="row">
       <div class="col-sm-6 pl-4">
           <label for="dateDebut">Date Debut</label>
           <input type="text" class="form-control" id="minAirtel" name="minAirtel">
@@ -8,11 +8,11 @@
           <label for="dateDebut">Date Fin</label>
           <input type="text" class="form-control" id="maxAirtel" name="maxAirtel">
         </div> 
-    </div>
+    </div> -->
     <div class="container-fluid mt-3">
       <div class="card">
         <div class="card-header">
-          <b>Liste Ambiguous Regularisé</b>
+          <b>Liste Ambiguous cash in Regularisé</b>
         </div>
         <div class="card-body">
         <table class="table table-bordered" id="tableAmbigu">
@@ -54,7 +54,7 @@
         </div>
       </div>
     </div>
-    <div class="row">
+    <!-- <div class="row">
       <div class="col-sm-6 pl-4">
           <label for="dateDebut">Date Debut</label>
           <input type="text" class="form-control" id="minAirtel" name="minAirtel">
@@ -63,11 +63,11 @@
           <label for="dateDebut">Date Fin</label>
           <input type="text" class="form-control" id="maxAirtel" name="maxAirtel">
         </div> 
-    </div>
+    </div> -->
     <div class="container-fluid mt-3">
       <div class="card">
         <div class="card-header">
-          <b>Liste Ambiguous Regularisé</b>
+          <b>Liste Ambiguous cash out Regularisé</b>
         </div>
         <div class="card-body">
         <table class="table table-bordered" id="tableAmbiguCO">

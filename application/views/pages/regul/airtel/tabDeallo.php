@@ -1,5 +1,5 @@
 <div id="tabDeallo" class="container-fluid mt-5 tab-pane ">
-    <div class="row">
+    <!-- <div class="row">
       <div class="col-sm-6 pl-4">
           <label for="dateDebut">Date Debut</label>
           <input type="text" class="form-control" id="minAirtel" name="minAirtel">
@@ -8,7 +8,7 @@
           <label for="dateDebut">Date Fin</label>
           <input type="text" class="form-control" id="maxAirtel" name="maxAirtel">
         </div> 
-    </div>
+    </div> -->
     <div class="container-fluid mt-3">
       <div class="card">
         <div class="card-header">

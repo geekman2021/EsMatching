@@ -1,7 +1,7 @@
 
 <div class=" tab-content">
   <div id="tabDat" class="container-fluid mt-1 tab-pane "><br>
-    <div class="row">
+    <!-- <div class="row">
       <div class="col-sm-6 pl-4">
           <label for="dateDebut">Date Debut</label>
           <input type="text" class="form-control" id="minBoa" name="minBoa">
@@ -10,7 +10,7 @@
         <label for="dateDebut">Date Fin</label>
           <input type="text" class="form-control" id="maxBoa" name="maxBoa">
       </div> 
-    </div>
+    </div> -->
     <div class="container-fluid mt-4">
       <div class="card">
         <div class="card-header">

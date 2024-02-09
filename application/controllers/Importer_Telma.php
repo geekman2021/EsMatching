@@ -13,7 +13,7 @@
             $this->load->model("Telma_Anomalie_Model");
             $this->load->model("Boa_Telma_Anomalie_Model");
             $this->load->model("Historique_Telma_Model");
-            ini_set('memory_limit', '1024M');
+            ini_set('memory_limit', '2048M');
             set_time_limit(300);
             session_start();
         }
@@ -102,7 +102,7 @@
                                "OPER" => $igor_read[$i][6],
                                "EXPL" => $igor_read[$i][7],
                                "REF_IGOR" => $igor_read[$i][8],
-                               "ref_rel" => $igor_read[$i][9]
+                               "ref_rel" => $igor_read[$i][10]
                             );
                         }
                     }
@@ -136,11 +136,7 @@
                     $telmaCO= $this->filtrerCO($reste);
                     $telmaCO= $this->trierParCleEtHeure($telmaCO);
 
-                   
-
-
 // -------------------------------------------------------------------------------------IGOR ---------------------------------------------------------------------------
-
 
                     $igor = $this->supprimerEspace($igor);
                     $vi= $this->filtrerVI($igor);
@@ -240,9 +236,6 @@ if(empty($_SESSION["admin"]) && empty($_SESSION["vi"]) && empty($admin) && !empt
     $adjust_merge= array_merge($admin, $adjust);
     $this->RegulAdminVi($v, $adjust_merge);
 
-
-
-    
 } else if (!empty($_SESSION["admin"]) && empty($_SESSION["vi"]) && !empty($admin) && empty($vi)) {
 
     foreach($admin as $item) {
@@ -257,22 +250,22 @@ if(empty($_SESSION["admin"]) && empty($_SESSION["vi"]) && empty($admin) && !empt
 
 // **************************************************************************************** INSERTION DES DONNEES *********************************************************************************//
 
-                    $_SESSION["last_solde"] = $this->Historique_Telma_Model->get_last_solde();
-                    if(count($_SESSION["last_solde"]) > 0 ) {
-                        $solde_telma= $_SESSION["last_solde"][0]->solde_telma;
-                        $solde_boa= $_SESSION["last_solde"][0]->solde_boa;
-                    } else if(count($_SESSION["last_solde"]) === 0 ) {
-                        $solde_telma= 0;
-                        $solde_boa= 0;
-                    }
+                    // $_SESSION["last_solde"] = $this->Historique_Telma_Model->get_last_solde();
+                    // if(count($_SESSION["last_solde"]) > 0 ) {
+                    //     $solde_telma= $_SESSION["last_solde"][0]->solde_telma;
+                    //     $solde_boa= $_SESSION["last_solde"][0]->solde_boa;
+                    // } else if(count($_SESSION["last_solde"]) === 0 ) {
+                    //     $solde_telma= 0;
+                    //     $solde_boa= 0;
+                    // }
 
                     $historique =array_merge($dat[0], $cat[0], $reverseEtAnnule, $admin, $nonAu, $mvtsCI[0], $mvtsCO[0], $vi ,$normalCI[0], $normalCO[0]);
                     
                     foreach ($historique as $item) {
-                        $solde_telma += isset($item["solde"]) ? $item["solde"] : 0;
-                        $solde_boa += isset($item["MONTANT"]) ? $item["MONTANT"] : 0;
-                        $item["solde_telma"] = $solde_telma;
-                        $item["solde_boa"] = $solde_boa;
+                        // $solde_telma += isset($item["solde"]) ? $item["solde"] : 0;
+                        // $solde_boa += isset($item["MONTANT"]) ? $item["MONTANT"] : 0;
+                        // $item["solde_telma"] = $solde_telma;
+                        // $item["solde_boa"] = $solde_boa;
                         $this->Historique_Telma_Model->insert_or_update($item);
                     }
 
@@ -316,8 +309,7 @@ if(empty($_SESSION["admin"]) && empty($_SESSION["vi"]) && empty($admin) && !empt
                     $newNonAu = $this->changerCle($nonAu);
                     foreach($newNonAu as $item) {
                         $this->Boa_Telma_Anomalie_Model->insert_or_update_nonAu($item);
-                    }              
-
+                    } 
 // *******************************************************************************************************************************
 
                 $this->exporter($normalCI[0], $normalCO[0], $reverseEtAnnule,$admin, $rollback, $dat[0], $cat[0], $vi, $nonAu, $mvtsCI[0], $mvtsCO[0]);
@@ -903,7 +895,7 @@ if(empty($_SESSION["admin"]) && empty($_SESSION["vi"]) && empty($admin) && !empt
                 $sheet->setCellValue($cell_array[29] .$lastRow, $dataRow["ACTION"]);
                 $sheet->setCellValue($cell_array[30] .$lastRow, $dataRow["AA1_GROUP"]);
                 $sheet->setCellValue($cell_array[31] .$lastRow, $dataRow["PAR"]);
-                $sheet->setCellValue($cell_array[32] .$lastRow, $dataRow["solde"]);
+                $sheet->setCellValue($cell_array[32] .$lastRow, 0);
 
                 $lastRow++;
             }
@@ -1013,7 +1005,6 @@ if(empty($_SESSION["admin"]) && empty($_SESSION["vi"]) && empty($admin) && !empt
             }
 
             // CREDIT A TORT 
-
             $lastRow = $sheet->getHighestRow() + 2; 
             foreach ($cat as $dataRow) {
                 $sheet->getStyle($cell_array[0] . $lastRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FF0000');
@@ -1272,7 +1263,12 @@ if(empty($_SESSION["admin"]) && empty($_SESSION["vi"]) && empty($admin) && !empt
             $resultat = array();
             foreach($index as $item) {
                 $element= $telma[$item];
-                $element["solde"] = $telma[$item]["Amount_MGA"] * -1;
+                if($telma[$item]["TYPE"] ==="reverse") {
+                    $element["solde"] = $telma[$item]["Amount_MGA"] * 1;
+                } else {
+                    $element["solde"] = $telma[$item]["Amount_MGA"] * -1;
+                }
+                
                 $resultat[]= $element;
             }
             return $resultat;

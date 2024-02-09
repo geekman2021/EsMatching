@@ -270,54 +270,68 @@
 
 $("#tableDat").DataTable({
     scrollX: true,
-    autoFill: true,
     responsive: true,
+    autoWidth: false,
+    order: [],
     language: {
         url: '<?php echo base_url(); ?>assets/fr-FR.json',
     }
 });
 $("#tableCat").DataTable({
     scrollX: true,
-    autoFill: true,
+    autoWidth: false,
     responsive: true,
+    order: [],
     language: {
         url: '<?php echo base_url(); ?>assets/fr-FR.json',
     }
 });
 $("#tableMvts").DataTable({
     scrollX: true,
-    autoFill: true,
+    autoWidth: false,
+    order: [],
     language: {
         url: '<?php echo base_url(); ?>assets/fr-FR.json',
     }
 });
 $("#tableAmbigu").DataTable({
     scrollX: true,
-    autoFill: true,
+    autoWidth: false,
+    order: [],
     language: {
         url: '<?php echo base_url(); ?>assets/fr-FR.json',
     }
 });
 $("#tableAmbiguCO").DataTable({
     scrollX: true,
-    autoFill: true,
+    autoWidth: false,
+    order: [],
     language: {
         url: '<?php echo base_url(); ?>assets/fr-FR.json',
     }
 });
 $("#tableDeallo").DataTable({
     scrollX: true,
-    autoFill: true,
+    autoWidth: false,
+    order: [],
     language: {
         url: '<?php echo base_url(); ?>assets/fr-FR.json',
     }
 });
 $("#tableVi").DataTable({
     scrollX: true,
-    autoFill: true,
+    responsive: true,
+    autoWidth: false,
+    order: [],
     language: {
         url: '<?php echo base_url(); ?>assets/fr-FR.json',
     }
+});
+
+$(".nav-tabs a").click(function(){
+    $(this).tab('show');
+    $($.fn.dataTable.tables(true)).DataTable()
+      .columns.adjust(); 
 });
 
 </script>

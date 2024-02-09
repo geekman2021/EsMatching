@@ -46,6 +46,27 @@
             return $query->result();
         }
 
+        public function get_solde_by_month() {
+            $resultArray = array();
+
+            for ($i = 1; $i <= 12; $i++) {
+                $sql = "SELECT princ_date_oper, orange_date,  COALESCE(princ_montant,0) AS principale, COALESCE(orange_montant,0) AS orange, COALESCE(comm_montant, 0) AS commission FROM historique_orange WHERE MONTH(princ_date_oper)=$i OR MONTH(orange_date)=$i";
+                $query = $this->db->query($sql);
+                if ($query->num_rows() > 0) {
+                    $resultArray[$i] = $query->result_array();
+                } else {   
+                    $resultArray[$i] = array(
+                        'princ_date_oper' => 0,
+                        'orange_date' => 0,
+                        'princ_montant' => 0,
+                        'comm_montant' => 0,
+                        "orange_montant" =>0
+                    );
+                }
+            } 
+            return $resultArray;
+        }
+
         
 
 
